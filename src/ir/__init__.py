@@ -1,3 +1,4 @@
+from .bfgen import Code, Generator, Pointer
 from .exceptions import CodeSemanticsViolationError, IRError, NotClosedLoopError, NotOpenedLoopError
 from .tokens import (
     ORDER_FIXED_TOKENS,
@@ -14,6 +15,7 @@ from .tokens import (
     Increment,
     Input,
 )
+from .tools import AutoMatchEnterExitLoop, build_jump_map
 
 __all__ = (
     "BFToken",
@@ -33,4 +35,9 @@ __all__ = (
     "CodeSemanticsViolationError",
     "NotOpenedLoopError",
     "NotClosedLoopError",
+    "AutoMatchEnterExitLoop",
+    "build_jump_map",
+    "Code",
+    "Generator",
+    "Pointer",
 )

@@ -12,7 +12,7 @@ class CompilerInjection(BFToken):
     A class representing a compiler injection token in the compiler.
     """
 
-    value: str
+    value: str = ""
     end_owner: types.Owner | None = None
 
     def __attrs_post_init__(self) -> None:
@@ -26,7 +26,7 @@ class CommentInjection(CompilerInjection):
     A subclass of 'CompilerInjection' specifically for injecting comments into the compiler output.
     """
 
-    value: str = attrs.field(validator=check_injection_safety)
+    value: str = attrs.field(validator=check_injection_safety, default="")
     owner: types.Owner | None = attrs.field(init=False, default=None)
     end_owner: types.Owner | None = attrs.field(init=False, default=None)
 

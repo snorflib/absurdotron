@@ -7,4 +7,4 @@ from src.ir import types
 
 @attrs.frozen
 class BFToken:
-    owner: types.Owner | None
+    owner: types.Owner | None = None
