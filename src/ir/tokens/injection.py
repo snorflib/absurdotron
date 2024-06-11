@@ -15,6 +15,10 @@ class CompilerInjection(BFToken):
     value: str
     end_owner: types.Owner | None = None
 
+    def __attrs_post_init__(self) -> None:
+        if self.end_owner is None:
+            object.__setattr__(self, "end_owner", self.owner)
+
 
 @attrs.frozen
 class CommentInjection(CompilerInjection):
