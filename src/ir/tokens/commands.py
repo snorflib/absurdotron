@@ -80,7 +80,7 @@ class ExitLoop(Command):
     be mapped back to the `entering` owner later.
     """
 
-    start: None = attrs.field(init=False, repr=False, default=None)
+    owner: None = attrs.field(init=False, repr=False, default=None)
 
 
 @command("[-]")

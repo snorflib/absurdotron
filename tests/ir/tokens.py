@@ -37,3 +37,8 @@ def test_check_injection_safety_error_details() -> None:
     with pytest.raises(ir.CodeSemanticsViolationError) as exc_info:
         ir.CommentInjection(value="++[>.<]")
     assert "++[>.<]" in str(exc_info.value)
+
+
+def test_exit_loop_does_not_take_arguments() -> None:
+    with pytest.raises(TypeError):
+        ir.ExitLoop(1)
