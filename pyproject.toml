@@ -15,6 +15,7 @@ bidict = "^0.23.1"
 pyperclip = "^1.8.2"
 mip = "^1.15.0"
 numpy = "^1.26.4"
+typeguard = "^4.3.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.2"
