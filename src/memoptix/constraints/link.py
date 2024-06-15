@@ -36,7 +36,7 @@ class LinkedConstraint(BaseConstraint):
             if self.factor == object():
                 self.factor = str(uuid.uuid4())
 
-            if (factor_var := model.get_var(self.factor)) is None:
+            if (factor_var := model.get_var(self.factor)) is None: # type: ignore
                 factor_var = model.add_var(
                     self.factor,
                     var_type=mip.INTEGER,
