@@ -1,5 +1,6 @@
 from .commands import (
     AddUnit,
+    AssignUnit,
     BaseCommand,
     CallZ,
     ClearUnit,
@@ -44,4 +45,5 @@ __all__ = (
     "MulUnit",
     "LShiftUnit",
     "RShiftUnit",
+    "AssignUnit",
 )

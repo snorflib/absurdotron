@@ -1,4 +1,5 @@
 from .add import AddUnit
+from .assign import AssignUnit
 from .base import BaseCommand
 from .callz import CallZ
 from .clear import ClearUnit
@@ -36,4 +37,5 @@ __all__ = (
     "MulUnit",
     "LShiftUnit",
     "RShiftUnit",
+    "AssignUnit",
 )
