@@ -26,35 +26,35 @@
     > Add a way to save or load commands from a text file with custom syntax.
 
     > Instructions to implement:
-        > INPUT
+        > ✅ INPUT
         > INPUT_INT 
-        > DISPLAY 
+        > ✅ DISPLAY 
         > DISPLAY_INT
         > ✅ INIT_UNIT
         > ✅ INIT_ARRAY
-        > ASSIGN
+        > ✅ ASSIGN
         > ARRAY_READ
         > ARRAY_WRITE
         > ARRAY_MAP
-        > CLEAR
-        > COPY
+        > ✅ CLEAR
+        > ✅ COPY
         > ✅ ADD
-        > SUB
-        > MUL
-        > DIVMOD
-        > DIV
-        > MOD
-        > CALLZ
+        > ✅ SUB
+        > ✅ MUL
+        > ✅ DIVMOD
+        > ✅ DIV
+        > ✅ MOD
+        > ✅ CALLZ
         > CALLGE
         > CALLGT
         > CALLLE
         > CALLLT
-        > NOT
+        > ✅ NOT
         > XOR
         > AND
         > OR
-        > LSHIFT
-        > RSHIFT
+        > ✅ LSHIFT
+        > ✅ RSHIFT
         > ✅ MIGRATE
         > ADDC
         > SUBC
