@@ -8,6 +8,7 @@ from .commands import (
     InitUnit,
     InputUnit,
     MigrateUnit,
+    NotUnit,
     SubUnit,
 )
 from .dtypes import Array, DType, Unit
@@ -28,4 +29,5 @@ __all__ = (
     "InputUnit",
     "CopyUnit",
     "DisplayUnit",
+    "NotUnit",
 )

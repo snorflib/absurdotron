@@ -7,6 +7,7 @@ from .init_array import InitArray
 from .init_unit import InitUnit
 from .input import InputUnit
 from .migrate import MigrateUnit
+from .not_ import NotUnit
 from .sub import SubUnit
 
 __all__ = (
@@ -20,4 +21,5 @@ __all__ = (
     "InputUnit",
     "ClearUnit",
     "CopyUnit",
+    "NotUnit",
 )
