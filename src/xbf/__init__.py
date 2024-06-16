@@ -6,10 +6,12 @@ from .commands import (
     CopyUnit,
     DisplayUnit,
     DivModUnit,
+    DivUnit,
     InitArray,
     InitUnit,
     InputUnit,
     MigrateUnit,
+    ModUnit,
     NotUnit,
     SubUnit,
 )
@@ -34,4 +36,6 @@ __all__ = (
     "NotUnit",
     "CallZ",
     "DivModUnit",
+    "DivUnit",
+    "ModUnit",
 )
