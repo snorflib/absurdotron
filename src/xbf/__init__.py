@@ -4,6 +4,7 @@ from .commands import (
     InitArray,
     InitUnit,
     MigrateUnit,
+    SubUnit,
 )
 from .dtypes import Array, DType, Unit
 from .program import Program
@@ -18,4 +19,5 @@ __all__ = (
     "InitArray",
     "InitUnit",
     "AddUnit",
+    "SubUnit",
 )
