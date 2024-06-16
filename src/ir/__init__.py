@@ -16,6 +16,7 @@ from .tokens import (
     Input,
 )
 from .tools import AutoMatchEnterExitLoop, build_jump_map
+from .types import Owner
 
 __all__ = (
     "BFToken",
@@ -40,4 +41,5 @@ __all__ = (
     "Code",
     "Generator",
     "Pointer",
+    "Owner",
 )

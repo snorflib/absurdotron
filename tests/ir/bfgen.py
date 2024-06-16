@@ -29,6 +29,26 @@ def test_pointer_movement() -> None:
     assert code.source_code.getvalue() == expected_code, f"Expected {expected_code}, got {code.source_code.getvalue()}"
 
 
+def test_code_with_loops() -> None:
+    """Test that the pointer moves correctly through the memory."""
+    program = [
+        tokens.Increment("byte1"),
+        tokens.EnterLoop("byte2"),
+        tokens.Increment("byte3"),
+        tokens.Decrement("byte2"),
+        tokens.ExitLoop(),
+        tokens.Display("byte3"),
+    ]
+
+    code = bfgen.Generator()(
+        program,
+        {"byte1": 0, "byte2": 1, "byte3": 2},
+    )
+
+    expected_code = "+>[>+<-]>."
+    assert code.source_code.getvalue() == expected_code, f"Expected {expected_code}, got {code.source_code.getvalue()}"
+
+
 def test_code_saving_and_output() -> None:
     """Test saving the generated code to a file and copying to clipboard functionality."""
     program = [tokens.Increment("byte1")]

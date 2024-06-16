@@ -9,16 +9,16 @@ from .code import Code
 from .pointer import Pointer
 
 
-def _assemble(
+def assemble(
     code: Code,
     pointer: Pointer,
     routine: collections.abc.Collection[tokens.BFToken],
     memory: dict[types.Owner, int],
 ) -> None:
     with tools.AutoMatchEnterExitLoop() as matcher:
-        for token in routine:
-            curr_token = matcher(token) or token
-            so, eo = _get_token_owner(curr_token)
+        for curr_token in routine:
+            owner_token = matcher(curr_token) or curr_token
+            so, eo = _get_token_owner(owner_token)
             value = _get_token_value(curr_token)
 
             pointer.move(memory.get(so, None))

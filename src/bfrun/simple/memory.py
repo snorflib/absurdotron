@@ -54,3 +54,7 @@ class Memory:
             raise ValueError(f"Trying to set pointer larger then memory. Memory size: {self._size}")
 
         self._pointer = value
+
+    @property
+    def cells(self) -> list[int]:
+        return self._array.tolist()  # type: ignore
