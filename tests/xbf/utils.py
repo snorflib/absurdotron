@@ -65,7 +65,7 @@ def eval_bf(code: str, input: str | list[int] | None = "") -> simple.Executor:
     else:
         input_str = input or ""
 
-    exc = simple.Executor(code, input=io.StringIO(input_str))
+    exc = simple.Executor(code, input=io.StringIO(input_str), output=io.StringIO())
     exc()
 
     return exc

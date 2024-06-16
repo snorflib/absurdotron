@@ -1,4 +1,15 @@
-from .commands import AddUnit, BaseCommand, ClearUnit, CopyUnit, InitArray, InitUnit, InputUnit, MigrateUnit, SubUnit
+from .commands import (
+    AddUnit,
+    BaseCommand,
+    ClearUnit,
+    CopyUnit,
+    DisplayUnit,
+    InitArray,
+    InitUnit,
+    InputUnit,
+    MigrateUnit,
+    SubUnit,
+)
 from .dtypes import Array, DType, Unit
 from .program import Program
 
@@ -16,4 +27,5 @@ __all__ = (
     "ClearUnit",
     "InputUnit",
     "CopyUnit",
+    "DisplayUnit",
 )
