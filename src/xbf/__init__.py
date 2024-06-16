@@ -12,6 +12,7 @@ from .commands import (
     InputUnit,
     MigrateUnit,
     ModUnit,
+    MulUnit,
     NotUnit,
     SubUnit,
 )
@@ -38,4 +39,5 @@ __all__ = (
     "DivModUnit",
     "DivUnit",
     "ModUnit",
+    "MulUnit",
 )

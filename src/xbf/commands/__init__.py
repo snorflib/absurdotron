@@ -13,6 +13,7 @@ from .migrate import MigrateUnit
 from .mod import ModUnit
 from .not_ import NotUnit
 from .sub import SubUnit
+from .mul import MulUnit
 
 __all__ = (
     "BaseCommand",
@@ -30,4 +31,5 @@ __all__ = (
     "DivModUnit",
     "ModUnit",
     "DivUnit",
+    "MulUnit",
 )

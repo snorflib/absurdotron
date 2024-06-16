@@ -16,10 +16,14 @@
 
     > Add an exception when freeing the unknown owner
 
-### Commands:
+### XBF:
     > Optimize instructions. To ease the task add `multidispatch`
 
     > Make freeing and allocating buffer units easier.
+
+    > Try to reduce code repetition.
+
+    > Add a way to save or load commands from a text file with custom syntax.
 
     > Instructions to implement:
         > INPUT
