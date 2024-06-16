@@ -10,10 +10,12 @@ from .commands import (
     InitArray,
     InitUnit,
     InputUnit,
+    LShiftUnit,
     MigrateUnit,
     ModUnit,
     MulUnit,
     NotUnit,
+    RShiftUnit,
     SubUnit,
 )
 from .dtypes import Array, DType, Unit
@@ -40,4 +42,6 @@ __all__ = (
     "DivUnit",
     "ModUnit",
     "MulUnit",
+    "LShiftUnit",
+    "RShiftUnit",
 )

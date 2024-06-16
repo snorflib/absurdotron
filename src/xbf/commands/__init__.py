@@ -9,11 +9,13 @@ from .divmod import DivModUnit
 from .init_array import InitArray
 from .init_unit import InitUnit
 from .input import InputUnit
+from .lshift import LShiftUnit
 from .migrate import MigrateUnit
 from .mod import ModUnit
-from .not_ import NotUnit
-from .sub import SubUnit
 from .mul import MulUnit
+from .not_ import NotUnit
+from .rshift import RShiftUnit
+from .sub import SubUnit
 
 __all__ = (
     "BaseCommand",
@@ -32,4 +34,6 @@ __all__ = (
     "ModUnit",
     "DivUnit",
     "MulUnit",
+    "LShiftUnit",
+    "RShiftUnit",
 )
