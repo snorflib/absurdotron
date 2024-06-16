@@ -2,6 +2,7 @@ import io
 
 from src import ir, memoptix, xbf
 from src.bfrun import simple
+from src.memoptix.metainfo import meta
 
 
 def run_and_eval_commands_get_output(

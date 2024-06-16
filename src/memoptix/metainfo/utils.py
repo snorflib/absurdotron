@@ -48,7 +48,7 @@ def get_memory_owner_scopes(routine: collections.abc.Sequence[tokens.BFToken]) -
 
     for idx, token in enumerate(routine):
         if isinstance(token, tokens.CompilerInjection) and (end_owner := token.end_owner):
-            life_cycles[end_owner] = (life_cycles[end_owner][0], idx)
+            life_cycles[end_owner] = (life_cycles[end_owner][0], life_cycles[end_owner][1])
 
         if isinstance(token, tokens.ExitLoop):
             owner = token_map[jump_map.inverse[idx]].owner

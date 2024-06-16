@@ -12,6 +12,10 @@
 
     > Abstract the resolver away from owners/metainfo context. 
 
+    > Add an exception when second freeing
+
+    > Add an exception when freeing the unknown owner
+
 ### Commands:
     > Optimize instructions. To ease the task add `multidispatch`
 

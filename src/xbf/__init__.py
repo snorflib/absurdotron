@@ -1,6 +1,7 @@
 from .commands import (
     AddUnit,
     BaseCommand,
+    CallZ,
     ClearUnit,
     CopyUnit,
     DisplayUnit,
@@ -30,4 +31,5 @@ __all__ = (
     "CopyUnit",
     "DisplayUnit",
     "NotUnit",
+    "CallZ",
 )
