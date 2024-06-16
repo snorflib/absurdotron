@@ -1,4 +1,5 @@
 from .commands import (
+    AddUnit,
     BaseCommand,
     InitArray,
     InitUnit,
@@ -16,4 +17,5 @@ __all__ = (
     "Program",
     "InitArray",
     "InitUnit",
+    "AddUnit",
 )

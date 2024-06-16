@@ -1,3 +1,4 @@
+from .add import AddUnit
 from .base import BaseCommand
 from .init_array import InitArray
 from .init_unit import InitUnit
@@ -8,4 +9,5 @@ __all__ = (
     "MigrateUnit",
     "InitArray",
     "InitUnit",
+    "AddUnit",
 )
