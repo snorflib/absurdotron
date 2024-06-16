@@ -1,6 +1,7 @@
 from .add import AddUnit
 from .base import BaseCommand
 from .clear import ClearUnit
+from .copy import CopyUnit
 from .init_array import InitArray
 from .init_unit import InitUnit
 from .input import InputUnit
@@ -16,4 +17,5 @@ __all__ = (
     "SubUnit",
     "InputUnit",
     "ClearUnit",
+    "CopyUnit",
 )
