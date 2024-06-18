@@ -25,38 +25,39 @@
 
     > Add a way to save or load commands from a text file with custom syntax.
 
+    > Rename migrate to move
+
+    > Make addition and other similar instructions accept a list of arguments instead of a list
+
+    > Make display accept plenty of literal or byte arguments and print them efficiently
+
+    > Make input accept multiple bytes to store data to.
+
     > Instructions to implement:
-        > ✅ INPUT
-        > INPUT_INT 
-        > ✅ DISPLAY 
-        > DISPLAY_INT
+        > ✅ INPUT   # INP
+        > ✅ DISPLAY # DSP
+        > ✅ CLEAR # CLR
+        > INC
+        > DEC
+        > ETL
+        > EXL
+        > COMPI
+        > CODEI
+        > COMMI
+
         > ✅ INIT_UNIT
         > ✅ INIT_ARRAY
-        > ✅ ASSIGN
         > ARRAY_READ
         > ARRAY_WRITE
-        > ARRAY_MAP
-        > ✅ CLEAR
         > ✅ COPY
         > ✅ ADD
         > ✅ SUB
         > ✅ MUL
         > ✅ DIVMOD
-        > ✅ DIV
-        > ✅ MOD
         > ✅ CALLZ
-        > CALLGE
-        > CALLGT
-        > CALLLE
-        > CALLLT
         > ✅ NOT
+        > ✅ ASSIGN
         > XOR
         > AND
         > OR
-        > ✅ LSHIFT
-        > ✅ RSHIFT
         > ✅ MIGRATE
-        > ADDC
-        > SUBC
-        > MULC
-        > DIVC
