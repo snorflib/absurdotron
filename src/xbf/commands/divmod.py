@@ -20,6 +20,8 @@ def _generic_division(
 ) -> None:
     restore_divisor: bool = True
 
+    if remainder is quotient is None:
+        return None
     if remainder is quotient:
         raise ValueError("Remainder cannot be Quotient")
 
@@ -66,12 +68,10 @@ def _generic_division(
         program.routine.append(metainfo.Free(divisor))
 
     if remainder:
+        program.routine.extend([tokens.Clear(remainder)])
         program.routine.extend(_migrate_unit2units(remainder_buf, [(remainder, 1)]))
     else:
         program.routine.append(tokens.Clear(remainder_buf))
-
-    if quotient:
-        program.routine.append(tokens.BFToken(quotient))
 
     program.routine.extend(
         [

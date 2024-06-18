@@ -81,7 +81,6 @@ def test_all_arguments() -> None:
         xbf.InitUnit(d),
         xbf.AddUnit(a, 6, a),
         xbf.AddUnit(c, 4, c),
-        xbf.AddUnit(d, 1, d),
         xbf.DivModUnit(a, c, quotient=b, remainder=d),
         xbf.AddUnit(a, 1, a),
         xbf.AddUnit(c, 1, c),
@@ -92,7 +91,7 @@ def test_all_arguments() -> None:
     assert memory[a] == 7
     assert memory[c] == 5
     assert memory[b] == 2
-    assert memory[d] == 3
+    assert memory[d] == 2
 
 
 def test_zero_dividend() -> None:
@@ -100,7 +99,7 @@ def test_zero_dividend() -> None:
     commands = [
         xbf.InitUnit(a),
         xbf.InitUnit(b),
-        xbf.DivModUnit(a, 4, quotient=a, remainder=b),
+        xbf.DivModUnit(a, 4, quotient=b, remainder=a),
     ]
 
     memory = run_and_eval_commands(commands)
