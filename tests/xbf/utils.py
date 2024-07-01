@@ -1,7 +1,5 @@
 import io
 
-from mip import solver
-
 from src import ir, memoptix, xbf
 from src.bfrun import simple
 
@@ -27,9 +25,8 @@ def run_and_eval_commands(
 ) -> dict[ir.Owner, int]:
     program = eval_commands(commands)
     memory = resolve_program_memory(program)
-
     code = compile_routine_with_memory(program.routine, memory)
-
+    print(code)
     tape = eval_bf(code, input=input).memory.cells
     for owner, index in memory.items():
         try:

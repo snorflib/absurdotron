@@ -46,10 +46,7 @@ def and_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit, program: pr
 
     routine.append(tokens.EnterLoop(lrem))
     routine.append(tokens.EnterLoop(rrem))
-    routine.append(tokens.Display(target))
     AddUnit(bit_scale, target, target)(program)
-    routine.append(tokens.Display(bit_scale))
-    routine.append(tokens.Display(target))
     routine.append(tokens.Decrement(rrem))
     routine.append(tokens.ExitLoop())
     routine.append(tokens.Decrement(lrem))
