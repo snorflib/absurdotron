@@ -29,6 +29,7 @@ def _multiply(
         if origin is target:
             routine.extend(_migrate_unit2units(buffer, [(target, other)]))
         else:
+            routine.append(tokens.Clear(target))
             routine.extend(_migrate_unit2units(buffer, [(target, other), (origin, 1)]))
 
         routine.append(metainfo.Free(buffer))
@@ -45,6 +46,7 @@ def _multiply(
         routine = _migrate_unit2units(from_unit=origin, to_units=[(origin_buf, 1)])
         routine.extend(_migrate_unit2units(from_unit=other, to_units=[(other_buf, 1)]))
 
+    routine.append(tokens.Clear(target))
     routine.append(tokens.EnterLoop(other_buf))
     routine.extend(_generic_addition(target, origin_buf, target, program, add=True))
 

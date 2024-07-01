@@ -106,3 +106,16 @@ def test_zero_dividend() -> None:
 
     assert memory[a] == 0
     assert memory[b] == 0
+
+def test_division_by_integer_dividend_to_quotient() -> None:
+    a, b = xbf.Unit(), xbf.Unit()
+    commands = [
+        xbf.InitUnit(a),
+        xbf.InitUnit(b),
+        xbf.AssignUnit(a, 22),
+        xbf.DivModUnit(a, 4, quotient=a, remainder=b),
+    ]
+
+    memory = run_and_eval_commands(commands)
+    assert memory[a] == 5
+    assert memory[b] == 2

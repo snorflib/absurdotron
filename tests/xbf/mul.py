@@ -16,7 +16,7 @@ def test_simple_two_arguments_mul() -> None:
     commands = [xbf.InitUnit(a), xbf.InitUnit(b), xbf.AddUnit(a, 10, a), xbf.AddUnit(b, 5, b), xbf.MulUnit(a, 10, b)]
 
     memory = run_and_eval_commands(commands)
-    assert memory[b] == 105
+    assert memory[b] == 100
     assert memory[a] == 10
 
 
@@ -50,7 +50,7 @@ def test_mul_by_itself() -> None:
     commands = [xbf.InitUnit(a), xbf.InitUnit(b), xbf.AddUnit(a, 10, a), xbf.AddUnit(b, 5, b), xbf.MulUnit(b, b, a)]
 
     memory = run_and_eval_commands(commands)
-    assert memory[a] == 35
+    assert memory[a] == 25
     assert memory[b] == 5
 
 

@@ -1,4 +1,5 @@
 from .add import AddUnit
+from .and_ import AndUnit
 from .assign import AssignUnit
 from .base import BaseCommand
 from .callz import CallZ
@@ -30,4 +31,5 @@ __all__ = (
     "DivModUnit",
     "MulUnit",
     "AssignUnit",
+    "AndUnit",
 )

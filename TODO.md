@@ -5,6 +5,8 @@
 
     > Add a de-compiler functionality from BF to IR (needed for `ASSIGN` instruction, since I am too lazy to manually rewrite 255 algorithms)
 
+    > EnterLoop can be a singleton
+
 ### Memoptix:
     > Make exceptions more detailed and persistent
 
@@ -18,6 +20,8 @@
 
 ### XBF:
     > Optimize instructions. To ease the task add `multidispatch`
+
+    > Make all operations always clear the target, unless it's repassed as an argument.
 
     > Make freeing and allocating buffer units easier.
 
@@ -33,6 +37,14 @@
 
     > Make input accept multiple bytes to store data to.
 
+    > make instruction names the same, and using multidispatch or custom dispatch choose different algorithms for different types
+
+    > due to the last change change InitUnit and InitArray to <Allocate>
+
+    > add comments and comment compilation
+
+    > Make a global counter for dtypes. To not overuse memory.
+
     > Instructions to implement:
         > ✅ INPUT   # INP
         > ✅ DISPLAY # DSP
@@ -41,14 +53,15 @@
         > DEC
         > ETL
         > EXL
-        > COMPI
-        > CODEI
-        > COMMI
+        > CODI
+        > COMI
 
         > ✅ INIT_UNIT
         > ✅ INIT_ARRAY
+        
         > ARRAY_READ
         > ARRAY_WRITE
+        
         > ✅ COPY
         > ✅ ADD
         > ✅ SUB
@@ -57,7 +70,13 @@
         > ✅ CALLZ
         > ✅ NOT
         > ✅ ASSIGN
+        > ✅ MIGRATE
+        
+        > CALLLE
+        > CALLLT
+        > CALLGE
+        > CALLGT
+
         > XOR
         > AND
         > OR
-        > ✅ MIGRATE

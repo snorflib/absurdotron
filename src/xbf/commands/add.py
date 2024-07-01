@@ -70,7 +70,10 @@ def _generic_addition(
         routine.append(metainfo.Free(buffer_unit))
         return routine
 
-    other_buffer = dtypes.Unit("other_buffer")
+    if (other is target) and (add is True):
+        origin, other = other, origin
+
+    other_buffer = dtypes.Unit()
     InitUnit(other_buffer)(program)
     routine = _migrate_unit2units(from_unit=other, to_units=[(other_buffer, 1)])
 
@@ -79,11 +82,15 @@ def _generic_addition(
         routine.append(metainfo.Free(other_buffer))
         return routine
 
-    origin_buffer = dtypes.Unit("origin_buffer")
+    origin_buffer = dtypes.Unit()
     InitUnit(origin_buffer)(program)
     routine.extend(_migrate_unit2units(from_unit=origin, to_units=[(origin_buffer, 1)]))
     routine.extend(_migrate_unit2units(from_unit=origin_buffer, to_units=[(origin, 1), (target, 1)]))
-    routine.extend(_migrate_unit2units(from_unit=other_buffer, to_units=[(other, 1), (target, 1 if add else -1)]))
+
+    if other is target:
+        routine.extend(_migrate_unit2units(from_unit=other_buffer, to_units=[(target, 1 if add else -1)]))
+    else:
+        routine.extend(_migrate_unit2units(from_unit=other_buffer, to_units=[(other, 1), (target, 1 if add else -1)]))
 
     routine.append(metainfo.Free(origin_buffer))
     routine.append(metainfo.Free(other_buffer))

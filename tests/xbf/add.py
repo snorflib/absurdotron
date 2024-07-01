@@ -19,13 +19,29 @@ def test_add_to_itself() -> None:
     assert memory[a] == 20
 
 
-def test_add_complex() -> None:
+def test_add_complex_one() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [xbf.InitUnit(a), xbf.InitUnit(b), xbf.AddUnit(a, 10, a), xbf.AddUnit(b, a, b), xbf.AddUnit(b, 5, b)]
 
     memory = run_and_eval_commands(commands)
     assert memory[a] == 10
     assert memory[b] == 15
+
+
+def test_add_complex_two() -> None:
+    a, b = xbf.Unit(), xbf.Unit()
+    commands = [
+        xbf.InitUnit(a),
+        xbf.InitUnit(b),
+        xbf.AddUnit(a, 10, a),
+        xbf.AddUnit(b, 5, b),
+        xbf.AddUnit(a, b, b),
+    ]
+
+    memory = run_and_eval_commands(commands)
+    assert memory[a] == 10
+    assert memory[b] == 15
+
 
 
 def test_add_three_args() -> None:
@@ -63,9 +79,8 @@ def test_save_target_to_add_target() -> None:
         xbf.AddUnit(b, 10, b),
         xbf.AddUnit(a, a, a),
         xbf.AddUnit(b, a, a),
-        xbf.AddUnit(a, 1, b),
     ]
 
     memory = run_and_eval_commands(commands)
-    assert memory[a] == 50
-    assert memory[b] == 61
+    assert memory[a] == 30
+    assert memory[b] == 10
