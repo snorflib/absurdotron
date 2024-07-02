@@ -26,7 +26,7 @@ def run_and_eval_commands(
     program = eval_commands(commands)
     memory = resolve_program_memory(program)
     code = compile_routine_with_memory(program.routine, memory)
-    print(code)
+
     tape = eval_bf(code, input=input).memory.cells
     for owner, index in memory.items():
         try:
@@ -49,7 +49,8 @@ def eval_commands(commands: list[xbf.BaseCommand]) -> xbf.Program:
 def resolve_program_memory(program: xbf.Program) -> dict[ir.Owner, int]:
     metainfo = memoptix.get_metainfo_from_routine(program.routine)
     resolver = memoptix.build_memory_resolver(program.constr, metainfo)
-    resolver.resolve(max_solutions=1000)
+
+    resolver.resolve(max_solutions=100)
 
     return resolver.model.get_vars_by_owners(metainfo.owners)
 

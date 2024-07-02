@@ -13,6 +13,7 @@ from .input import InputUnit
 from .migrate import MigrateUnit
 from .mul import MulUnit
 from .not_ import NotUnit
+from .or_ import OrUnit
 from .sub import SubUnit
 
 __all__ = (
@@ -32,4 +33,5 @@ __all__ = (
     "MulUnit",
     "AssignUnit",
     "AndUnit",
+    "OrUnit",
 )

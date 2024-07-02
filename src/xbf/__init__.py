@@ -14,6 +14,7 @@ from .commands import (
     MigrateUnit,
     MulUnit,
     NotUnit,
+    OrUnit,
     SubUnit,
 )
 from .dtypes import Array, DType, Unit
@@ -27,6 +28,7 @@ __all__ = (
     "MigrateUnit",
     "Program",
     "InitArray",
+    "OrUnit",
     "InitUnit",
     "AddUnit",
     "SubUnit",

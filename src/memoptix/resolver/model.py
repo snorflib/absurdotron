@@ -15,7 +15,7 @@ def owner_to_str_key(owner: types.Owner) -> str:
 
 @attrs.frozen
 class Model:
-    model: mip.Model = attrs.field(factory=lambda: mip.Model(solver_name=mip.CPX))
+    model: mip.Model = attrs.field(factory=mip.Model)
 
     def add_var(
         self,
