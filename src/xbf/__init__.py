@@ -4,6 +4,7 @@ from .commands import (
     AssignUnit,
     BaseCommand,
     CallGE,
+    CallLE,
     CallLT,
     CallZ,
     ClearUnit,
@@ -48,4 +49,5 @@ __all__ = (
     "XorUnit",
     "CallGE",
     "CallLT",
+    "CallLE",
 )
