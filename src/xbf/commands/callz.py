@@ -1,15 +1,14 @@
 import typing
-import uuid
 
 import attrs
 
 from src import memoptix
 from src.ir import tokens
-from src.memoptix import constraints
 from src.xbf import dtypes, program
 
 from .base import BaseCommand
 from .init_unit import InitUnit
+from .migrate import MigrateUnit
 
 
 def _callz(
@@ -18,39 +17,40 @@ def _callz(
     else_: typing.Iterable[BaseCommand] | None,
     program: program.Program,
 ) -> None:
-    else_flag, zero_flag = dtypes.Unit(), dtypes.Unit()
+    else_flag, zero_flag, buffer = dtypes.Unit(), dtypes.Unit(), dtypes.Unit()
+
     InitUnit(else_flag)(program)
     InitUnit(zero_flag)(program)
+    InitUnit(buffer)(program)
 
-    hash = uuid.uuid4().int
-    program.constr.append(constraints.LinkedConstraint(subject, else_flag, 1, hash))
-    program.constr.append(constraints.LinkedConstraint(subject, zero_flag, 2, hash))
-
+    MigrateUnit(subject, [(buffer, 1)])(program)
     program.routine.extend(
         [
             tokens.Increment(else_flag),
-            tokens.EnterLoop(subject),
+            tokens.EnterLoop(buffer),
         ]
     )
     for command in if_ or []:
         command(program)
 
+    MigrateUnit(buffer, [(subject, 1)])(program)
+
     program.routine.extend(
         [
-            tokens.CodeInjection(owner=else_flag, value="-", end_owner=subject),
+            tokens.Decrement(else_flag),
             tokens.ExitLoop(),
+            #
             tokens.EnterLoop(else_flag),
             tokens.Decrement(else_flag),
         ]
     )
+
     for command in else_ or []:
         command(program)
 
     program.routine.extend(
         [
-            tokens.CodeInjection(owner=zero_flag, value="", end_owner=else_flag),
             tokens.ExitLoop(),
-            tokens.CodeInjection(owner=else_flag, value="", end_owner=zero_flag),
         ]
     )
 
@@ -58,6 +58,7 @@ def _callz(
         [
             memoptix.Free(else_flag),
             memoptix.Free(zero_flag),
+            memoptix.Free(buffer),
         ]
     )
 

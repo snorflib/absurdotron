@@ -58,10 +58,10 @@
 
         > ✅ INIT_UNIT
         > ✅ INIT_ARRAY
-        
+
         > ARRAY_READ
         > ARRAY_WRITE
-        
+
         > ✅ COPY
         > ✅ ADD
         > ✅ SUB
@@ -71,12 +71,12 @@
         > ✅ NOT
         > ✅ ASSIGN
         > ✅ MIGRATE
-        
+
         > CALLLE
         > CALLLT
         > CALLGE
         > CALLGT
 
         > XOR
-        > AND
-        > OR
+        > ✅ AND
+        > ✅ OR

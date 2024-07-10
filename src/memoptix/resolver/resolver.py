@@ -1,48 +1,69 @@
-from __future__ import annotations
-
-import collections.abc
 import typing
 
 import attrs
-import mip  # type: ignore
+from src.ir import types
 
-from src.ir import tokens
-from src.memoptix import constraints, exceptions, metainfo
+from src.memoptix import constraints, metainfo
 
-from .model import Model
+
+@attrs.define(hash=False)
+class Unit:
+    start: int
+    end: int
+    owner: types.Owner
+    width: int = 1
+
+    def __hash__(self) -> int:
+        return hash(self.owner)
 
 
 @attrs.frozen
 class MemoryResolver:
-    meta: metainfo.RoutineMetaInfo
-    model: Model = attrs.field(factory=Model)
+    _units: list[Unit] = attrs.field(factory=list)
 
-    def resolve(self, **kwargs: typing.Any) -> typing.Self:
-        status = self.model.optimize(**kwargs)
+    def add_unit(self, unit: Unit) -> None:
+        self._units.append(unit)
 
-        if status is mip.OptimizationStatus.INFEASIBLE:
-            raise exceptions.MemoryAllocationFailedError
+    def resolve(self) -> dict[types.Owner, int]:
+        sorted_units = sorted(self._units, key=lambda unit: unit.start)
+        unit_to_index = {}
+        indices = {}
 
-        return self
+        for new_unit in sorted_units:
+            for idx in unit_to_index:
+                for idx_offset in range(idx, idx + new_unit.width):
+                    if unit_to_index[idx_offset].end >= new_unit.start:
+                        break
 
-    def constrain(self, constraint: constraints.BaseConstraint) -> None:
-        constraint(self.model, self.meta)
+                else:
+                    for idx_offset in range(idx, idx + new_unit.width):
+                        unit_to_index[idx_offset] = new_unit
+                    indices[new_unit.owner] = idx
+                    break
+            else:
+                idx = len(unit_to_index)
+                for idx_offset in range(idx, idx + new_unit.width):
+                    unit_to_index[idx_offset] = new_unit
+                indices[new_unit.owner] = idx
+
+        return indices
 
 
 def build_memory_resolver(
-    constraints: typing.Iterable[constraints.BaseConstraint],
-    meta_info: metainfo.RoutineMetaInfo | collections.abc.Sequence[tokens.BFToken],
-    resolver: typing.Optional[MemoryResolver] = None,
+    constrs: list[constraints.BaseConstraint],
+    metainfo: metainfo.RoutineMetaInfo,
 ) -> MemoryResolver:
-    if not isinstance(meta_info, metainfo.RoutineMetaInfo):
-        meta_info = metainfo.get_metainfo_from_routine(meta_info)
+    owner_to_constraints = {constr.owner: constr for constr in constrs}
 
-    resolver = resolver or MemoryResolver(meta_info)
+    resolver = MemoryResolver()
 
-    for owner in meta_info.owners:
-        resolver.model.add_var(owner, var_type=mip.INTEGER)
-
-    for constraint in constraints:
-        resolver.constrain(constraint)
+    for owner in metainfo.owners:
+        start, end = metainfo.scopes[owner].adjusted_bounds
+        constr = owner_to_constraints.get(owner, constraints.UnitConstraint(owner))
+        match constr:
+            case constraints.UnitConstraint():
+                resolver.add_unit(Unit(start, end, owner))
+            case constraints.ArrayConstraint():
+                resolver.add_unit(Unit(start, end, owner, width=constr.length))
 
     return resolver

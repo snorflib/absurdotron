@@ -50,9 +50,7 @@ def resolve_program_memory(program: xbf.Program) -> dict[ir.Owner, int]:
     metainfo = memoptix.get_metainfo_from_routine(program.routine)
     resolver = memoptix.build_memory_resolver(program.constr, metainfo)
 
-    resolver.resolve(max_solutions=100)
-
-    return resolver.model.get_vars_by_owners(metainfo.owners)
+    return resolver.resolve()
 
 
 def compile_routine_with_memory(routine: list[ir.BFToken], memory: dict[ir.Owner, int]) -> str:

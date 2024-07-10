@@ -38,7 +38,7 @@ def or_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit, program: pro
     CopyUnit(left, lquot)(program)
     CopyUnit(right, rquot)(program)
 
-    AssignUnit(break_, 7)(program)
+    AssignUnit(break_, 8)(program)
     AssignUnit(bit_scale, 1)(program)
 
     routine = program.routine

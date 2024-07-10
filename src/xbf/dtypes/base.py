@@ -9,7 +9,7 @@ class DType:
 
     def __init__(self, name: str | None = None, id: int | None = None) -> None:
         self.name = name
-        self.id = id or int(uuid.uuid4().int)
+        self.id = id or uuid.uuid4().int
 
     def __hash__(self) -> int:
         return self.id

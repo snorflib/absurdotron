@@ -72,7 +72,7 @@ def test_or_zero_and_non_zero() -> None:
     memory = run_and_eval_commands(commands)
     assert memory[a] == 0
     assert memory[b] == 79
-    assert memory[c] == 0
+    assert memory[c] == 79
 
 
 def test_or_non_zero_and_non_zero() -> None:
@@ -82,7 +82,7 @@ def test_or_non_zero_and_non_zero() -> None:
         xbf.InitUnit(b),
         xbf.AddUnit(a, 13, a),
         xbf.AddUnit(b, 91, b),
-        xbf.AndUnit(a, b, a),
+        xbf.OrUnit(a, b, a),
     ]
 
     memory = run_and_eval_commands(commands)
@@ -98,7 +98,7 @@ def test_or_non_zero_and_non_zero_2() -> None:
         xbf.InitUnit(c),
         xbf.AddUnit(a, 167, a),
         xbf.AddUnit(b, 13, b),
-        xbf.AndUnit(a, b, c),
+        xbf.OrUnit(a, b, c),
     ]
 
     memory = run_and_eval_commands(commands)
@@ -121,6 +121,6 @@ def test_or_in_row() -> None:
     ]
 
     memory = run_and_eval_commands(commands)
-    assert memory[a] == 155
+    assert memory[a] == 231
     assert memory[b] == 231
     assert memory[c] == 4
