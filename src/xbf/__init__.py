@@ -7,6 +7,7 @@ from .commands import (
     CallGT,
     CallLE,
     CallLT,
+    CallNeq,
     CallZ,
     ClearUnit,
     CopyUnit,
@@ -52,4 +53,5 @@ __all__ = (
     "CallLT",
     "CallLE",
     "CallGT",
+    "CallNeq",
 )

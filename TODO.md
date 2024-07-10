@@ -72,10 +72,12 @@
         > ✅ ASSIGN
         > ✅ MIGRATE
 
-        > CALLLE
-        > CALLLT
-        > CALLGE
-        > CALLGT
+        > ✅ CALLZ
+        > ✅ CALLLE
+        > ✅ CALLLT
+        > ✅ CALLGE
+        > ✅ CALLGT
+        > CALLEQ
 
         > ✅ XOR
         > ✅ AND
