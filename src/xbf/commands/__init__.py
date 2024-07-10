@@ -2,11 +2,12 @@ from .add import AddUnit
 from .and_ import AndUnit
 from .assign import AssignUnit
 from .base import BaseCommand
-from .callneq import CallNeq
+from .calleq import CallEq
 from .callge import CallGE
 from .callgt import CallGT
 from .callle import CallLE
 from .calllt import CallLT
+from .callneq import CallNeq
 from .callz import CallZ
 from .clear import ClearUnit
 from .copy import CopyUnit
@@ -46,4 +47,5 @@ __all__ = (
     "CallLE",
     "CallGT",
     "CallNeq",
+    "CallEq",
 )

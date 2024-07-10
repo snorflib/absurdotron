@@ -3,6 +3,7 @@ from .commands import (
     AndUnit,
     AssignUnit,
     BaseCommand,
+    CallEq,
     CallGE,
     CallGT,
     CallLE,
@@ -54,4 +55,5 @@ __all__ = (
     "CallLE",
     "CallGT",
     "CallNeq",
+    "CallEq",
 )
