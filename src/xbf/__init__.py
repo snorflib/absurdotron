@@ -16,6 +16,7 @@ from .commands import (
     NotUnit,
     OrUnit,
     SubUnit,
+    XorUnit,
 )
 from .dtypes import Array, DType, Unit
 from .program import Program
@@ -42,4 +43,5 @@ __all__ = (
     "MulUnit",
     "AssignUnit",
     "AndUnit",
+    "XorUnit",
 )

@@ -15,6 +15,7 @@ from .mul import MulUnit
 from .not_ import NotUnit
 from .or_ import OrUnit
 from .sub import SubUnit
+from .xor import XorUnit
 
 __all__ = (
     "BaseCommand",
@@ -34,4 +35,5 @@ __all__ = (
     "AssignUnit",
     "AndUnit",
     "OrUnit",
+    "XorUnit",
 )

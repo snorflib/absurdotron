@@ -7,6 +7,8 @@ from src.xbf import dtypes, program
 from .add import AddUnit
 from .assign import AssignUnit
 from .base import BaseCommand
+from .callz import CallZ
+from .clear import ClearUnit
 from .copy import CopyUnit
 from .divmod import DivModUnit
 from .init_unit import InitUnit
@@ -14,18 +16,15 @@ from .migrate import MigrateUnit
 from .mul import MulUnit
 
 
-def or_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit, program: program.Program) -> None:
-    if left is right is target:
-        return
+def xor_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit, program: program.Program) -> None:
     if left is right:
         program.routine.append(tokens.Clear(target))
-        CopyUnit(left, target)(program)
         return
 
     lquot, rquot = dtypes.Unit(), dtypes.Unit()
     lrem, rrem = dtypes.Unit(), dtypes.Unit()
     bit_scale, break_ = dtypes.Unit(), dtypes.Unit()
-    ored_bit = dtypes.Unit()
+    xored_bit = dtypes.Unit()
 
     InitUnit(lrem)(program)
     InitUnit(rrem)(program)
@@ -33,7 +32,7 @@ def or_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit, program: pro
     InitUnit(rquot)(program)
     InitUnit(bit_scale)(program)
     InitUnit(break_)(program)
-    InitUnit(ored_bit)(program)
+    InitUnit(xored_bit)(program)
 
     CopyUnit(left, lquot)(program)
     CopyUnit(right, rquot)(program)
@@ -48,12 +47,18 @@ def or_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit, program: pro
     DivModUnit(lquot, 2, lquot, lrem)(program)
     DivModUnit(rquot, 2, rquot, rrem)(program)
 
-    MigrateUnit(lrem, [(ored_bit, 1)])(program)
-    MigrateUnit(rrem, [(ored_bit, 1)])(program)
+    MigrateUnit(lrem, [(xored_bit, 1)])(program)
+    MigrateUnit(rrem, [(xored_bit, 1)])(program)
 
-    routine.append(tokens.EnterLoop(ored_bit))
-    AddUnit(bit_scale, target, target)(program)
-    routine.append(tokens.Clear(ored_bit))
+    routine.append(tokens.EnterLoop(xored_bit))
+    routine.append(tokens.Decrement(xored_bit))
+    CallZ(
+        xored_bit,
+        if_=[ClearUnit(xored_bit)],
+        else_=[
+            AddUnit(target, bit_scale, target),
+        ],
+    )(program)
     routine.append(tokens.ExitLoop())
 
     routine.append(tokens.Decrement(break_))
@@ -64,17 +69,17 @@ def or_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit, program: pro
     routine.append(metainfo.Free(lrem))
     routine.append(metainfo.Free(rrem))
     routine.append(metainfo.Free(bit_scale))
-    routine.append(metainfo.Free(ored_bit))
     routine.append(metainfo.Free(lquot))
     routine.append(metainfo.Free(rquot))
+    routine.append(metainfo.Free(xored_bit))
     routine.append(metainfo.Free(break_))
 
 
 @attrs.frozen
-class OrUnit(BaseCommand):
+class XorUnit(BaseCommand):
     left: dtypes.Unit
     right: dtypes.Unit
     target: dtypes.Unit
 
     def _apply(self, context: program.Program) -> None:
-        or_(self.left, self.right, self.target, program=context)
+        xor_(self.left, self.right, self.target, program=context)

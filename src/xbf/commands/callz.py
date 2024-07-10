@@ -30,10 +30,10 @@ def _callz(
             tokens.EnterLoop(buffer),
         ]
     )
+    MigrateUnit(buffer, [(subject, 1)])(program)
+
     for command in if_ or []:
         command(program)
-
-    MigrateUnit(buffer, [(subject, 1)])(program)
 
     program.routine.extend(
         [
