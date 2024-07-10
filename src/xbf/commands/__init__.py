@@ -3,6 +3,7 @@ from .and_ import AndUnit
 from .assign import AssignUnit
 from .base import BaseCommand
 from .callge import CallGE
+from .callgt import CallGT
 from .callle import CallLE
 from .calllt import CallLT
 from .callz import CallZ
@@ -42,4 +43,5 @@ __all__ = (
     "CallGE",
     "CallLT",
     "CallLE",
+    "CallGT",
 )
