@@ -44,6 +44,21 @@ def test_sub_two() -> None:
     assert memory[b] == 236
 
 
+def test_sub_two_2() -> None:
+    a, b = xbf.Unit(), xbf.Unit()
+    commands = [
+        xbf.InitUnit(a),
+        xbf.InitUnit(b),
+        xbf.AddUnit(a, 10, a),
+        xbf.AddUnit(b, 4, b),
+        xbf.SubUnit(a, b, a),
+    ]
+
+    memory = run_and_eval_commands(commands)
+    assert memory[a] == 6
+    assert memory[b] == 4
+
+
 def test_sub_negative() -> None:
     a = xbf.Unit()
     commands = [xbf.InitUnit(a), xbf.SubUnit(a, -5, a)]

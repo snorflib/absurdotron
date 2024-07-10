@@ -77,6 +77,6 @@
         > CALLGE
         > CALLGT
 
-        > XOR
+        > ✅ XOR
         > ✅ AND
         > ✅ OR

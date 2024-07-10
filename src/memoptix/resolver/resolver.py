@@ -1,8 +1,6 @@
-import typing
-
 import attrs
-from src.ir import types
 
+from src.ir import types
 from src.memoptix import constraints, metainfo
 
 

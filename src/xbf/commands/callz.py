@@ -17,10 +17,9 @@ def _callz(
     else_: typing.Iterable[BaseCommand] | None,
     program: program.Program,
 ) -> None:
-    else_flag, zero_flag, buffer = dtypes.Unit(), dtypes.Unit(), dtypes.Unit()
+    else_flag, buffer = dtypes.Unit(), dtypes.Unit()
 
     InitUnit(else_flag)(program)
-    InitUnit(zero_flag)(program)
     InitUnit(buffer)(program)
 
     MigrateUnit(subject, [(buffer, 1)])(program)
@@ -51,13 +50,8 @@ def _callz(
     program.routine.extend(
         [
             tokens.ExitLoop(),
-        ]
-    )
-
-    program.routine.extend(
-        [
+            #
             memoptix.Free(else_flag),
-            memoptix.Free(zero_flag),
             memoptix.Free(buffer),
         ]
     )

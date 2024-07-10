@@ -2,6 +2,7 @@ from .add import AddUnit
 from .and_ import AndUnit
 from .assign import AssignUnit
 from .base import BaseCommand
+from .callge import CallGE
 from .callz import CallZ
 from .clear import ClearUnit
 from .copy import CopyUnit
@@ -36,4 +37,5 @@ __all__ = (
     "AndUnit",
     "OrUnit",
     "XorUnit",
+    "CallGE",
 )
