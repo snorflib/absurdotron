@@ -1,5 +1,6 @@
 from .add import AddUnit
 from .and_ import AndUnit
+from .arr_load import ArrayLoad
 from .arr_store import ArrayStore
 from .assign import AssignUnit
 from .base import BaseCommand
@@ -50,4 +51,5 @@ __all__ = (
     "CallNeq",
     "CallEq",
     "ArrayStore",
+    "ArrayLoad",
 )

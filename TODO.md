@@ -47,6 +47,10 @@
 
     > Rework arrays to be good code
 
+    > replace None owner by Current alias with object()
+
+    > make read tests independent from store
+
     > Instructions to implement:
         > ✅ INPUT   # INP
         > ✅ DISPLAY # DSP

@@ -52,7 +52,7 @@ def get_memory_owner_scopes(routine: collections.abc.Sequence[tokens.BFToken]) -
 
         if isinstance(token, tokens.ExitLoop):
             owner = token_map[jump_map.inverse[idx]].owner
-        elif (owner := token.owner) is None:
+        if (owner := token.owner) is None:
             continue
 
         if owner not in life_cycles:
