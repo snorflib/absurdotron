@@ -29,8 +29,6 @@
 
     > Add a way to save or load commands from a text file with custom syntax.
 
-    > Rename migrate to move
-
     > Make addition and other similar instructions accept a list of arguments instead of a list
 
     > Make display accept plenty of literal or byte arguments and print them efficiently
@@ -51,41 +49,4 @@
 
     > make read tests independent from store
 
-    > Instructions to implement:
-        > ✅ INPUT   # INP
-        > ✅ DISPLAY # DSP
-        > ✅ CLEAR # CLR
-        > INC
-        > DEC
-        > ETL
-        > EXL
-        > CODI
-        > COMI
-
-        > ✅ INIT_UNIT
-        > ✅ INIT_ARRAY
-
-        > ARRAY_READ
-        > ARRAY_WRITE
-
-        > ✅ COPY
-        > ✅ ADD
-        > ✅ SUB
-        > ✅ MUL
-        > ✅ DIVMOD
-        > ✅ CALLZ
-        > ✅ NOT
-        > ✅ ASSIGN
-        > ✅ MIGRATE
-
-        > ✅ CALLZ
-        > ✅ CALLLE
-        > ✅ CALLLT
-        > ✅ CALLGE
-        > ✅ CALLGT
-        > ✅ CALLEQ
-        > ✅ CALLNEQ
-
-        > ✅ XOR
-        > ✅ AND
-        > ✅ OR
+    > Implement all basic instructions, or make them compatible

@@ -6,7 +6,7 @@ from src.xbf import dtypes, program
 from .base import BaseCommand
 
 
-def _migrate_unit2units(from_unit: dtypes.Unit, to_units: list[tuple[dtypes.Unit, int]]) -> list[tokens.BFToken]:
+def _move_unit2units(from_unit: dtypes.Unit, to_units: list[tuple[dtypes.Unit, int]]) -> list[tokens.BFToken]:
     filling_sequence = []
     for unit, scale in to_units:
         if unit == from_unit:
@@ -24,13 +24,13 @@ def _migrate_unit2units(from_unit: dtypes.Unit, to_units: list[tuple[dtypes.Unit
 
 
 @attrs.frozen
-class MigrateUnit(BaseCommand):
+class MoveUnit(BaseCommand):
     unit: dtypes.Unit
     to: list[tuple[dtypes.Unit, int]]
 
     def _apply(self, context: program.Program) -> None:
         context.routine.extend(
-            _migrate_unit2units(
+            _move_unit2units(
                 self.unit,
                 self.to,
             )

@@ -8,7 +8,7 @@ from .add import AddUnit
 from .base import BaseCommand
 from .callz import CallZ
 from .init_unit import InitUnit
-from .migrate import MigrateUnit, _migrate_unit2units
+from .move import MoveUnit, _move_unit2units
 
 
 def _generic_division(
@@ -45,7 +45,7 @@ def _generic_division(
     InitUnit(remainder_buf)(program)
     InitUnit(dividend_buf)(program)
 
-    program.routine.extend(_migrate_unit2units(dividend, [(dividend_buf, 1)]))
+    program.routine.extend(_move_unit2units(dividend, [(dividend_buf, 1)]))
     program.routine.append(tokens.EnterLoop(dividend_buf))
     program.routine.append(tokens.Decrement(dividend_buf))
     program.routine.append(tokens.Decrement(divisor))
@@ -54,7 +54,7 @@ def _generic_division(
     if dividend not in [remainder, quotient]:
         program.routine.append(tokens.Increment(dividend))
 
-    else_: list[BaseCommand] = [MigrateUnit(remainder_buf, [(divisor, 1)])]
+    else_: list[BaseCommand] = [MoveUnit(remainder_buf, [(divisor, 1)])]
     if quotient:
         else_.append(AddUnit(quotient, 1, quotient))
     CallZ(divisor, else_=else_)(program)
@@ -69,7 +69,7 @@ def _generic_division(
 
     if remainder:
         program.routine.extend([tokens.Clear(remainder)])
-        program.routine.extend(_migrate_unit2units(remainder_buf, [(remainder, 1)]))
+        program.routine.extend(_move_unit2units(remainder_buf, [(remainder, 1)]))
     else:
         program.routine.append(tokens.Clear(remainder_buf))
 

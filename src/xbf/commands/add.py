@@ -8,7 +8,7 @@ from src.xbf import dtypes, program
 
 from .base import BaseCommand
 from .init_unit import InitUnit
-from .migrate import _migrate_unit2units
+from .move import _move_unit2units
 
 
 def _add_an_integer(origin: dtypes.Unit, integer: int) -> collections.abc.Sequence[tokens.Increment | tokens.Decrement]:
@@ -20,8 +20,8 @@ def _add_an_integer(origin: dtypes.Unit, integer: int) -> collections.abc.Sequen
 def _quick_migration(from_: dtypes.Unit, to: dtypes.Unit, program: program.Program) -> list[tokens.BFToken]:
     buffer = dtypes.Unit()
     InitUnit(buffer)(program)
-    routine = _migrate_unit2units(from_, [(buffer, 1)])
-    routine.extend(_migrate_unit2units(buffer, [(from_, 1), (to, 1)]))
+    routine = _move_unit2units(from_, [(buffer, 1)])
+    routine.extend(_move_unit2units(buffer, [(from_, 1), (to, 1)]))
     routine.append(metainfo.Free(buffer))
     return routine
 
@@ -60,12 +60,12 @@ def _generic_addition(
 
         buffer_unit = dtypes.Unit()
         InitUnit(buffer_unit)(program)
-        routine = _migrate_unit2units(from_unit=origin, to_units=[(buffer_unit, 1)])
+        routine = _move_unit2units(from_unit=origin, to_units=[(buffer_unit, 1)])
 
         if other is target:
-            routine.extend(_migrate_unit2units(from_unit=buffer_unit, to_units=[(target, 2)]))
+            routine.extend(_move_unit2units(from_unit=buffer_unit, to_units=[(target, 2)]))
         else:
-            routine.extend(_migrate_unit2units(from_unit=buffer_unit, to_units=[(origin, 1), (target, 2)]))
+            routine.extend(_move_unit2units(from_unit=buffer_unit, to_units=[(origin, 1), (target, 2)]))
 
         routine.append(metainfo.Free(buffer_unit))
         return routine
@@ -75,22 +75,22 @@ def _generic_addition(
 
     other_buffer = dtypes.Unit()
     InitUnit(other_buffer)(program)
-    routine = _migrate_unit2units(from_unit=other, to_units=[(other_buffer, 1)])
+    routine = _move_unit2units(from_unit=other, to_units=[(other_buffer, 1)])
 
     if origin is target:
-        routine.extend(_migrate_unit2units(from_unit=other_buffer, to_units=[(other, 1), (origin, 1 if add else -1)]))
+        routine.extend(_move_unit2units(from_unit=other_buffer, to_units=[(other, 1), (origin, 1 if add else -1)]))
         routine.append(metainfo.Free(other_buffer))
         return routine
 
     origin_buffer = dtypes.Unit()
     InitUnit(origin_buffer)(program)
-    routine.extend(_migrate_unit2units(from_unit=origin, to_units=[(origin_buffer, 1)]))
-    routine.extend(_migrate_unit2units(from_unit=origin_buffer, to_units=[(origin, 1), (target, 1)]))
+    routine.extend(_move_unit2units(from_unit=origin, to_units=[(origin_buffer, 1)]))
+    routine.extend(_move_unit2units(from_unit=origin_buffer, to_units=[(origin, 1), (target, 1)]))
 
     if other is target:
-        routine.extend(_migrate_unit2units(from_unit=other_buffer, to_units=[(target, 1 if add else -1)]))
+        routine.extend(_move_unit2units(from_unit=other_buffer, to_units=[(target, 1 if add else -1)]))
     else:
-        routine.extend(_migrate_unit2units(from_unit=other_buffer, to_units=[(other, 1), (target, 1 if add else -1)]))
+        routine.extend(_move_unit2units(from_unit=other_buffer, to_units=[(other, 1), (target, 1 if add else -1)]))
 
     routine.append(metainfo.Free(origin_buffer))
     routine.append(metainfo.Free(other_buffer))

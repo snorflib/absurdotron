@@ -6,7 +6,7 @@ from src.xbf import dtypes, program
 
 from .base import BaseCommand
 from .init_unit import InitUnit
-from .migrate import _migrate_unit2units
+from .move import _move_unit2units
 
 
 def _copy(from_: dtypes.Unit, to: dtypes.Unit, program: program.Program) -> list[tokens.BFToken]:
@@ -17,8 +17,8 @@ def _copy(from_: dtypes.Unit, to: dtypes.Unit, program: program.Program) -> list
     InitUnit(buffer)(program)
 
     routine: list[tokens.BFToken] = [tokens.Clear(to)]
-    routine.extend(_migrate_unit2units(from_, [(buffer, 1)]))
-    routine.extend(_migrate_unit2units(buffer, [(from_, 1), (to, 1)]))
+    routine.extend(_move_unit2units(from_, [(buffer, 1)]))
+    routine.extend(_move_unit2units(buffer, [(from_, 1), (to, 1)]))
 
     routine.append(metainfo.Free(buffer))
 

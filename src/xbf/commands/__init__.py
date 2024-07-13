@@ -18,7 +18,7 @@ from .divmod import DivModUnit
 from .init_array import InitArray
 from .init_unit import InitUnit
 from .input import InputUnit
-from .migrate import MigrateUnit
+from .move import MoveUnit
 from .mul import MulUnit
 from .not_ import NotUnit
 from .or_ import OrUnit
@@ -27,7 +27,7 @@ from .xor import XorUnit
 
 __all__ = (
     "BaseCommand",
-    "MigrateUnit",
+    "MoveUnit",
     "InitArray",
     "InitUnit",
     "AddUnit",

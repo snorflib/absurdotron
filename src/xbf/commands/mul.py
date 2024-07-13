@@ -9,7 +9,7 @@ from src.xbf import dtypes, program
 from .add import _generic_addition
 from .base import BaseCommand
 from .init_unit import InitUnit
-from .migrate import _migrate_unit2units
+from .move import _move_unit2units
 
 
 def _multiply(
@@ -25,12 +25,12 @@ def _multiply(
         buffer = dtypes.Unit()
         InitUnit(buffer)(program)
 
-        routine = _migrate_unit2units(origin, [(buffer, 1)])
+        routine = _move_unit2units(origin, [(buffer, 1)])
         if origin is target:
-            routine.extend(_migrate_unit2units(buffer, [(target, other)]))
+            routine.extend(_move_unit2units(buffer, [(target, other)]))
         else:
             routine.append(tokens.Clear(target))
-            routine.extend(_migrate_unit2units(buffer, [(target, other), (origin, 1)]))
+            routine.extend(_move_unit2units(buffer, [(target, other), (origin, 1)]))
 
         routine.append(metainfo.Free(buffer))
         return routine
@@ -41,10 +41,10 @@ def _multiply(
     InitUnit(other_buf)(program)
 
     if origin is other:
-        routine = _migrate_unit2units(from_unit=origin, to_units=[(origin_buf, 1), (other_buf, 1)])
+        routine = _move_unit2units(from_unit=origin, to_units=[(origin_buf, 1), (other_buf, 1)])
     else:
-        routine = _migrate_unit2units(from_unit=origin, to_units=[(origin_buf, 1)])
-        routine.extend(_migrate_unit2units(from_unit=other, to_units=[(other_buf, 1)]))
+        routine = _move_unit2units(from_unit=origin, to_units=[(origin_buf, 1)])
+        routine.extend(_move_unit2units(from_unit=other, to_units=[(other_buf, 1)]))
 
     routine.append(tokens.Clear(target))
     routine.append(tokens.EnterLoop(other_buf))
@@ -57,7 +57,7 @@ def _multiply(
     routine.append(tokens.ExitLoop())
 
     # This line also covers the case where target is the
-    routine.extend(_migrate_unit2units(origin_buf, [(origin, 1)]))
+    routine.extend(_move_unit2units(origin_buf, [(origin, 1)]))
 
     routine.append(metainfo.Free(other_buf))
     routine.append(metainfo.Free(origin_buf))

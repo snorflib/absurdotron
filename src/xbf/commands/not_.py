@@ -6,23 +6,23 @@ from src.xbf import dtypes, program
 
 from .base import BaseCommand
 from .init_unit import InitUnit
-from .migrate import _migrate_unit2units
+from .move import _move_unit2units
 
 
 def _not_unit(unit: dtypes.Unit, target: dtypes.Unit, program: program.Program) -> list[tokens.BFToken]:
     buffer = dtypes.Unit()
     InitUnit(buffer)(program)
 
-    routine = _migrate_unit2units(unit, [(buffer, 1)])
+    routine = _move_unit2units(unit, [(buffer, 1)])
     routine.append(tokens.Increment(buffer))
 
     if target is unit:
-        routine.extend(_migrate_unit2units(buffer, [(unit, -1)]))
+        routine.extend(_move_unit2units(buffer, [(unit, -1)]))
         routine.append(metainfo.Free(buffer))
         return routine
 
     routine.append(tokens.Clear(target))
-    routine.extend(_migrate_unit2units(buffer, [(unit, 1), (target, -1)]))
+    routine.extend(_move_unit2units(buffer, [(unit, 1), (target, -1)]))
     routine.append(tokens.Decrement(unit))
 
     routine.append(metainfo.Free(buffer))

@@ -12,7 +12,7 @@ from .clear import ClearUnit
 from .copy import CopyUnit
 from .divmod import DivModUnit
 from .init_unit import InitUnit
-from .migrate import MigrateUnit
+from .move import MoveUnit
 from .mul import MulUnit
 
 
@@ -47,8 +47,8 @@ def xor_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit, program: pr
     DivModUnit(lquot, 2, lquot, lrem)(program)
     DivModUnit(rquot, 2, rquot, rrem)(program)
 
-    MigrateUnit(lrem, [(xored_bit, 1)])(program)
-    MigrateUnit(rrem, [(xored_bit, 1)])(program)
+    MoveUnit(lrem, [(xored_bit, 1)])(program)
+    MoveUnit(rrem, [(xored_bit, 1)])(program)
 
     routine.append(tokens.EnterLoop(xored_bit))
     routine.append(tokens.Decrement(xored_bit))

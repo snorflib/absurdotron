@@ -8,7 +8,7 @@ from src.xbf import dtypes, program
 
 from .base import BaseCommand
 from .init_unit import InitUnit
-from .migrate import MigrateUnit
+from .move import MoveUnit
 
 
 def _callz(
@@ -22,14 +22,14 @@ def _callz(
     InitUnit(else_flag)(program)
     InitUnit(buffer)(program)
 
-    MigrateUnit(subject, [(buffer, 1)])(program)
+    MoveUnit(subject, [(buffer, 1)])(program)
     program.routine.extend(
         [
             tokens.Increment(else_flag),
             tokens.EnterLoop(buffer),
         ]
     )
-    MigrateUnit(buffer, [(subject, 1)])(program)
+    MoveUnit(buffer, [(subject, 1)])(program)
 
     for command in if_ or []:
         command(program)
