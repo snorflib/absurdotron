@@ -1,6 +1,7 @@
 from .commands import (
     AddUnit,
     AndUnit,
+    ArrayStore,
     AssignUnit,
     BaseCommand,
     CallEq,
@@ -56,4 +57,5 @@ __all__ = (
     "CallGT",
     "CallNeq",
     "CallEq",
+    "ArrayStore",
 )

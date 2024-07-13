@@ -19,6 +19,18 @@ def run_and_eval_commands_get_output(
     return output.getvalue()
 
 
+def run_and_eval_commands_get_whole_tape(
+    commands: list[xbf.BaseCommand],
+    input: str | list[int] | None = None,
+) -> tuple[list[int], dict[ir.Owner, int]]:
+    program = eval_commands(commands)
+    memory = resolve_program_memory(program)
+    code = compile_routine_with_memory(program.routine, memory)
+
+    tape = eval_bf(code, input=input).memory.cells
+    return tape, memory
+
+
 def run_and_eval_commands(
     commands: list[xbf.BaseCommand],
     input: str | list[int] | None = None,

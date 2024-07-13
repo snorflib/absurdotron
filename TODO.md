@@ -45,6 +45,8 @@
 
     > Make a global counter for dtypes. To not overuse memory.
 
+    > Rework arrays to be good code
+
     > Instructions to implement:
         > ✅ INPUT   # INP
         > ✅ DISPLAY # DSP
@@ -77,7 +79,8 @@
         > ✅ CALLLT
         > ✅ CALLGE
         > ✅ CALLGT
-        > CALLEQ
+        > ✅ CALLEQ
+        > ✅ CALLNEQ
 
         > ✅ XOR
         > ✅ AND

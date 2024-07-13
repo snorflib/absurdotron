@@ -9,7 +9,6 @@ from .base import BaseCommand
 @attrs.frozen
 class InitArray(BaseCommand):
     array: dtypes.Array
-    length: int
 
     def _apply(self, context: program.Program) -> None:
-        context.constr.append(constraints.ArrayConstraint(self.array, self.length))
+        context.constr.append(constraints.ArrayConstraint(self.array, self.array.length))

@@ -1,5 +1,6 @@
 from .add import AddUnit
 from .and_ import AndUnit
+from .arr_store import ArrayStore
 from .assign import AssignUnit
 from .base import BaseCommand
 from .calleq import CallEq
@@ -48,4 +49,5 @@ __all__ = (
     "CallGT",
     "CallNeq",
     "CallEq",
+    "ArrayStore",
 )
