@@ -5,13 +5,13 @@ from src.memoptix import metainfo
 from src.xbf import dtypes, program
 
 from .base import BaseCommand
-from .init_unit import InitUnit
+from .init import Init
 from .move import _move_unit2units
 
 
 def _not_unit(unit: dtypes.Unit, target: dtypes.Unit, program: program.Program) -> list[tokens.BFToken]:
     buffer = dtypes.Unit()
-    InitUnit(buffer)(program)
+    Init(buffer)(program)
 
     routine = _move_unit2units(unit, [(buffer, 1)])
     routine.append(tokens.Increment(buffer))

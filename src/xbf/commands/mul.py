@@ -8,7 +8,7 @@ from src.xbf import dtypes, program
 
 from .add import _generic_addition
 from .base import BaseCommand
-from .init_unit import InitUnit
+from .init import Init
 from .move import _move_unit2units
 
 
@@ -23,7 +23,7 @@ def _multiply(
             return []
 
         buffer = dtypes.Unit()
-        InitUnit(buffer)(program)
+        Init(buffer)(program)
 
         routine = _move_unit2units(origin, [(buffer, 1)])
         if origin is target:
@@ -37,8 +37,8 @@ def _multiply(
 
     origin_buf, other_buf = dtypes.Unit(), dtypes.Unit()
 
-    InitUnit(origin_buf)(program)
-    InitUnit(other_buf)(program)
+    Init(origin_buf)(program)
+    Init(other_buf)(program)
 
     if origin is other:
         routine = _move_unit2units(from_unit=origin, to_units=[(origin_buf, 1), (other_buf, 1)])

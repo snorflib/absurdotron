@@ -6,8 +6,8 @@ from .utils import run_and_eval_commands
 def test_callge_only_if() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(a, 15, a),
         xbf.AddUnit(b, 10, b),
         xbf.CallGE(
@@ -27,8 +27,8 @@ def test_callge_only_if() -> None:
 def test_callge_only_else() -> None:
     a, b = xbf.Unit("a"), xbf.Unit("b")
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(b, 1, b),
         xbf.CallGE(
             a,
@@ -47,8 +47,8 @@ def test_callge_only_else() -> None:
 def test_callge_equal_only_else_two() -> None:
     a, b = xbf.Unit("a"), xbf.Unit("b")
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(a, 254, a),
         xbf.AddUnit(b, 255, b),
         xbf.CallGE(
@@ -68,8 +68,8 @@ def test_callge_equal_only_else_two() -> None:
 def test_callge_equal() -> None:
     a, b = xbf.Unit("a"), xbf.Unit("b")
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(a, 5, a),
         xbf.AddUnit(b, 5, b),
         xbf.CallGE(
@@ -89,8 +89,8 @@ def test_callge_equal() -> None:
 def test_callge_nested() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(b, 10, b),
         xbf.CallGE(
             a,

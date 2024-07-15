@@ -9,7 +9,7 @@ from .assign import AssignUnit
 from .base import BaseCommand
 from .copy import CopyUnit
 from .divmod import DivModUnit
-from .init_unit import InitUnit
+from .init import Init
 from .mul import MulUnit
 
 
@@ -24,12 +24,12 @@ def and_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit, program: pr
     lquot, rquot = dtypes.Unit(), dtypes.Unit()
     lrem, rrem = dtypes.Unit(), dtypes.Unit()
     bit_scale, break_ = dtypes.Unit(), dtypes.Unit()
-    InitUnit(lrem)(program)
-    InitUnit(rrem)(program)
-    InitUnit(lquot)(program)
-    InitUnit(rquot)(program)
-    InitUnit(bit_scale)(program)
-    InitUnit(break_)(program)
+    Init(lrem)(program)
+    Init(rrem)(program)
+    Init(lquot)(program)
+    Init(rquot)(program)
+    Init(bit_scale)(program)
+    Init(break_)(program)
 
     CopyUnit(left, lquot)(program)
     CopyUnit(right, rquot)(program)

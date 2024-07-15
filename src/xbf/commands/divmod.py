@@ -7,7 +7,7 @@ from src.xbf import dtypes, program
 from .add import AddUnit
 from .base import BaseCommand
 from .callz import CallZ
-from .init_unit import InitUnit
+from .init import Init
 from .move import MoveUnit, _move_unit2units
 
 
@@ -34,7 +34,7 @@ def _generic_division(
 
     if isinstance(divisor, int):
         divisor_unit = dtypes.Unit("divisor_unit")
-        InitUnit(divisor_unit)(program)
+        Init(divisor_unit)(program)
         AddUnit(divisor_unit, divisor, divisor_unit)(program)
         divisor = divisor_unit
         restore_divisor = False
@@ -42,8 +42,8 @@ def _generic_division(
     remainder_buf = dtypes.Unit()
     dividend_buf = dtypes.Unit()
 
-    InitUnit(remainder_buf)(program)
-    InitUnit(dividend_buf)(program)
+    Init(remainder_buf)(program)
+    Init(dividend_buf)(program)
 
     program.routine.extend(_move_unit2units(dividend, [(dividend_buf, 1)]))
     program.routine.append(tokens.EnterLoop(dividend_buf))

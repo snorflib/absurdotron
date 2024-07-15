@@ -10,7 +10,7 @@
 ### Memoptix:
     > Make exceptions more detailed and persistent
 
-    > Make scope detection more intuitive. Make sure `Free` is applied when owner's value is zero, if there's a chance it's no -> warn or raise an exception. Automatically add `Free` if it's known for a fact that value is zero (for example after a loop). Add an intuitive constraint `GlobalUnit` to make globally scoped units explicit, and raise an error if a unit is not global and is not freed. 
+    > Add an intuitive constraint `GlobalUnit` to make globally scoped units explicit, and raise an error if a unit is not global and is not freed. 
 
     > Abstract the resolver away from owners/metainfo context. 
 
@@ -37,7 +37,7 @@
 
     > make instruction names the same, and using multidispatch or custom dispatch choose different algorithms for different types
 
-    > due to the last change change InitUnit and InitArray to <Allocate>
+    > due to the last change change Init and Init to <Allocate>
 
     > add comments and comment compilation
 

@@ -5,7 +5,7 @@ from .utils import run_and_eval_commands
 
 def test_simple_mul() -> None:
     a = xbf.Unit()
-    commands = [xbf.InitUnit(a), xbf.AddUnit(a, 10, a), xbf.MulUnit(a, 10, a)]
+    commands = [xbf.Init(a), xbf.AddUnit(a, 10, a), xbf.MulUnit(a, 10, a)]
 
     memory = run_and_eval_commands(commands)
     assert memory[a] == 100
@@ -13,7 +13,7 @@ def test_simple_mul() -> None:
 
 def test_simple_two_arguments_mul() -> None:
     a, b = xbf.Unit(), xbf.Unit()
-    commands = [xbf.InitUnit(a), xbf.InitUnit(b), xbf.AddUnit(a, 10, a), xbf.AddUnit(b, 5, b), xbf.MulUnit(a, 10, b)]
+    commands = [xbf.Init(a), xbf.Init(b), xbf.AddUnit(a, 10, a), xbf.AddUnit(b, 5, b), xbf.MulUnit(a, 10, b)]
 
     memory = run_and_eval_commands(commands)
     assert memory[b] == 100
@@ -23,8 +23,8 @@ def test_simple_two_arguments_mul() -> None:
 def test_multiply_by_zero() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(b, 2, b),
         xbf.AddUnit(a, 10, a),
         xbf.MulUnit(a, 0, b),
@@ -39,7 +39,7 @@ def test_multiply_by_zero() -> None:
 
 def test_mul_by_itself_and_save_to_it() -> None:
     a = xbf.Unit()
-    commands = [xbf.InitUnit(a), xbf.AddUnit(a, 10, a), xbf.MulUnit(a, a, a)]
+    commands = [xbf.Init(a), xbf.AddUnit(a, 10, a), xbf.MulUnit(a, a, a)]
 
     memory = run_and_eval_commands(commands)
     assert memory[a] == 110  # 10 * 10 = 100 -> +10 before multiplication
@@ -47,7 +47,7 @@ def test_mul_by_itself_and_save_to_it() -> None:
 
 def test_mul_by_itself() -> None:
     a, b = xbf.Unit(), xbf.Unit()
-    commands = [xbf.InitUnit(a), xbf.InitUnit(b), xbf.AddUnit(a, 10, a), xbf.AddUnit(b, 5, b), xbf.MulUnit(b, b, a)]
+    commands = [xbf.Init(a), xbf.Init(b), xbf.AddUnit(a, 10, a), xbf.AddUnit(b, 5, b), xbf.MulUnit(b, b, a)]
 
     memory = run_and_eval_commands(commands)
     assert memory[a] == 25
@@ -57,9 +57,9 @@ def test_mul_by_itself() -> None:
 def test_mul_with_two_arguments() -> None:
     a, b, c = xbf.Unit(), xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
-        xbf.InitUnit(c),
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Init(c),
         xbf.AddUnit(a, 10, a),
         xbf.AddUnit(b, 4, b),
         xbf.MulUnit(a, b, c),

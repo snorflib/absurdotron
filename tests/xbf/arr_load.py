@@ -8,9 +8,9 @@ def test_simple_load() -> None:
     idx = xbf.Unit()
     value = xbf.Unit()
     commands = [
-        xbf.InitArray(arr),
-        xbf.InitUnit(idx),
-        xbf.InitUnit(value),
+        xbf.Init(arr),
+        xbf.Init(idx),
+        xbf.Init(value),
         xbf.AssignUnit(idx, 4),
         xbf.AssignUnit(value, 5),
         xbf.ArrayStore(arr, value, idx),
@@ -29,10 +29,10 @@ def test_load_zero_at_zero() -> None:
     value = xbf.Unit()
     value_read = xbf.Unit()
     commands = [
-        xbf.InitArray(arr),
-        xbf.InitUnit(idx),
-        xbf.InitUnit(value),
-        xbf.InitUnit(value_read),
+        xbf.Init(arr),
+        xbf.Init(idx),
+        xbf.Init(value),
+        xbf.Init(value_read),
         xbf.AssignUnit(idx, 0),
         xbf.AssignUnit(value, 0),
         xbf.AssignUnit(value_read, 1),

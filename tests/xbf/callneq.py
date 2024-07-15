@@ -6,8 +6,8 @@ from .utils import run_and_eval_commands
 def test_callneq_only_if() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(a, 14, a),
         xbf.AddUnit(b, 15, b),
         xbf.CallNeq(
@@ -27,8 +27,8 @@ def test_callneq_only_if() -> None:
 def test_callneq_only_else() -> None:
     a, b = xbf.Unit("a"), xbf.Unit("b")
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(b, 1, b),
         xbf.AddUnit(a, 1, a),
         xbf.CallNeq(
@@ -48,8 +48,8 @@ def test_callneq_only_else() -> None:
 def test_callneq_equal() -> None:
     a, b = xbf.Unit("a"), xbf.Unit("b")
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(a, 5, a),
         xbf.AddUnit(b, 5, b),
         xbf.CallNeq(
@@ -69,8 +69,8 @@ def test_callneq_equal() -> None:
 def test_callneq_nested() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.CallNeq(
             a,
             b,

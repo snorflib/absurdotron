@@ -7,7 +7,7 @@ from src.ir import tokens
 from src.xbf import dtypes, program
 
 from .base import BaseCommand
-from .init_unit import InitUnit
+from .init import Init
 from .move import MoveUnit
 
 
@@ -19,8 +19,8 @@ def _callz(
 ) -> None:
     else_flag, buffer = dtypes.Unit(), dtypes.Unit()
 
-    InitUnit(else_flag)(program)
-    InitUnit(buffer)(program)
+    Init(else_flag)(program)
+    Init(buffer)(program)
 
     MoveUnit(subject, [(buffer, 1)])(program)
     program.routine.extend(

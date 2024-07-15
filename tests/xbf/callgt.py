@@ -6,8 +6,8 @@ from .utils import run_and_eval_commands
 def test_callgt_only_if() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(a, 15, a),
         xbf.AddUnit(b, 10, b),
         xbf.CallGT(
@@ -27,8 +27,8 @@ def test_callgt_only_if() -> None:
 def test_callgt_only_else() -> None:
     a, b = xbf.Unit("a"), xbf.Unit("b")
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.CallGT(
             a,
             b,
@@ -46,8 +46,8 @@ def test_callgt_only_else() -> None:
 def test_callgt_equal_only_else_two() -> None:
     a, b = xbf.Unit("a"), xbf.Unit("b")
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(a, 254, a),
         xbf.AddUnit(b, 255, b),
         xbf.CallGT(
@@ -67,8 +67,8 @@ def test_callgt_equal_only_else_two() -> None:
 def test_callgt_equal() -> None:
     a, b = xbf.Unit("a"), xbf.Unit("b")
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(a, 5, a),
         xbf.AddUnit(b, 5, b),
         xbf.CallGT(
@@ -88,8 +88,8 @@ def test_callgt_equal() -> None:
 def test_callgt_nested() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(b, 10, b),
         xbf.CallGT(
             a,

@@ -5,7 +5,7 @@ from .utils import run_and_eval_commands
 
 def test_input_add() -> None:
     a = xbf.Unit()
-    commands = [xbf.InitUnit(a), xbf.InputUnit(a)]
+    commands = [xbf.Init(a), xbf.InputUnit(a)]
 
     memory = run_and_eval_commands(
         commands,
@@ -18,7 +18,7 @@ def test_input_add() -> None:
 
 def test_input_override() -> None:
     a = xbf.Unit()
-    commands = [xbf.InitUnit(a), xbf.InputUnit(a), xbf.InputUnit(a)]
+    commands = [xbf.Init(a), xbf.InputUnit(a), xbf.InputUnit(a)]
 
     memory = run_and_eval_commands(
         commands,

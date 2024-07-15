@@ -6,8 +6,8 @@ from .utils import run_and_eval_commands
 def test_callz_only_if() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(a, 1, a),
         xbf.CallZ(
             a,
@@ -25,8 +25,8 @@ def test_callz_only_if() -> None:
 def test_callz_only_else() -> None:
     a, b = xbf.Unit("a"), xbf.Unit("b")
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.CallZ(
             a,
             else_=[
@@ -40,12 +40,11 @@ def test_callz_only_else() -> None:
     assert memory[b] == 5
 
 
-
 def test_callz_nested() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.CallZ(
             a,
             else_=[

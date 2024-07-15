@@ -6,8 +6,8 @@ from .utils import run_and_eval_commands
 def test_integer_division_quotient() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(a, 15, a),
         xbf.DivModUnit(a, 4, quotient=b),
         xbf.AddUnit(b, 1, b),
@@ -21,8 +21,8 @@ def test_integer_division_quotient() -> None:
 def test_integer_division_remainder() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(a, 17, a),
         xbf.DivModUnit(a, 4, remainder=b),
         xbf.AddUnit(b, 1, b),
@@ -37,8 +37,8 @@ def test_integer_division_remainder() -> None:
 def test_integer_remainder_is_divisor() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(a, 6, a),
         xbf.DivModUnit(a, 4, remainder=a),
     ]
@@ -50,8 +50,8 @@ def test_integer_remainder_is_divisor() -> None:
 def test_integer_quotient_is_divisor() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(a, 6, a),
         xbf.DivModUnit(a, 4, quotient=a),
     ]
@@ -59,11 +59,12 @@ def test_integer_quotient_is_divisor() -> None:
     memory = run_and_eval_commands(commands)
     assert memory[a] == 1
 
+
 def test_divmod_zero_division() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(a, 6, a),
         xbf.DivModUnit(a, 0, quotient=a),
     ]
@@ -75,10 +76,10 @@ def test_divmod_zero_division() -> None:
 def test_all_arguments() -> None:
     a, b, c, d = xbf.Unit(), xbf.Unit(), xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
-        xbf.InitUnit(c),
-        xbf.InitUnit(d),
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Init(c),
+        xbf.Init(d),
         xbf.AddUnit(a, 6, a),
         xbf.AddUnit(c, 4, c),
         xbf.DivModUnit(a, c, quotient=b, remainder=d),
@@ -97,8 +98,8 @@ def test_all_arguments() -> None:
 def test_zero_dividend() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.DivModUnit(a, 4, quotient=b, remainder=a),
     ]
 
@@ -107,11 +108,12 @@ def test_zero_dividend() -> None:
     assert memory[a] == 0
     assert memory[b] == 0
 
+
 def test_division_by_integer_dividend_to_quotient() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AssignUnit(a, 22),
         xbf.DivModUnit(a, 4, quotient=a, remainder=b),
     ]

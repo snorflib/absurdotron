@@ -15,8 +15,7 @@ from .clear import ClearUnit
 from .copy import CopyUnit
 from .display import DisplayUnit
 from .divmod import DivModUnit
-from .init_array import InitArray
-from .init_unit import InitUnit
+from .init import Init
 from .input import InputUnit
 from .move import MoveUnit
 from .mul import MulUnit
@@ -28,8 +27,7 @@ from .xor import XorUnit
 __all__ = (
     "BaseCommand",
     "MoveUnit",
-    "InitArray",
-    "InitUnit",
+    "Init",
     "AddUnit",
     "SubUnit",
     "DisplayUnit",

@@ -5,7 +5,7 @@ from src.memoptix import metainfo
 from src.xbf import dtypes, program
 
 from .base import BaseCommand
-from .init_unit import InitUnit
+from .init import Init
 from .move import _move_unit2units
 
 
@@ -14,7 +14,7 @@ def _copy(from_: dtypes.Unit, to: dtypes.Unit, program: program.Program) -> list
         return []
 
     buffer = dtypes.Unit()
-    InitUnit(buffer)(program)
+    Init(buffer)(program)
 
     routine: list[tokens.BFToken] = [tokens.Clear(to)]
     routine.extend(_move_unit2units(from_, [(buffer, 1)]))

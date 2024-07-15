@@ -7,7 +7,7 @@ from src.memoptix import metainfo
 from src.xbf import dtypes, program
 
 from .base import BaseCommand
-from .init_unit import InitUnit
+from .init import Init
 from .move import _move_unit2units
 
 
@@ -19,7 +19,7 @@ def _add_an_integer(origin: dtypes.Unit, integer: int) -> collections.abc.Sequen
 
 def _quick_migration(from_: dtypes.Unit, to: dtypes.Unit, program: program.Program) -> list[tokens.BFToken]:
     buffer = dtypes.Unit()
-    InitUnit(buffer)(program)
+    Init(buffer)(program)
     routine = _move_unit2units(from_, [(buffer, 1)])
     routine.extend(_move_unit2units(buffer, [(from_, 1), (to, 1)]))
     routine.append(metainfo.Free(buffer))
@@ -59,7 +59,7 @@ def _generic_addition(
             return [tokens.Clear(origin)]
 
         buffer_unit = dtypes.Unit()
-        InitUnit(buffer_unit)(program)
+        Init(buffer_unit)(program)
         routine = _move_unit2units(from_unit=origin, to_units=[(buffer_unit, 1)])
 
         if other is target:
@@ -74,7 +74,7 @@ def _generic_addition(
         origin, other = other, origin
 
     other_buffer = dtypes.Unit()
-    InitUnit(other_buffer)(program)
+    Init(other_buffer)(program)
     routine = _move_unit2units(from_unit=other, to_units=[(other_buffer, 1)])
 
     if origin is target:
@@ -83,7 +83,7 @@ def _generic_addition(
         return routine
 
     origin_buffer = dtypes.Unit()
-    InitUnit(origin_buffer)(program)
+    Init(origin_buffer)(program)
     routine.extend(_move_unit2units(from_unit=origin, to_units=[(origin_buffer, 1)]))
     routine.extend(_move_unit2units(from_unit=origin_buffer, to_units=[(origin, 1), (target, 1)]))
 

@@ -6,8 +6,8 @@ from .utils import run_and_eval_commands
 def test_copy_simple() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(a, 10, a),
         xbf.CopyUnit(a, b),
     ]
@@ -20,8 +20,8 @@ def test_copy_simple() -> None:
 def test_copy_override() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(a, 10, a),
         xbf.AddUnit(b, 15, b),
         xbf.CopyUnit(a, b),

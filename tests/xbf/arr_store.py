@@ -8,9 +8,9 @@ def test_simple_assignment() -> None:
     idx = xbf.Unit()
     value = xbf.Unit()
     commands = [
-        xbf.InitArray(arr),
-        xbf.InitUnit(idx),
-        xbf.InitUnit(value),
+        xbf.Init(arr),
+        xbf.Init(idx),
+        xbf.Init(value),
         xbf.AssignUnit(idx, 4),
         xbf.AssignUnit(value, 5),
         xbf.ArrayStore(arr, value, idx),
@@ -29,9 +29,9 @@ def test_value_override() -> None:
     value = xbf.Unit()
     value_2 = xbf.Unit()
     commands = [
-        xbf.InitArray(arr),
-        xbf.InitUnit(idx),
-        xbf.InitUnit(value),
+        xbf.Init(arr),
+        xbf.Init(idx),
+        xbf.Init(value),
         xbf.AssignUnit(idx, 4),
         xbf.AssignUnit(value, 5),
         xbf.AssignUnit(value_2, 50),
@@ -51,9 +51,9 @@ def test_zero_index() -> None:
     idx = xbf.Unit()
     value = xbf.Unit()
     commands = [
-        xbf.InitArray(arr),
-        xbf.InitUnit(idx),
-        xbf.InitUnit(value),
+        xbf.Init(arr),
+        xbf.Init(idx),
+        xbf.Init(value),
         xbf.AssignUnit(idx, 0),
         xbf.AssignUnit(value, 5),
         xbf.ArrayStore(arr, value, idx),

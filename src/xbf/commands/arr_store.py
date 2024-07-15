@@ -5,7 +5,7 @@ from src.memoptix import metainfo
 from src.xbf import dtypes, program
 
 from .base import BaseCommand
-from .init_unit import InitUnit
+from .init import Init
 from .move import MoveUnit
 
 
@@ -31,7 +31,7 @@ def _array_store(
 
     if isinstance(index, int):
         buffer = dtypes.Unit()
-        InitUnit(buffer)(program)
+        Init(buffer)(program)
         MoveUnit(to_store, [(buffer, 1)])(program)
 
         routine.extend(

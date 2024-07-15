@@ -11,7 +11,7 @@ from .base import BaseCommand
 from .callz import CallZ
 from .clear import ClearUnit
 from .copy import CopyUnit
-from .init_unit import InitUnit
+from .init import Init
 from .sub import SubUnit
 
 
@@ -25,10 +25,10 @@ def _callge(
     else_flag, true_flag = dtypes.Unit(), dtypes.Unit()
     right_buffer, left_buffer = dtypes.Unit(), dtypes.Unit()
 
-    InitUnit(else_flag)(program)
-    InitUnit(true_flag)(program)
-    InitUnit(right_buffer)(program)
-    InitUnit(left_buffer)(program)
+    Init(else_flag)(program)
+    Init(true_flag)(program)
+    Init(right_buffer)(program)
+    Init(left_buffer)(program)
 
     CopyUnit(left, left_buffer)(program)
     CopyUnit(right, right_buffer)(program)

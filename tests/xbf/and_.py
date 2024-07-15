@@ -5,7 +5,7 @@ from .utils import run_and_eval_commands
 
 def test_simple_and() -> None:
     a = xbf.Unit()
-    commands = [xbf.InitUnit(a), xbf.AddUnit(a, 10, a), xbf.AndUnit(a, a, a)]
+    commands = [xbf.Init(a), xbf.AddUnit(a, 10, a), xbf.AndUnit(a, a, a)]
 
     memory = run_and_eval_commands(commands)
     assert memory[a] == 10
@@ -13,7 +13,7 @@ def test_simple_and() -> None:
 
 def test_simple_and_zero() -> None:
     a = xbf.Unit()
-    commands = [xbf.InitUnit(a), xbf.AddUnit(a, 0, a), xbf.AndUnit(a, a, a)]
+    commands = [xbf.Init(a), xbf.AddUnit(a, 0, a), xbf.AndUnit(a, a, a)]
 
     memory = run_and_eval_commands(commands)
     assert memory.get(a, 0) == 0
@@ -21,7 +21,7 @@ def test_simple_and_zero() -> None:
 
 def test_simple_and_255() -> None:
     a = xbf.Unit()
-    commands = [xbf.InitUnit(a), xbf.AddUnit(a, 255, a), xbf.AndUnit(a, a, a)]
+    commands = [xbf.Init(a), xbf.AddUnit(a, 255, a), xbf.AndUnit(a, a, a)]
 
     memory = run_and_eval_commands(commands)
     assert memory[a] == 255
@@ -30,9 +30,9 @@ def test_simple_and_255() -> None:
 def test_and_0_0() -> None:
     a, b, c = xbf.Unit(), xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
-        xbf.InitUnit(c),
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Init(c),
         xbf.AndUnit(a, b, c),
     ]
 
@@ -45,8 +45,8 @@ def test_and_0_0() -> None:
 def test_and_same_number_non_zero() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(a, 44, a),
         xbf.AddUnit(b, 44, b),
         xbf.AndUnit(a, b, b),
@@ -61,9 +61,9 @@ def test_and_same_number_non_zero() -> None:
 def test_and_zero_and_non_zero() -> None:
     a, b, c = xbf.Unit(), xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
-        xbf.InitUnit(c),
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Init(c),
         xbf.AddUnit(a, 0, a),
         xbf.AddUnit(b, 79, b),
         xbf.AndUnit(a, b, c),
@@ -78,8 +78,8 @@ def test_and_zero_and_non_zero() -> None:
 def test_and_non_zero_and_non_zero() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
+        xbf.Init(a),
+        xbf.Init(b),
         xbf.AddUnit(a, 13, a),
         xbf.AddUnit(b, 91, b),
         xbf.AndUnit(a, b, a),
@@ -93,9 +93,9 @@ def test_and_non_zero_and_non_zero() -> None:
 def test_and_non_zero_and_non_zero_2() -> None:
     a, b, c = xbf.Unit(), xbf.Unit(), xbf.Unit()
     commands = [
-        xbf.InitUnit(a),
-        xbf.InitUnit(b),
-        xbf.InitUnit(c),
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Init(c),
         xbf.AddUnit(a, 167, a),
         xbf.AddUnit(b, 13, b),
         xbf.AndUnit(a, b, c),
