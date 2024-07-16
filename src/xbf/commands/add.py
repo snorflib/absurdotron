@@ -56,6 +56,9 @@ def _add_without_clear(from_: dtypes.Unit, to_: dtypes.Unit, scale: int = 1) -> 
     if scale == 0:
         return None
 
+    if (from_ == to_) and (scale == -1):
+        return [tokens.Clear(from_)]
+
     buffer = dtypes.Unit()
     return [
         memoptix.UnitConstraint(buffer),
