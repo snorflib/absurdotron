@@ -8,9 +8,9 @@ def test_integer_division_quotient() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 15, a),
+        xbf.Add(a, 15, a),
         xbf.DivModUnit(a, 4, quotient=b),
-        xbf.AddUnit(b, 1, b),
+        xbf.Add(b, 1, b),
     ]
 
     memory = run_and_eval_commands(commands)
@@ -23,10 +23,10 @@ def test_integer_division_remainder() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 17, a),
+        xbf.Add(a, 17, a),
         xbf.DivModUnit(a, 4, remainder=b),
-        xbf.AddUnit(b, 1, b),
-        xbf.AddUnit(a, 1, a),
+        xbf.Add(b, 1, b),
+        xbf.Add(a, 1, a),
     ]
 
     memory = run_and_eval_commands(commands)
@@ -39,7 +39,7 @@ def test_integer_remainder_is_divisor() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 6, a),
+        xbf.Add(a, 6, a),
         xbf.DivModUnit(a, 4, remainder=a),
     ]
 
@@ -52,7 +52,7 @@ def test_integer_quotient_is_divisor() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 6, a),
+        xbf.Add(a, 6, a),
         xbf.DivModUnit(a, 4, quotient=a),
     ]
 
@@ -65,7 +65,7 @@ def test_divmod_zero_division() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 6, a),
+        xbf.Add(a, 6, a),
         xbf.DivModUnit(a, 0, quotient=a),
     ]
 
@@ -80,12 +80,12 @@ def test_all_arguments() -> None:
         xbf.Init(b),
         xbf.Init(c),
         xbf.Init(d),
-        xbf.AddUnit(a, 6, a),
-        xbf.AddUnit(c, 4, c),
+        xbf.Add(a, 6, a),
+        xbf.Add(c, 4, c),
         xbf.DivModUnit(a, c, quotient=b, remainder=d),
-        xbf.AddUnit(a, 1, a),
-        xbf.AddUnit(c, 1, c),
-        xbf.AddUnit(b, 1, b),
+        xbf.Add(a, 1, a),
+        xbf.Add(c, 1, c),
+        xbf.Add(b, 1, b),
     ]
 
     memory = run_and_eval_commands(commands)

@@ -4,7 +4,7 @@ from src.ir import tokens
 from src.memoptix import metainfo
 from src.xbf import dtypes, program
 
-from .add import AddUnit
+from .add import Add
 from .assign import AssignUnit
 from .base import BaseCommand
 from .copy import CopyUnit
@@ -46,7 +46,7 @@ def and_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit, program: pr
 
     routine.append(tokens.EnterLoop(lrem))
     routine.append(tokens.EnterLoop(rrem))
-    AddUnit(bit_scale, target, target)(program)
+    Add(bit_scale, target, target)(program)
     routine.append(tokens.Decrement(rrem))
     routine.append(tokens.ExitLoop())
     routine.append(tokens.Decrement(lrem))

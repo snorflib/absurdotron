@@ -4,7 +4,7 @@ from src.ir import tokens
 from src.memoptix import metainfo
 from src.xbf import dtypes, program
 
-from .add import AddUnit
+from .add import Add
 from .base import BaseCommand
 from .callz import CallZ
 from .init import Init
@@ -35,7 +35,7 @@ def _generic_division(
     if isinstance(divisor, int):
         divisor_unit = dtypes.Unit("divisor_unit")
         Init(divisor_unit)(program)
-        AddUnit(divisor_unit, divisor, divisor_unit)(program)
+        Add(divisor_unit, divisor, divisor_unit)(program)
         divisor = divisor_unit
         restore_divisor = False
 
@@ -56,13 +56,13 @@ def _generic_division(
 
     else_: list[BaseCommand] = [MoveUnit(remainder_buf, [(divisor, 1)])]
     if quotient:
-        else_.append(AddUnit(quotient, 1, quotient))
+        else_.append(Add(quotient, 1, quotient))
     CallZ(divisor, else_=else_)(program)
 
     program.routine.append(tokens.ExitLoop())
 
     if restore_divisor:
-        AddUnit(remainder_buf, 0, divisor)(program)
+        Add(remainder_buf, 0, divisor)(program)
     else:
         program.routine.append(tokens.Clear(divisor))
         program.routine.append(metainfo.Free(divisor))

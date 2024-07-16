@@ -8,13 +8,13 @@ def test_callle_only_if() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 9, a),
-        xbf.AddUnit(b, 10, b),
+        xbf.Add(a, 9, a),
+        xbf.Add(b, 10, b),
         xbf.CallLE(
             a,
             b,
             if_=[
-                xbf.AddUnit(b, 4, b),
+                xbf.Add(b, 4, b),
             ],
         ),
     ]
@@ -29,12 +29,12 @@ def test_callle_only_else() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 1, a),
+        xbf.Add(a, 1, a),
         xbf.CallLE(
             a,
             b,
             else_=[
-                xbf.AddUnit(b, 5, b),
+                xbf.Add(b, 5, b),
             ],
         ),
     ]
@@ -49,12 +49,12 @@ def test_callle_only_else_two() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 1, a),
+        xbf.Add(a, 1, a),
         xbf.CallLE(
             a,
             b,
             else_=[
-                xbf.AddUnit(b, 5, b),
+                xbf.Add(b, 5, b),
             ],
         ),
     ]
@@ -69,13 +69,13 @@ def test_callle_equal() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 5, a),
-        xbf.AddUnit(b, 5, b),
+        xbf.Add(a, 5, a),
+        xbf.Add(b, 5, b),
         xbf.CallLE(
             a,
             b,
             if_=[
-                xbf.AddUnit(a, 5, a),
+                xbf.Add(a, 5, a),
             ],
         ),
     ]
@@ -90,18 +90,18 @@ def test_callle_nested() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 2, a),
-        xbf.AddUnit(b, 1, b),
+        xbf.Add(a, 2, a),
+        xbf.Add(b, 1, b),
         xbf.CallLE(
             a,
             b,
             else_=[
-                xbf.AddUnit(b, 1, b),
+                xbf.Add(b, 1, b),
                 xbf.CallLE(
                     a,
                     b,
                     if_=[
-                        xbf.AddUnit(b, 5, b),
+                        xbf.Add(b, 5, b),
                     ],
                 ),
             ],

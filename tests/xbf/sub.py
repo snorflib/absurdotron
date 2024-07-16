@@ -34,7 +34,7 @@ def test_sub_two() -> None:
         xbf.Init(a),
         xbf.Init(b),
         xbf.SubUnit(a, 10, a),
-        xbf.AddUnit(b, 4, b),
+        xbf.Add(b, 4, b),
         xbf.SubUnit(a, b, b),
         xbf.SubUnit(b, 6, b),
     ]
@@ -49,8 +49,8 @@ def test_sub_two_2() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 10, a),
-        xbf.AddUnit(b, 4, b),
+        xbf.Add(a, 10, a),
+        xbf.Add(b, 4, b),
         xbf.SubUnit(a, b, a),
     ]
 

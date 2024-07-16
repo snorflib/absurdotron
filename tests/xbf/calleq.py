@@ -8,13 +8,13 @@ def test_calleq_only_if() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 15, a),
-        xbf.AddUnit(b, 15, b),
+        xbf.Add(a, 15, a),
+        xbf.Add(b, 15, b),
         xbf.CallEq(
             a,
             b,
             if_=[
-                xbf.AddUnit(b, 4, b),
+                xbf.Add(b, 4, b),
             ],
         ),
     ]
@@ -29,12 +29,12 @@ def test_calleq_only_else() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 1, a),
+        xbf.Add(a, 1, a),
         xbf.CallEq(
             a,
             b,
             else_=[
-                xbf.AddUnit(b, 5, b),
+                xbf.Add(b, 5, b),
             ],
         ),
     ]
@@ -49,12 +49,12 @@ def test_calleq_equal() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(b, 5, b),
+        xbf.Add(b, 5, b),
         xbf.CallEq(
             a,
             b,
             else_=[
-                xbf.AddUnit(a, 5, a),
+                xbf.Add(a, 5, a),
             ],
         ),
     ]
@@ -69,17 +69,17 @@ def test_calleq_nested() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(b, 5, b),
+        xbf.Add(b, 5, b),
         xbf.CallEq(
             a,
             b,
             else_=[
-                xbf.AddUnit(a, 5, a),
+                xbf.Add(a, 5, a),
                 xbf.CallEq(
                     a,
                     b,
                     if_=[
-                        xbf.AddUnit(b, 5, b),
+                        xbf.Add(b, 5, b),
                     ],
                 ),
             ],

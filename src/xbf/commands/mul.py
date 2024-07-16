@@ -6,7 +6,7 @@ from src.ir import tokens
 from src.memoptix import metainfo
 from src.xbf import dtypes, program
 
-from .add import _generic_addition
+# from .add import _generic_addition
 from .base import BaseCommand
 from .init import Init
 from .move import _move_unit2units
@@ -48,7 +48,7 @@ def _multiply(
 
     routine.append(tokens.Clear(target))
     routine.append(tokens.EnterLoop(other_buf))
-    routine.extend(_generic_addition(target, origin_buf, target, program, add=True))
+    # routine.extend(_generic_addition(target, origin_buf, target, program, add=True))
 
     if other is not origin:
         routine.append(tokens.Increment(other))

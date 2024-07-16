@@ -8,7 +8,7 @@ def test_copy_simple() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 10, a),
+        xbf.Add(a, 10, a),
         xbf.CopyUnit(a, b),
     ]
 
@@ -22,8 +22,8 @@ def test_copy_override() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 10, a),
-        xbf.AddUnit(b, 15, b),
+        xbf.Add(a, 10, a),
+        xbf.Add(b, 15, b),
         xbf.CopyUnit(a, b),
     ]
 

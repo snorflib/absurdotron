@@ -4,7 +4,7 @@ from src.ir import tokens
 from src.memoptix import metainfo
 from src.xbf import dtypes, program
 
-from .add import AddUnit
+from .add import Add
 from .assign import AssignUnit
 from .base import BaseCommand
 from .copy import CopyUnit
@@ -52,7 +52,7 @@ def or_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit, program: pro
     MoveUnit(rrem, [(ored_bit, 1)])(program)
 
     routine.append(tokens.EnterLoop(ored_bit))
-    AddUnit(bit_scale, target, target)(program)
+    Add(bit_scale, target, target)(program)
     routine.append(tokens.Clear(ored_bit))
     routine.append(tokens.ExitLoop())
 

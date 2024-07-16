@@ -5,7 +5,7 @@ import attrs
 from src.ir import tokens
 from src.xbf import dtypes, program
 
-from .add import _generic_addition
+# from .add import _generic_addition
 from .base import BaseCommand
 
 # Thanks to https://esolangs.org/wiki/Brainfuck_constants
@@ -278,7 +278,7 @@ def _assign(
 ) -> list[tokens.BFToken]:
     routine: list[tokens.BFToken] = [tokens.Clear(unit)]
 
-    routine.extend(_generic_addition(unit, value, unit, program))
+    # routine.extend(_generic_addition(unit, value, unit, program))
     return routine
 
 

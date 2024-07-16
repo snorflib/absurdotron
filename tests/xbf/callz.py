@@ -8,11 +8,11 @@ def test_callz_only_if() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 1, a),
+        xbf.Add(a, 1, a),
         xbf.CallZ(
             a,
             if_=[
-                xbf.AddUnit(b, 5, b),
+                xbf.Add(b, 5, b),
             ],
         ),
     ]
@@ -30,7 +30,7 @@ def test_callz_only_else() -> None:
         xbf.CallZ(
             a,
             else_=[
-                xbf.AddUnit(b, 5, b),
+                xbf.Add(b, 5, b),
             ],
         ),
     ]
@@ -48,11 +48,11 @@ def test_callz_nested() -> None:
         xbf.CallZ(
             a,
             else_=[
-                xbf.AddUnit(a, 1, a),
+                xbf.Add(a, 1, a),
                 xbf.CallZ(
                     a,
                     if_=[
-                        xbf.AddUnit(b, 5, b),
+                        xbf.Add(b, 5, b),
                     ],
                 ),
             ],

@@ -8,13 +8,13 @@ def test_callgt_only_if() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 15, a),
-        xbf.AddUnit(b, 10, b),
+        xbf.Add(a, 15, a),
+        xbf.Add(b, 10, b),
         xbf.CallGT(
             a,
             b,
             if_=[
-                xbf.AddUnit(b, 4, b),
+                xbf.Add(b, 4, b),
             ],
         ),
     ]
@@ -33,7 +33,7 @@ def test_callgt_only_else() -> None:
             a,
             b,
             else_=[
-                xbf.AddUnit(b, 5, b),
+                xbf.Add(b, 5, b),
             ],
         ),
     ]
@@ -48,13 +48,13 @@ def test_callgt_equal_only_else_two() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 254, a),
-        xbf.AddUnit(b, 255, b),
+        xbf.Add(a, 254, a),
+        xbf.Add(b, 255, b),
         xbf.CallGT(
             a,
             b,
             else_=[
-                xbf.AddUnit(b, 5, b),
+                xbf.Add(b, 5, b),
             ],
         ),
     ]
@@ -69,13 +69,13 @@ def test_callgt_equal() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 5, a),
-        xbf.AddUnit(b, 5, b),
+        xbf.Add(a, 5, a),
+        xbf.Add(b, 5, b),
         xbf.CallGT(
             a,
             b,
             else_=[
-                xbf.AddUnit(a, 5, a),
+                xbf.Add(a, 5, a),
             ],
         ),
     ]
@@ -90,17 +90,17 @@ def test_callgt_nested() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(b, 10, b),
+        xbf.Add(b, 10, b),
         xbf.CallGT(
             a,
             b,
             else_=[
-                xbf.AddUnit(a, 11, a),
+                xbf.Add(a, 11, a),
                 xbf.CallGT(
                     a,
                     b,
                     if_=[
-                        xbf.AddUnit(b, 5, b),
+                        xbf.Add(b, 5, b),
                     ],
                 ),
             ],

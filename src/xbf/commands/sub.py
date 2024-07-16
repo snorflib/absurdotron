@@ -2,7 +2,7 @@ import attrs
 
 from src.xbf import dtypes, program
 
-from .add import _generic_addition
+# from .add import _generic_addition
 from .base import BaseCommand
 
 
@@ -13,12 +13,13 @@ class SubUnit(BaseCommand):
     target: dtypes.Unit
 
     def _apply(self, context: program.Program) -> None:
-        context.routine.extend(
-            _generic_addition(
-                self.origin,
-                self.to_sub,
-                self.target,
-                context,
-                add=False,
-            )
-        )
+        ...
+        # context.routine.extend(
+        #     _generic_addition(
+        #         self.origin,
+        #         self.to_sub,
+        #         self.target,
+        #         context,
+        #         add=False,
+        #     )
+        # )

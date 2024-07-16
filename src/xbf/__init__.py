@@ -1,5 +1,5 @@
 from .commands import (
-    AddUnit,
+    Add,
     AndUnit,
     ArrayLoad,
     ArrayStore,
@@ -37,7 +37,7 @@ __all__ = (
     "Program",
     "OrUnit",
     "Init",
-    "AddUnit",
+    "Add",
     "SubUnit",
     "ClearUnit",
     "InputUnit",

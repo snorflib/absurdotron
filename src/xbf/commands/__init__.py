@@ -1,4 +1,4 @@
-from .add import AddUnit
+from .add import Add
 from .and_ import AndUnit
 from .arr_load import ArrayLoad
 from .arr_store import ArrayStore
@@ -28,7 +28,7 @@ __all__ = (
     "BaseCommand",
     "MoveUnit",
     "Init",
-    "AddUnit",
+    "Add",
     "SubUnit",
     "DisplayUnit",
     "InputUnit",

@@ -8,13 +8,13 @@ def test_callge_only_if() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 15, a),
-        xbf.AddUnit(b, 10, b),
+        xbf.Add(a, 15, a),
+        xbf.Add(b, 10, b),
         xbf.CallGE(
             a,
             b,
             if_=[
-                xbf.AddUnit(b, 4, b),
+                xbf.Add(b, 4, b),
             ],
         ),
     ]
@@ -29,12 +29,12 @@ def test_callge_only_else() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(b, 1, b),
+        xbf.Add(b, 1, b),
         xbf.CallGE(
             a,
             b,
             else_=[
-                xbf.AddUnit(b, 5, b),
+                xbf.Add(b, 5, b),
             ],
         ),
     ]
@@ -49,13 +49,13 @@ def test_callge_equal_only_else_two() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 254, a),
-        xbf.AddUnit(b, 255, b),
+        xbf.Add(a, 254, a),
+        xbf.Add(b, 255, b),
         xbf.CallGE(
             a,
             b,
             else_=[
-                xbf.AddUnit(b, 5, b),
+                xbf.Add(b, 5, b),
             ],
         ),
     ]
@@ -70,13 +70,13 @@ def test_callge_equal() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 5, a),
-        xbf.AddUnit(b, 5, b),
+        xbf.Add(a, 5, a),
+        xbf.Add(b, 5, b),
         xbf.CallGE(
             a,
             b,
             if_=[
-                xbf.AddUnit(a, 5, a),
+                xbf.Add(a, 5, a),
             ],
         ),
     ]
@@ -91,17 +91,17 @@ def test_callge_nested() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(b, 10, b),
+        xbf.Add(b, 10, b),
         xbf.CallGE(
             a,
             b,
             else_=[
-                xbf.AddUnit(a, 10, a),
+                xbf.Add(a, 10, a),
                 xbf.CallGE(
                     a,
                     b,
                     if_=[
-                        xbf.AddUnit(b, 5, b),
+                        xbf.Add(b, 5, b),
                     ],
                 ),
             ],

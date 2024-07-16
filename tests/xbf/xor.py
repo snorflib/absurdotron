@@ -5,7 +5,7 @@ from .utils import run_and_eval_commands
 
 def test_simple_xor() -> None:
     a = xbf.Unit()
-    commands = [xbf.Init(a), xbf.AddUnit(a, 10, a), xbf.XorUnit(a, a, a)]
+    commands = [xbf.Init(a), xbf.Add(a, 10, a), xbf.XorUnit(a, a, a)]
 
     memory = run_and_eval_commands(commands)
     assert memory[a] == 0
@@ -13,7 +13,7 @@ def test_simple_xor() -> None:
 
 def test_simple_xor_zero() -> None:
     a = xbf.Unit()
-    commands = [xbf.Init(a), xbf.AddUnit(a, 0, a), xbf.XorUnit(a, a, a)]
+    commands = [xbf.Init(a), xbf.Add(a, 0, a), xbf.XorUnit(a, a, a)]
 
     memory = run_and_eval_commands(commands)
     assert memory.get(a, 0) == 0
@@ -21,7 +21,7 @@ def test_simple_xor_zero() -> None:
 
 def test_simple_xor_255() -> None:
     a = xbf.Unit()
-    commands = [xbf.Init(a), xbf.AddUnit(a, 255, a), xbf.XorUnit(a, a, a)]
+    commands = [xbf.Init(a), xbf.Add(a, 255, a), xbf.XorUnit(a, a, a)]
 
     memory = run_and_eval_commands(commands)
     assert memory[a] == 0
@@ -47,8 +47,8 @@ def test_xor_same_number_non_zero() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 44, a),
-        xbf.AddUnit(b, 44, b),
+        xbf.Add(a, 44, a),
+        xbf.Add(b, 44, b),
         xbf.XorUnit(a, b, b),
     ]
 
@@ -64,8 +64,8 @@ def test_xor_zero_and_non_zero() -> None:
         xbf.Init(a),
         xbf.Init(b),
         xbf.Init(c),
-        xbf.AddUnit(a, 0, a),
-        xbf.AddUnit(b, 79, b),
+        xbf.Add(a, 0, a),
+        xbf.Add(b, 79, b),
         xbf.XorUnit(a, b, c),
     ]
 
@@ -77,7 +77,7 @@ def test_xor_zero_and_non_zero() -> None:
 
 def test_xor_non_zero_and_non_zero() -> None:
     a, b = xbf.Unit(), xbf.Unit()
-    commands = [xbf.Init(a), xbf.Init(b), xbf.AddUnit(a, 13, a), xbf.AddUnit(b, 91, b), xbf.XorUnit(a, b, a)]
+    commands = [xbf.Init(a), xbf.Init(b), xbf.Add(a, 13, a), xbf.Add(b, 91, b), xbf.XorUnit(a, b, a)]
 
     memory = run_and_eval_commands(commands)
     assert memory[b] == 91
@@ -90,8 +90,8 @@ def test_xor_non_zero_and_non_zero_2() -> None:
         xbf.Init(a),
         xbf.Init(b),
         xbf.Init(c),
-        xbf.AddUnit(a, 167, a),
-        xbf.AddUnit(b, 13, b),
+        xbf.Add(a, 167, a),
+        xbf.Add(b, 13, b),
         xbf.XorUnit(a, b, c),
     ]
 
@@ -107,10 +107,10 @@ def test_xor_in_row() -> None:
         xbf.Init(a),
         xbf.Init(b),
         xbf.Init(c),
-        xbf.AddUnit(a, 155, a),
-        xbf.AddUnit(b, 231, b),
+        xbf.Add(a, 155, a),
+        xbf.Add(b, 231, b),
         xbf.XorUnit(a, b, c),
-        xbf.AddUnit(c, 5, c),
+        xbf.Add(c, 5, c),
         xbf.XorUnit(c, b, a),
     ]
 

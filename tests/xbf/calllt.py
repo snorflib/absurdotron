@@ -8,13 +8,13 @@ def test_calllt_only_if() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 9, a),
-        xbf.AddUnit(b, 10, b),
+        xbf.Add(a, 9, a),
+        xbf.Add(b, 10, b),
         xbf.CallLT(
             a,
             b,
             if_=[
-                xbf.AddUnit(b, 4, b),
+                xbf.Add(b, 4, b),
             ],
         ),
     ]
@@ -33,7 +33,7 @@ def test_calllt_only_else() -> None:
             a,
             b,
             else_=[
-                xbf.AddUnit(b, 5, b),
+                xbf.Add(b, 5, b),
             ],
         ),
     ]
@@ -48,13 +48,13 @@ def test_calllt_equal_only_else_two() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 5, a),
-        xbf.AddUnit(b, 4, b),
+        xbf.Add(a, 5, a),
+        xbf.Add(b, 4, b),
         xbf.CallLT(
             a,
             b,
             else_=[
-                xbf.AddUnit(b, 5, b),
+                xbf.Add(b, 5, b),
             ],
         ),
     ]
@@ -69,13 +69,13 @@ def test_calllt_equal() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 5, a),
-        xbf.AddUnit(b, 5, b),
+        xbf.Add(a, 5, a),
+        xbf.Add(b, 5, b),
         xbf.CallLT(
             a,
             b,
             else_=[
-                xbf.AddUnit(a, 5, a),
+                xbf.Add(a, 5, a),
             ],
         ),
     ]
@@ -90,18 +90,18 @@ def test_calllt_nested() -> None:
     commands = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AddUnit(a, 1, a),
-        xbf.AddUnit(b, 1, b),
+        xbf.Add(a, 1, a),
+        xbf.Add(b, 1, b),
         xbf.CallLT(
             a,
             b,
             else_=[
-                xbf.AddUnit(b, 1, b),
+                xbf.Add(b, 1, b),
                 xbf.CallLT(
                     a,
                     b,
                     if_=[
-                        xbf.AddUnit(b, 5, b),
+                        xbf.Add(b, 5, b),
                     ],
                 ),
             ],

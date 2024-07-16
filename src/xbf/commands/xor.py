@@ -4,7 +4,7 @@ from src.ir import tokens
 from src.memoptix import metainfo
 from src.xbf import dtypes, program
 
-from .add import AddUnit
+from .add import Add
 from .assign import AssignUnit
 from .base import BaseCommand
 from .callz import CallZ
@@ -56,7 +56,7 @@ def xor_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit, program: pr
         xored_bit,
         if_=[ClearUnit(xored_bit)],
         else_=[
-            AddUnit(target, bit_scale, target),
+            Add(target, bit_scale, target),
         ],
     )(program)
     routine.append(tokens.ExitLoop())
