@@ -83,3 +83,33 @@ def test_save_target_to_add_target() -> None:
     memory = run_and_eval_commands(commands)
     assert memory[a] == 30
     assert memory[b] == 10
+
+
+def test_add_multiple_self_instances() -> None:
+    a = xbf.Unit("a")
+    commands = [xbf.Init(a), xbf.Add([10], a), xbf.Add([a, a, a, a], a)]
+
+    memory = run_and_eval_commands(commands)
+    assert memory[a] == 40
+
+
+def test_add_ints_and_multiple_self_instances() -> None:
+    a = xbf.Unit("a")
+    commands = [xbf.Init(a), xbf.Add([10], a), xbf.Add([10, a, a, a, 10, a], a)]
+
+    memory = run_and_eval_commands(commands)
+    assert memory[a] == 60
+
+
+def test_add_ints_units_self() -> None:
+    a, b = xbf.Unit("a"), xbf.Unit("b")
+    commands = [
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Add([a, 10], a),
+        xbf.Add([b, 10], b),
+        xbf.Add([30, 10, a, b, b, a], a),
+    ]
+    memory = run_and_eval_commands(commands)
+    assert memory[a] == 80
+    assert memory[b] == 10
