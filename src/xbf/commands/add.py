@@ -7,21 +7,21 @@ from src import memoptix
 from src.ir import tokens
 from src.xbf import dtypes, program
 
-from .base import BaseCommand, CommandReturn, ToFlatten, flatten2return
+from . import base
 from .move import _move_unit2units
 
 
 @attrs.frozen
-class Add(BaseCommand):
+class Add(base.BaseCommand):
     arguments: typing.Iterable[dtypes.Unit | int]
     target: dtypes.Unit
 
-    def _apply(self, context: program.Program) -> CommandReturn:
+    def _apply(self, context: program.Program) -> base.CommandReturn:
         return add(*self.arguments, target=self.target)
 
 
-@flatten2return
-def add(*args: dtypes.Unit | int, target: dtypes.Unit) -> ToFlatten:
+@base.flatten2return
+def add(*args: dtypes.Unit | int, target: dtypes.Unit) -> base.ToFlatten:
     arg_sorts = {int: [], dtypes.Unit: []}  # type: ignore
     for arg in args:
         arg_sorts[type(arg)].append(arg)
@@ -32,27 +32,27 @@ def add(*args: dtypes.Unit | int, target: dtypes.Unit) -> ToFlatten:
     ]
 
 
-@flatten2return
-def _add_ints(*args: int, target: dtypes.Unit) -> ToFlatten:
+@base.flatten2return
+def _add_ints(*args: int, target: dtypes.Unit) -> base.ToFlatten:
     value = sum(args, 0)
     operation = tokens.Increment if value > 0 else tokens.Decrement
     return [operation(owner=target)] * abs(value)
 
 
-@flatten2return
-def _add_units(*args: dtypes.Unit, target: dtypes.Unit) -> ToFlatten:
+@base.flatten2return
+def _add_units(*args: dtypes.Unit, target: dtypes.Unit) -> base.ToFlatten:
     # If target exists it will be placed as a first key.
     counts = {target: 0} | collections.Counter(args)
     counts[target] -= 1
 
-    instrs: list[ToFlatten] = []
+    instrs: list[base.ToFlatten] = []
     for arg, scale in counts.items():
         instrs.append(_add_without_clear(arg, target, scale))
 
     return instrs
 
 
-def _add_without_clear(from_: dtypes.Unit, to_: dtypes.Unit, scale: int = 1) -> ToFlatten:
+def _add_without_clear(from_: dtypes.Unit, to_: dtypes.Unit, scale: int = 1) -> base.ToFlatten:
     if scale == 0:
         return None
 

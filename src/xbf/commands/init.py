@@ -1,25 +1,21 @@
 import attrs
-import multimethod
 
 from src.memoptix import constraints
 from src.xbf import dtypes, program
 
-from .base import BaseCommand
+from . import base
 
 
 @attrs.frozen
-class Init(BaseCommand):
+class Init(base.BaseCommand):
     obj: dtypes.Unit | dtypes.Array
 
-    def _apply(self, context: program.Program) -> None:
-        context.update(_init(self.obj))
+    def _apply(self, context: program.Program) -> base.CommandReturn:
+        return _init(self.obj)
 
 
-@multimethod.multimethod
-def _init(obj: dtypes.Unit) -> program.Program:
-    return program.Program([constraints.UnitConstraint(obj)])
-
-
-@_init.register
-def _(obj: dtypes.Array) -> program.Program:
-    return program.Program([constraints.ArrayConstraint(obj, obj.length)])
+@base.flatten2return
+def _init(obj: dtypes.Unit | dtypes.Array) -> base.ToFlatten:
+    if isinstance(obj, dtypes.Unit):
+        return constraints.UnitConstraint(obj)
+    return constraints.ArrayConstraint(obj, obj.length)
