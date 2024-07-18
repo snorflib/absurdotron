@@ -65,3 +65,18 @@ def test_sub_negative() -> None:
 
     memory = run_and_eval_commands(commands)
     assert memory[a] == 5
+
+
+def test_sub_multiple_arguments() -> None:
+    a, b = xbf.Unit(), xbf.Unit()
+    commands = [
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Add([a, 10], a),
+        xbf.Add([b, 4], b),
+        xbf.Sub([a, 4, b, 26, b, b], [b, b, 23], a),
+    ]
+
+    memory = run_and_eval_commands(commands)
+    assert memory[a] == 21
+    assert memory[b] == 4
