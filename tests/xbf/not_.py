@@ -1,27 +1,27 @@
 from src import xbf
 
-from .utils import run_and_eval_commands
+from .utils import run_and_eval_opcodes
 
 
 def test_simple_not() -> None:
     a = xbf.Unit()
-    commands = [xbf.Init(a), xbf.Add(a, 10, a), xbf.NotUnit(a, a)]
+    opcodes = [xbf.Init(a), xbf.Add(a, 10, a), xbf.NotUnit(a, a)]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 245
 
 
 def test_double_not() -> None:
     a = xbf.Unit()
-    commands = [xbf.Init(a), xbf.Add(a, 10, a), xbf.NotUnit(a, a), xbf.NotUnit(a, a)]
+    opcodes = [xbf.Init(a), xbf.Add(a, 10, a), xbf.NotUnit(a, a), xbf.NotUnit(a, a)]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 10
 
 
 def test_not_target_override() -> None:
     a, b = xbf.Unit("a"), xbf.Unit("b")
-    commands = [
+    opcodes = [
         xbf.Init(a),
         xbf.Init(b),
         xbf.Add(a, 10, a),
@@ -30,6 +30,6 @@ def test_not_target_override() -> None:
         xbf.NotUnit(b, a),
     ]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 10
     assert memory[b] == 245

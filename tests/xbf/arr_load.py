@@ -1,13 +1,13 @@
 from src import xbf
 
-from .utils import run_and_eval_commands_get_whole_tape
+from .utils import run_and_eval_opcodes_get_whole_tape
 
 
 def test_simple_load() -> None:
     arr = xbf.Array(16)
     idx = xbf.Unit()
     value = xbf.Unit()
-    commands = [
+    opcodes = [
         xbf.Init(arr),
         xbf.Init(idx),
         xbf.Init(value),
@@ -17,7 +17,7 @@ def test_simple_load() -> None:
         xbf.ArrayLoad(arr, idx, idx),
     ]
 
-    tape, var2idx = run_and_eval_commands_get_whole_tape(commands)
+    tape, var2idx = run_and_eval_opcodes_get_whole_tape(opcodes)
     assert tape[var2idx[idx]] == tape[var2idx[value]] == 5
     assert tape[var2idx[arr] + 3 + 4 * 2] == 5
     assert sum(tape) == 15
@@ -28,7 +28,7 @@ def test_load_zero_at_zero() -> None:
     idx = xbf.Unit()
     value = xbf.Unit()
     value_read = xbf.Unit()
-    commands = [
+    opcodes = [
         xbf.Init(arr),
         xbf.Init(idx),
         xbf.Init(value),
@@ -40,6 +40,6 @@ def test_load_zero_at_zero() -> None:
         xbf.ArrayLoad(arr, value_read, idx),
     ]
 
-    tape, var2idx = run_and_eval_commands_get_whole_tape(commands)
+    tape, var2idx = run_and_eval_opcodes_get_whole_tape(opcodes)
     assert tape[var2idx[value]] == tape[var2idx[value_read]] == tape[var2idx[idx]] == 0
     assert sum(tape) == 0

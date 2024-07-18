@@ -4,11 +4,11 @@ from src import ir, memoptix, xbf
 from src.bfrun import simple
 
 
-def run_and_eval_commands_get_output(
-    commands: list[xbf.BaseCommand],
+def run_and_eval_opcodes_get_output(
+    opcodes: list[xbf.BaseCommand],
     input: str | list[int] | None = None,
 ) -> str:
-    program = eval_commands(commands)
+    program = eval_opcodes(opcodes)
     memory = resolve_program_memory(program)
     code = compile_routine_with_memory(program.routine, memory)
 
@@ -19,11 +19,11 @@ def run_and_eval_commands_get_output(
     return output.getvalue()
 
 
-def run_and_eval_commands_get_whole_tape(
-    commands: list[xbf.BaseCommand],
+def run_and_eval_opcodes_get_whole_tape(
+    opcodes: list[xbf.BaseCommand],
     input: str | list[int] | None = None,
 ) -> tuple[list[int], dict[ir.Owner, int]]:
-    program = eval_commands(commands)
+    program = eval_opcodes(opcodes)
     memory = resolve_program_memory(program)
     code = compile_routine_with_memory(program.routine, memory)
 
@@ -31,11 +31,11 @@ def run_and_eval_commands_get_whole_tape(
     return tape, memory
 
 
-def run_and_eval_commands(
-    commands: list[xbf.BaseCommand],
+def run_and_eval_opcodes(
+    opcodes: list[xbf.BaseCommand],
     input: str | list[int] | None = None,
 ) -> dict[ir.Owner, int]:
-    program = eval_commands(commands)
+    program = eval_opcodes(opcodes)
     memory = resolve_program_memory(program)
     code = compile_routine_with_memory(program.routine, memory)
 
@@ -51,9 +51,9 @@ def run_and_eval_commands(
     return memory
 
 
-def eval_commands(commands: list[xbf.BaseCommand]) -> xbf.Program:
+def eval_opcodes(opcodes: list[xbf.BaseCommand]) -> xbf.Program:
     program = xbf.Program()
-    for command in commands:
+    for command in opcodes:
         command(program)
     return program
 

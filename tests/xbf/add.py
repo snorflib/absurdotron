@@ -1,36 +1,36 @@
 from src import xbf
 
-from .utils import run_and_eval_commands
+from .utils import run_and_eval_opcodes
 
 
 def test_simple_add() -> None:
     a = xbf.Unit()
-    commands = [xbf.Init(a), xbf.Add([a, 50], a)]
+    opcodes = [xbf.Init(a), xbf.Add([a, 50], a)]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 50
 
 
 def test_add_to_itself() -> None:
     a = xbf.Unit()
-    commands = [xbf.Init(a), xbf.Add([a, 10], a), xbf.Add([a, a], a)]
+    opcodes = [xbf.Init(a), xbf.Add([a, 10], a), xbf.Add([a, a], a)]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 20
 
 
 def test_add_complex_one() -> None:
     a, b = xbf.Unit(), xbf.Unit()
-    commands = [xbf.Init(a), xbf.Init(b), xbf.Add([a, 10], a), xbf.Add([b, a], b), xbf.Add([b, 5], b)]
+    opcodes = [xbf.Init(a), xbf.Init(b), xbf.Add([a, 10], a), xbf.Add([b, a], b), xbf.Add([b, 5], b)]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 10
     assert memory[b] == 15
 
 
 def test_add_complex_two() -> None:
     a, b = xbf.Unit(), xbf.Unit()
-    commands = [
+    opcodes = [
         xbf.Init(a),
         xbf.Init(b),
         xbf.Add([a, 10], a),
@@ -38,14 +38,14 @@ def test_add_complex_two() -> None:
         xbf.Add([a, b], b),
     ]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 10
     assert memory[b] == 15
 
 
 def test_add_three_args() -> None:
     a, b, c = xbf.Unit(), xbf.Unit(), xbf.Unit()
-    commands = [
+    opcodes = [
         xbf.Init(a),
         xbf.Init(b),
         xbf.Init(c),
@@ -55,7 +55,7 @@ def test_add_three_args() -> None:
         xbf.Add([b, a], c),
     ]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 10
     assert memory[b] == 10
     assert memory[c] == 20
@@ -63,15 +63,15 @@ def test_add_three_args() -> None:
 
 def test_add_negative() -> None:
     a = xbf.Unit()
-    commands = [xbf.Init(a), xbf.Add([a, -5], a)]
+    opcodes = [xbf.Init(a), xbf.Add([a, -5], a)]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 251
 
 
 def test_save_target_to_add_target() -> None:
     a, b = xbf.Unit("a"), xbf.Unit("b")
-    commands = [
+    opcodes = [
         xbf.Init(a),
         xbf.Init(b),
         xbf.Add([a, 10], a),
@@ -80,22 +80,22 @@ def test_save_target_to_add_target() -> None:
         xbf.Add([b, a], a),
     ]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 30
     assert memory[b] == 10
 
 
 def test_add_multiple_self_instances() -> None:
     a = xbf.Unit("a")
-    commands = [xbf.Init(a), xbf.Add([10], a), xbf.Add([a, a, a, a], a)]
+    opcodes = [xbf.Init(a), xbf.Add([10], a), xbf.Add([a, a, a, a], a)]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 40
 
 
 def test_add_ints_and_multiple_self_instances() -> None:
     a, b, c = xbf.Unit("a"), xbf.Unit("b"), xbf.Unit("c")
-    commands = [
+    opcodes = [
         xbf.Init(a),
         xbf.Init(b),
         xbf.Init(c),
@@ -105,19 +105,19 @@ def test_add_ints_and_multiple_self_instances() -> None:
         xbf.Add([10, a, c, a, 10, b], a),
     ]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 46
 
 
 def test_add_ints_units_self() -> None:
     a, b = xbf.Unit("a"), xbf.Unit("b")
-    commands = [
+    opcodes = [
         xbf.Init(a),
         xbf.Init(b),
         xbf.Add([a, 10], a),
         xbf.Add([b, 10], b),
         xbf.Add([30, 10, a, b, b, a], a),
     ]
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 80
     assert memory[b] == 10

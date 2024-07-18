@@ -1,13 +1,13 @@
 from src import xbf
 
-from .utils import run_and_eval_commands_get_whole_tape
+from .utils import run_and_eval_opcodes_get_whole_tape
 
 
 def test_simple_assignment() -> None:
     arr = xbf.Array(16)
     idx = xbf.Unit()
     value = xbf.Unit()
-    commands = [
+    opcodes = [
         xbf.Init(arr),
         xbf.Init(idx),
         xbf.Init(value),
@@ -16,7 +16,7 @@ def test_simple_assignment() -> None:
         xbf.ArrayStore(arr, value, idx),
     ]
 
-    tape, var2idx = run_and_eval_commands_get_whole_tape(commands)
+    tape, var2idx = run_and_eval_opcodes_get_whole_tape(opcodes)
     assert tape[var2idx[idx]] == 4
     assert tape[var2idx[value]] == 5
     assert tape[var2idx[arr] + 3 + 4 * 2] == 5
@@ -28,7 +28,7 @@ def test_value_override() -> None:
     idx = xbf.Unit()
     value = xbf.Unit()
     value_2 = xbf.Unit()
-    commands = [
+    opcodes = [
         xbf.Init(arr),
         xbf.Init(idx),
         xbf.Init(value),
@@ -39,7 +39,7 @@ def test_value_override() -> None:
         xbf.ArrayStore(arr, value_2, idx),
     ]
 
-    tape, var2idx = run_and_eval_commands_get_whole_tape(commands)
+    tape, var2idx = run_and_eval_opcodes_get_whole_tape(opcodes)
     assert tape[var2idx[idx]] == 4
     assert tape[var2idx[value]] == 5
     assert tape[var2idx[value_2]] == 50
@@ -50,7 +50,7 @@ def test_zero_index() -> None:
     arr = xbf.Array(16)
     idx = xbf.Unit()
     value = xbf.Unit()
-    commands = [
+    opcodes = [
         xbf.Init(arr),
         xbf.Init(idx),
         xbf.Init(value),
@@ -62,7 +62,7 @@ def test_zero_index() -> None:
         xbf.ArrayStore(arr, value, idx),
     ]
 
-    tape, var2idx = run_and_eval_commands_get_whole_tape(commands)
+    tape, var2idx = run_and_eval_opcodes_get_whole_tape(opcodes)
     assert tape[var2idx[idx]] == 1
     assert tape[var2idx[arr] + 3] == 5
     assert tape[var2idx[arr] + 5] == 10

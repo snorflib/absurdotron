@@ -1,4 +1,4 @@
-from .commands import (
+from .opcodes import (
     Add,
     AndUnit,
     ArrayLoad,

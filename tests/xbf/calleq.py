@@ -1,11 +1,11 @@
 from src import xbf
 
-from .utils import run_and_eval_commands
+from .utils import run_and_eval_opcodes
 
 
 def test_calleq_only_if() -> None:
     a, b = xbf.Unit(), xbf.Unit()
-    commands = [
+    opcodes = [
         xbf.Init(a),
         xbf.Init(b),
         xbf.Add(a, 15, a),
@@ -19,14 +19,14 @@ def test_calleq_only_if() -> None:
         ),
     ]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 15
     assert memory[b] == 19
 
 
 def test_calleq_only_else() -> None:
     a, b = xbf.Unit("a"), xbf.Unit("b")
-    commands = [
+    opcodes = [
         xbf.Init(a),
         xbf.Init(b),
         xbf.Add(a, 1, a),
@@ -39,14 +39,14 @@ def test_calleq_only_else() -> None:
         ),
     ]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 1
     assert memory[b] == 5
 
 
 def test_calleq_equal() -> None:
     a, b = xbf.Unit("a"), xbf.Unit("b")
-    commands = [
+    opcodes = [
         xbf.Init(a),
         xbf.Init(b),
         xbf.Add(b, 5, b),
@@ -59,14 +59,14 @@ def test_calleq_equal() -> None:
         ),
     ]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 5
     assert memory[b] == 5
 
 
 def test_calleq_nested() -> None:
     a, b = xbf.Unit(), xbf.Unit()
-    commands = [
+    opcodes = [
         xbf.Init(a),
         xbf.Init(b),
         xbf.Add(b, 5, b),
@@ -86,6 +86,6 @@ def test_calleq_nested() -> None:
         ),
     ]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 5
     assert memory[b] == 10

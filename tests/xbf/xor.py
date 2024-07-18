@@ -1,42 +1,42 @@
 from src import xbf
 
-from .utils import run_and_eval_commands
+from .utils import run_and_eval_opcodes
 
 
 def test_simple_xor() -> None:
     a = xbf.Unit()
-    commands = [xbf.Init(a), xbf.Add(a, 10, a), xbf.XorUnit(a, a, a)]
+    opcodes = [xbf.Init(a), xbf.Add(a, 10, a), xbf.XorUnit(a, a, a)]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 0
 
 
 def test_simple_xor_zero() -> None:
     a = xbf.Unit()
-    commands = [xbf.Init(a), xbf.Add(a, 0, a), xbf.XorUnit(a, a, a)]
+    opcodes = [xbf.Init(a), xbf.Add(a, 0, a), xbf.XorUnit(a, a, a)]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory.get(a, 0) == 0
 
 
 def test_simple_xor_255() -> None:
     a = xbf.Unit()
-    commands = [xbf.Init(a), xbf.Add(a, 255, a), xbf.XorUnit(a, a, a)]
+    opcodes = [xbf.Init(a), xbf.Add(a, 255, a), xbf.XorUnit(a, a, a)]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 0
 
 
 def test_xor_0_0() -> None:
     a, b, c = xbf.Unit(), xbf.Unit(), xbf.Unit()
-    commands = [
+    opcodes = [
         xbf.Init(a),
         xbf.Init(b),
         xbf.Init(c),
         xbf.XorUnit(a, b, c),
     ]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 0
     assert memory[b] == 0
     assert memory[c] == 0
@@ -44,7 +44,7 @@ def test_xor_0_0() -> None:
 
 def test_xor_same_number_non_zero() -> None:
     a, b = xbf.Unit(), xbf.Unit()
-    commands = [
+    opcodes = [
         xbf.Init(a),
         xbf.Init(b),
         xbf.Add(a, 44, a),
@@ -52,7 +52,7 @@ def test_xor_same_number_non_zero() -> None:
         xbf.XorUnit(a, b, b),
     ]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
 
     assert memory[a] == 44
     assert memory[b] == 0
@@ -60,7 +60,7 @@ def test_xor_same_number_non_zero() -> None:
 
 def test_xor_zero_and_non_zero() -> None:
     a, b, c = xbf.Unit(), xbf.Unit(), xbf.Unit()
-    commands = [
+    opcodes = [
         xbf.Init(a),
         xbf.Init(b),
         xbf.Init(c),
@@ -69,7 +69,7 @@ def test_xor_zero_and_non_zero() -> None:
         xbf.XorUnit(a, b, c),
     ]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 0
     assert memory[b] == 79
     assert memory[c] == 79
@@ -77,16 +77,16 @@ def test_xor_zero_and_non_zero() -> None:
 
 def test_xor_non_zero_and_non_zero() -> None:
     a, b = xbf.Unit(), xbf.Unit()
-    commands = [xbf.Init(a), xbf.Init(b), xbf.Add(a, 13, a), xbf.Add(b, 91, b), xbf.XorUnit(a, b, a)]
+    opcodes = [xbf.Init(a), xbf.Init(b), xbf.Add(a, 13, a), xbf.Add(b, 91, b), xbf.XorUnit(a, b, a)]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[b] == 91
     assert memory[a] == 86
 
 
 def test_xor_non_zero_and_non_zero_2() -> None:
     a, b, c = xbf.Unit(), xbf.Unit(), xbf.Unit()
-    commands = [
+    opcodes = [
         xbf.Init(a),
         xbf.Init(b),
         xbf.Init(c),
@@ -95,7 +95,7 @@ def test_xor_non_zero_and_non_zero_2() -> None:
         xbf.XorUnit(a, b, c),
     ]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 167
     assert memory[b] == 13
     assert memory[c] == 170
@@ -103,7 +103,7 @@ def test_xor_non_zero_and_non_zero_2() -> None:
 
 def test_xor_in_row() -> None:
     a, b, c = xbf.Unit(), xbf.Unit(), xbf.Unit()
-    commands = [
+    opcodes = [
         xbf.Init(a),
         xbf.Init(b),
         xbf.Init(c),
@@ -114,7 +114,7 @@ def test_xor_in_row() -> None:
         xbf.XorUnit(c, b, a),
     ]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 102
     assert memory[b] == 231
     assert memory[c] == 129

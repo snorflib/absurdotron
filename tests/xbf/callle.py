@@ -1,11 +1,11 @@
 from src import xbf
 
-from .utils import run_and_eval_commands
+from .utils import run_and_eval_opcodes
 
 
 def test_callle_only_if() -> None:
     a, b = xbf.Unit(), xbf.Unit()
-    commands = [
+    opcodes = [
         xbf.Init(a),
         xbf.Init(b),
         xbf.Add(a, 9, a),
@@ -19,14 +19,14 @@ def test_callle_only_if() -> None:
         ),
     ]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 9
     assert memory[b] == 14
 
 
 def test_callle_only_else() -> None:
     a, b = xbf.Unit("a"), xbf.Unit("b")
-    commands = [
+    opcodes = [
         xbf.Init(a),
         xbf.Init(b),
         xbf.Add(a, 1, a),
@@ -39,14 +39,14 @@ def test_callle_only_else() -> None:
         ),
     ]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 1
     assert memory[b] == 5
 
 
 def test_callle_only_else_two() -> None:
     a, b = xbf.Unit("a"), xbf.Unit("b")
-    commands = [
+    opcodes = [
         xbf.Init(a),
         xbf.Init(b),
         xbf.Add(a, 1, a),
@@ -59,14 +59,14 @@ def test_callle_only_else_two() -> None:
         ),
     ]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 1
     assert memory[b] == 5
 
 
 def test_callle_equal() -> None:
     a, b = xbf.Unit("a"), xbf.Unit("b")
-    commands = [
+    opcodes = [
         xbf.Init(a),
         xbf.Init(b),
         xbf.Add(a, 5, a),
@@ -80,14 +80,14 @@ def test_callle_equal() -> None:
         ),
     ]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 10
     assert memory[b] == 5
 
 
 def test_callle_nested() -> None:
     a, b = xbf.Unit(), xbf.Unit()
-    commands = [
+    opcodes = [
         xbf.Init(a),
         xbf.Init(b),
         xbf.Add(a, 2, a),
@@ -108,6 +108,6 @@ def test_callle_nested() -> None:
         ),
     ]
 
-    memory = run_and_eval_commands(commands)
+    memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 2
     assert memory[b] == 7

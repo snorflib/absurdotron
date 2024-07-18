@@ -27,7 +27,7 @@
 
     > Try to reduce code repetition.
 
-    > Add a way to save or load commands from a text file with custom syntax.
+    > Add a way to save or load opcodes from a text file with custom syntax.
 
     > Make addition and other similar instructions accept a list of arguments instead of a list
 
