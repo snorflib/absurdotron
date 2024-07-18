@@ -94,11 +94,19 @@ def test_add_multiple_self_instances() -> None:
 
 
 def test_add_ints_and_multiple_self_instances() -> None:
-    a = xbf.Unit("a")
-    commands = [xbf.Init(a), xbf.Add([10], a), xbf.Add([10, a, a, a, 10, a], a)]
+    a, b, c = xbf.Unit("a"), xbf.Unit("b"), xbf.Unit("c")
+    commands = [
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Init(c),
+        xbf.Add([10], a),
+        xbf.Add([5], b),
+        xbf.Add([1], c),
+        xbf.Add([10, a, c, a, 10, b], a),
+    ]
 
     memory = run_and_eval_commands(commands)
-    assert memory[a] == 60
+    assert memory[a] == 46
 
 
 def test_add_ints_units_self() -> None:
