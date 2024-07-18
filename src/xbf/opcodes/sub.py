@@ -1,5 +1,3 @@
-import collections
-
 import attrs
 
 from src import memoptix
@@ -13,68 +11,46 @@ from .move import _move_unit2units
 
 @attrs.frozen
 class Sub(base.BaseCommand):
-    minuends: list[dtypes.Unit | int]
-    subtrahends: list[dtypes.Unit | int]
+    minuend: dtypes.Unit | int
+    subtrahend: dtypes.Unit | int
     target: dtypes.Unit
 
     def _apply(self, context: program.Program) -> base.CommandReturn:
-        return _sub(self.minuends, self.subtrahends, self.target)
+        return sub(self.minuend, self.subtrahend, self.target)
 
 
 @base.flatten2return
-def _sub(
-    minuends: list[dtypes.Unit | int], subtrahends: list[dtypes.Unit | int], target: dtypes.Unit
+def sub(
+    minuend: dtypes.Unit | int,
+    subtrahend: dtypes.Unit | int,
+    target: dtypes.Unit,
 ) -> base.ToFlatten:
-    minuends, subtrahends = _reduce_minuends_and_subtrahends(minuends, subtrahends)
+    if target == minuend:
+        return _sub_from_target(subtrahend, target=target)
 
-    if target in minuends:
-        return _add(*minuends, target=target) | _sub_from_target(*subtrahends, target=target)
-
-    return _sub_from_target(target, *subtrahends, target=target) | _add(target, *minuends, target=target)
-
-
-def _reduce_minuends_and_subtrahends(
-    minuends: list[dtypes.Unit | int], subtrahends: list[dtypes.Unit | int]
-) -> tuple[list[dtypes.Unit | int], list[dtypes.Unit | int]]:
-    new_minuends = []
-
-    for minuend in minuends:
-        if minuend in subtrahends:
-            subtrahends.remove(minuend)
-            continue
-        new_minuends.append(minuend)
-
-    return new_minuends, subtrahends
+    return _clear_target_and_sub(subtrahend, target) | _add(target, minuend, target=target)
 
 
 @base.flatten2return
-def _sub_from_target(*args: dtypes.Unit | int, target: dtypes.Unit) -> base.ToFlatten:
-    arg_sorts = {int: [], dtypes.Unit: []}  # type: ignore
-    for arg in args:
-        arg_sorts[type(arg)].append(arg)
+def _clear_target_and_sub(subtrahend: dtypes.Unit | int, target: dtypes.Unit) -> base.ToFlatten:
+    if subtrahend == target:
+        return _move_without_clear(subtrahend, target, -2)  # type: ignore
 
-    return [
-        _sub_units(*arg_sorts[dtypes.Unit], target=target),
-        _sub_ints(sum(arg_sorts[int], 0), target=target),
-    ]
-
-
-def _sub_ints(value: int, target: dtypes.Unit) -> base.CommandReturn:
-    return _add_ints(-value, target)
+    return (
+        tokens.Clear(target),
+        _sub_from_target(subtrahend, target),
+    )
 
 
 @base.flatten2return
-def _sub_units(*args: dtypes.Unit, target: dtypes.Unit) -> base.ToFlatten:
-    # If target exists it will be placed as a first key.
-    counts = {target: 0} | collections.Counter(args)
+def _sub_from_target(subtrahend: dtypes.Unit | int, target: dtypes.Unit) -> base.ToFlatten:
+    if isinstance(subtrahend, int):
+        return _add_ints(-subtrahend, target)
 
-    instrs: list[base.ToFlatten] = []
-    for arg, scale in counts.items():
-        instrs.append(_move_without_clear(arg, target, -scale))
-
-    return instrs
+    return _move_without_clear(subtrahend, target, -1)
 
 
+@base.flatten2return
 def _move_without_clear(from_: dtypes.Unit, to_: dtypes.Unit, scale: int = 1) -> base.ToFlatten:
     if scale == 0:
         return None

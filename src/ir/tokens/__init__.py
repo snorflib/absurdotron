@@ -1,5 +1,5 @@
 from .base import BFToken
-from .opcodes import (
+from .commands import (
     Clear,
     Command,
     Decrement,
