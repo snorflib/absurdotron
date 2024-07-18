@@ -8,7 +8,7 @@ from src.xbf import dtypes, program
 
 from .base import BaseCommand
 from .init import Init
-from .sub import SubUnit
+from .sub import Sub
 
 
 def _callneq(
@@ -23,7 +23,7 @@ def _callneq(
     Init(else_flag)(program)
     Init(buffer)(program)
 
-    SubUnit(left, right, buffer)(program)
+    Sub(left, right, buffer)(program)
     program.routine.extend(
         [
             tokens.Increment(else_flag),

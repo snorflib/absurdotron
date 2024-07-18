@@ -12,7 +12,7 @@ from .callz import CallZ
 from .clear import ClearUnit
 from .copy import CopyUnit
 from .init import Init
-from .sub import SubUnit
+from .sub import Sub
 
 
 def _callge(
@@ -42,7 +42,7 @@ def _callge(
     CallZ(
         left_buffer,
         else_=[ClearUnit(right_buffer), AssignUnit(else_flag, 1)],
-        if_=[SubUnit(left_buffer, 1, left_buffer)],
+        if_=[Sub(left_buffer, 1, left_buffer)],
     )(program)
     program.routine.append(tokens.ExitLoop())
 

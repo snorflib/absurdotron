@@ -17,24 +17,23 @@ class Add(base.BaseCommand):
     target: dtypes.Unit
 
     def _apply(self, context: program.Program) -> base.CommandReturn:
-        return add(*self.arguments, target=self.target)
+        return _add(*self.arguments, target=self.target)
 
 
 @base.flatten2return
-def add(*args: dtypes.Unit | int, target: dtypes.Unit) -> base.ToFlatten:
+def _add(*args: dtypes.Unit | int, target: dtypes.Unit) -> base.ToFlatten:
     arg_sorts = {int: [], dtypes.Unit: []}  # type: ignore
     for arg in args:
         arg_sorts[type(arg)].append(arg)
 
     return [
         _add_units(*arg_sorts[dtypes.Unit], target=target),
-        _add_ints(*arg_sorts[int], target=target),
+        _add_ints(sum(arg_sorts[int], 0), target=target),
     ]
 
 
 @base.flatten2return
-def _add_ints(*args: int, target: dtypes.Unit) -> base.ToFlatten:
-    value = sum(args, 0)
+def _add_ints(value: int, target: dtypes.Unit) -> base.ToFlatten:
     operation = tokens.Increment if value > 0 else tokens.Decrement
     return [operation(owner=target)] * abs(value)
 
@@ -47,12 +46,12 @@ def _add_units(*args: dtypes.Unit, target: dtypes.Unit) -> base.ToFlatten:
 
     instrs: list[base.ToFlatten] = []
     for arg, scale in counts.items():
-        instrs.append(_add_without_clear(arg, target, scale))
+        instrs.append(_move_without_clear(arg, target, scale))
 
     return instrs
 
 
-def _add_without_clear(from_: dtypes.Unit, to_: dtypes.Unit, scale: int = 1) -> base.ToFlatten:
+def _move_without_clear(from_: dtypes.Unit, to_: dtypes.Unit, scale: int = 1) -> base.ToFlatten:
     if scale == 0:
         return None
 

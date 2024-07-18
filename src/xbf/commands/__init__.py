@@ -21,7 +21,7 @@ from .move import MoveUnit
 from .mul import MulUnit
 from .not_ import NotUnit
 from .or_ import OrUnit
-from .sub import SubUnit
+from .sub import Sub
 from .xor import XorUnit
 
 __all__ = (
@@ -29,7 +29,7 @@ __all__ = (
     "MoveUnit",
     "Init",
     "Add",
-    "SubUnit",
+    "Sub",
     "DisplayUnit",
     "InputUnit",
     "ClearUnit",

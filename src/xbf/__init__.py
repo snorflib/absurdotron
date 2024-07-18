@@ -22,7 +22,7 @@ from .commands import (
     MulUnit,
     NotUnit,
     OrUnit,
-    SubUnit,
+    Sub,
     XorUnit,
 )
 from .dtypes import Array, DType, Unit
@@ -38,7 +38,7 @@ __all__ = (
     "OrUnit",
     "Init",
     "Add",
-    "SubUnit",
+    "Sub",
     "ClearUnit",
     "InputUnit",
     "CopyUnit",
