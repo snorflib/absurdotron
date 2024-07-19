@@ -8,7 +8,7 @@ from .add import Add
 from .base import BaseCommand
 from .callz import CallZ
 from .init import Init
-from .move import MoveUnit, _move_unit2units
+from .move import MoveUnit, move
 
 
 def _generic_division(
@@ -45,7 +45,7 @@ def _generic_division(
     Init(remainder_buf)(program)
     Init(dividend_buf)(program)
 
-    program.routine.extend(_move_unit2units(dividend, [(dividend_buf, 1)]))
+    program.routine.extend(move(dividend, [(dividend_buf, 1)]))
     program.routine.append(tokens.EnterLoop(dividend_buf))
     program.routine.append(tokens.Decrement(dividend_buf))
     program.routine.append(tokens.Decrement(divisor))
@@ -69,7 +69,7 @@ def _generic_division(
 
     if remainder:
         program.routine.extend([tokens.Clear(remainder)])
-        program.routine.extend(_move_unit2units(remainder_buf, [(remainder, 1)]))
+        program.routine.extend(move(remainder_buf, [(remainder, 1)]))
     else:
         program.routine.append(tokens.Clear(remainder_buf))
 

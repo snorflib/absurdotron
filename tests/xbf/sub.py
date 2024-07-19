@@ -34,7 +34,7 @@ def test_sub_two() -> None:
         xbf.Init(a),
         xbf.Init(b),
         xbf.Sub(a, 10, a),
-        xbf.Add([b, 4], b),
+        xbf.Add(b, 4, b),
         xbf.Sub(a, b, b),
         xbf.Sub(b, 6, b),
     ]
@@ -49,8 +49,8 @@ def test_sub_two_2() -> None:
     opcodes = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.Add([a, 10], a),
-        xbf.Add([b, 4], b),
+        xbf.Add(a, 10, a),
+        xbf.Add(b, 4, b),
         xbf.Sub(a, b, a),
     ]
 

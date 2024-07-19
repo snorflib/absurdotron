@@ -1,6 +1,3 @@
-import collections
-import typing
-
 import attrs
 
 from src import memoptix
@@ -8,47 +5,42 @@ from src.ir import tokens
 from src.xbf import dtypes, program
 
 from . import base
-from .move import _move_unit2units
+from .init import init
+from .move import move
 
 
 @attrs.frozen
 class Add(base.BaseCommand):
-    arguments: typing.Iterable[dtypes.Unit | int]
+    left: dtypes.Unit | int
+    right: dtypes.Unit | int
     target: dtypes.Unit
 
     def _apply(self, context: program.Program) -> base.CommandReturn:
-        return _add(*self.arguments, target=self.target)
+        return add(self.left, self.right, target=self.target)
 
 
 @base.flatten2return
-def _add(*args: dtypes.Unit | int, target: dtypes.Unit) -> base.ToFlatten:
-    arg_sorts = {int: [], dtypes.Unit: []}  # type: ignore
-    for arg in args:
-        arg_sorts[type(arg)].append(arg)
+def add(left: dtypes.Unit | int, right: dtypes.Unit | int, target: dtypes.Unit) -> base.ToFlatten:
+    if target == left:
+        return _add_to_target(right, target)
+    elif target == right:
+        return _add_to_target(left, target)
 
-    return [
-        _add_units(*arg_sorts[dtypes.Unit], target=target),
-        _add_ints(sum(arg_sorts[int], 0), target=target),
-    ]
+    return tokens.Clear(target) | _add_to_target(left, target) | _add_to_target(right, target)
 
 
 @base.flatten2return
-def _add_ints(value: int, target: dtypes.Unit) -> base.ToFlatten:
+def _add_to_target(argument: dtypes.Unit | int, target: dtypes.Unit) -> base.ToFlatten:
+    if isinstance(argument, int):
+        return _add_int(argument, target)
+
+    return _move_without_clear(argument, target)
+
+
+@base.flatten2return
+def _add_int(value: int, target: dtypes.Unit) -> base.ToFlatten:
     operation = tokens.Increment if value > 0 else tokens.Decrement
     return [operation(owner=target)] * abs(value)
-
-
-@base.flatten2return
-def _add_units(*args: dtypes.Unit, target: dtypes.Unit) -> base.ToFlatten:
-    # If target exists it will be placed as a first key.
-    counts = {target: 0} | collections.Counter(args)
-    counts[target] -= 1
-
-    instrs: list[base.ToFlatten] = []
-    for arg, scale in counts.items():
-        instrs.append(_move_without_clear(arg, target, scale))
-
-    return instrs
 
 
 def _move_without_clear(from_: dtypes.Unit, to_: dtypes.Unit, scale: int = 1) -> base.ToFlatten:
@@ -60,8 +52,8 @@ def _move_without_clear(from_: dtypes.Unit, to_: dtypes.Unit, scale: int = 1) ->
 
     buffer = dtypes.Unit()
     return [
-        memoptix.UnitConstraint(buffer),
-        _move_unit2units(from_, [(buffer, 1)]),
-        _move_unit2units(buffer, [(from_, 1), (to_, scale)]),
+        init(buffer),
+        move(from_, [(buffer, 1)]),
+        move(buffer, [(from_, 1), (to_, scale)]),
         memoptix.Free(buffer),
     ]

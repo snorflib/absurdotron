@@ -11,11 +11,11 @@ class Init(base.BaseCommand):
     obj: dtypes.Unit | dtypes.Array
 
     def _apply(self, context: program.Program) -> base.CommandReturn:
-        return _init(self.obj)
+        return init(self.obj)
 
 
 @base.flatten2return
-def _init(obj: dtypes.Unit | dtypes.Array) -> base.ToFlatten:
+def init(obj: dtypes.Unit | dtypes.Array) -> base.ToFlatten:
     if isinstance(obj, dtypes.Unit):
         return constraints.UnitConstraint(obj)
     return constraints.ArrayConstraint(obj, obj.length)
