@@ -19,7 +19,7 @@ from .init import Init
 from .input import InputUnit
 from .move import Move
 from .mul import Mul
-from .not_ import NotUnit
+from .not_ import Not
 from .or_ import OrUnit
 from .sub import Sub
 from .xor import XorUnit
@@ -34,7 +34,7 @@ __all__ = (
     "InputUnit",
     "ClearUnit",
     "CopyUnit",
-    "NotUnit",
+    "Not",
     "CallZ",
     "DivModUnit",
     "Mul",

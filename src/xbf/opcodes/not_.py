@@ -1,38 +1,32 @@
 import attrs
 
 from src.ir import tokens
-from src.memoptix import metainfo
 from src.xbf import dtypes, program
 
-from .base import BaseCommand
-from .init import Init
-from .move import move
-
-
-def _not_unit(unit: dtypes.Unit, target: dtypes.Unit, program: program.Program) -> list[tokens.BFToken]:
-    buffer = dtypes.Unit()
-    Init(buffer)(program)
-
-    routine = move(unit, [(buffer, 1)])
-    routine.append(tokens.Increment(buffer))
-
-    if target is unit:
-        routine.extend(move(buffer, [(unit, -1)]))
-        routine.append(metainfo.Free(buffer))
-        return routine
-
-    routine.append(tokens.Clear(target))
-    routine.extend(move(buffer, [(unit, 1), (target, -1)]))
-    routine.append(tokens.Decrement(unit))
-
-    routine.append(metainfo.Free(buffer))
-    return routine
+from . import base
+from .add import _add_int, _move_without_clear
 
 
 @attrs.frozen
-class NotUnit(BaseCommand):
-    unit: dtypes.Unit
-    save_to: dtypes.Unit
+class Not(base.BaseCommand):
+    arg: dtypes.Unit | int
+    target: dtypes.Unit
 
-    def _apply(self, context: program.Program) -> None:
-        context.routine.extend(_not_unit(self.unit, self.save_to, context))
+    def _apply(self, context: program.Program) -> base.CommandReturn:
+        return not_(self.arg, self.target)
+
+
+@base.flatten2return
+def not_(arg: dtypes.Unit | int, target: dtypes.Unit) -> base.ToFlatten:
+    if isinstance(arg, int):
+        return _add_int(~arg, target)
+
+    return _not_unit(arg, target)
+
+
+@base.flatten2return
+def _not_unit(arg: dtypes.Unit, target: dtypes.Unit) -> base.ToFlatten:
+    if arg == target:
+        return _move_without_clear(target, target, -2) | tokens.Decrement(target)
+
+    return tokens.Clear(target), tokens.Decrement(target), _move_without_clear(arg, target, -1)
