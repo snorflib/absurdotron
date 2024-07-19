@@ -14,7 +14,7 @@ from .callz import CallZ
 from .clear import ClearUnit
 from .copy import CopyUnit
 from .display import DisplayUnit
-from .divmod import DivModUnit
+from .divmod import DivMod
 from .init import Init
 from .input import InputUnit
 from .move import Move
@@ -36,7 +36,7 @@ __all__ = (
     "CopyUnit",
     "Not",
     "CallZ",
-    "DivModUnit",
+    "DivMod",
     "Mul",
     "AssignUnit",
     "AndUnit",

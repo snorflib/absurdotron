@@ -10,11 +10,13 @@ from .return_ import CommandReturn
 class BaseCommand(abc.ABC):
     __slots__ = ()
 
-    def __call__(self, context: program.Program) -> None:
+    def __call__(self, context: program.Program) -> CommandReturn:
         base = self._apply(context)
-        if base is not None:
+        if (base is not None) and (context is not None):
             context.constr.extend(base._constrs)
             context.routine.extend(base._routine)
+
+        return base
 
     @abc.abstractmethod
     def _apply(self, context: program.Program) -> None | CommandReturn:

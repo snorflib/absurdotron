@@ -10,7 +10,7 @@ from .base import BaseCommand
 from .callz import CallZ
 from .clear import ClearUnit
 from .copy import CopyUnit
-from .divmod import DivModUnit
+from .divmod import DivMod
 from .init import Init
 from .move import Move
 from .mul import Mul
@@ -44,8 +44,8 @@ def xor_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit, program: pr
     routine.append(tokens.Clear(target))
     routine.append(tokens.EnterLoop(break_))
 
-    DivModUnit(lquot, 2, lquot, lrem)(program)
-    DivModUnit(rquot, 2, rquot, rrem)(program)
+    DivMod(lquot, 2, lquot, lrem)(program)
+    DivMod(rquot, 2, rquot, rrem)(program)
 
     Move(lrem, [(xored_bit, 1)])(program)
     Move(rrem, [(xored_bit, 1)])(program)

@@ -1,67 +1,49 @@
-import typing
-
 import attrs
 
 from src import memoptix
 from src.ir import tokens
 from src.xbf import dtypes, program
 
-from .base import BaseCommand
-from .init import Init
-from .move import Move
-
-
-def _callz(
-    subject: dtypes.Unit,
-    if_: typing.Iterable[BaseCommand] | None,
-    else_: typing.Iterable[BaseCommand] | None,
-    program: program.Program,
-) -> None:
-    else_flag, buffer = dtypes.Unit(), dtypes.Unit()
-
-    Init(else_flag)(program)
-    Init(buffer)(program)
-
-    Move(subject, [(buffer, 1)])(program)
-    program.routine.extend(
-        [
-            tokens.Increment(else_flag),
-            tokens.EnterLoop(buffer),
-        ]
-    )
-    Move(buffer, [(subject, 1)])(program)
-
-    for command in if_ or []:
-        command(program)
-
-    program.routine.extend(
-        [
-            tokens.Decrement(else_flag),
-            tokens.ExitLoop(),
-            #
-            tokens.EnterLoop(else_flag),
-            tokens.Decrement(else_flag),
-        ]
-    )
-
-    for command in else_ or []:
-        command(program)
-
-    program.routine.extend(
-        [
-            tokens.ExitLoop(),
-            #
-            memoptix.Free(else_flag),
-            memoptix.Free(buffer),
-        ]
-    )
+from . import base
+from .init import init
+from .move import move
 
 
 @attrs.frozen
-class CallZ(BaseCommand):
-    subject: dtypes.Unit
-    if_: typing.Iterable[BaseCommand] | None = None
-    else_: typing.Iterable[BaseCommand] | None = None
+class CallZ(base.BaseCommand):
+    arg: dtypes.Unit
+    if_: base.CommandReturn | None = None
+    else_: base.CommandReturn | None = None
 
-    def _apply(self, context: program.Program) -> None:
-        _callz(self.subject, self.if_, self.else_, context)
+    def _apply(self, context: program.Program) -> base.CommandReturn:
+        return callz(self.arg, self.if_, self.else_)
+
+
+@base.flatten2return
+def callz(
+    arg: dtypes.Unit,
+    if_: base.CommandReturn | None,
+    else_: base.CommandReturn | None,
+) -> base.CommandReturn:
+    else_flag, buffer = dtypes.Unit(), dtypes.Unit()
+
+    instrs = base.CommandReturn()
+    instrs |= init(else_flag) | init(buffer)
+
+    instrs |= move(arg, [(buffer, 1)])
+    instrs |= tokens.Increment(else_flag)
+    instrs |= tokens.EnterLoop(buffer)
+    instrs |= move(buffer, [(arg, 1)])
+    instrs |= if_ or base.CommandReturn()
+    instrs |= tokens.Decrement(else_flag)
+    instrs |= tokens.ExitLoop()
+
+    instrs |= tokens.EnterLoop(else_flag)
+    instrs |= tokens.Decrement(else_flag)
+    instrs |= else_ or base.CommandReturn()
+    instrs |= tokens.ExitLoop()
+
+    instrs |= memoptix.Free(else_flag)
+    instrs |= memoptix.Free(buffer)
+
+    return instrs

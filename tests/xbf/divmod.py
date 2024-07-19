@@ -9,7 +9,7 @@ def test_integer_division_quotient() -> None:
         xbf.Init(a),
         xbf.Init(b),
         xbf.Add(a, 15, a),
-        xbf.DivModUnit(a, 4, quotient=b),
+        xbf.DivMod(a, 4, quotient=b),
         xbf.Add(b, 1, b),
     ]
 
@@ -24,7 +24,7 @@ def test_integer_division_remainder() -> None:
         xbf.Init(a),
         xbf.Init(b),
         xbf.Add(a, 17, a),
-        xbf.DivModUnit(a, 4, remainder=b),
+        xbf.DivMod(a, 4, remainder=b),
         xbf.Add(b, 1, b),
         xbf.Add(a, 1, a),
     ]
@@ -40,7 +40,7 @@ def test_integer_remainder_is_divisor() -> None:
         xbf.Init(a),
         xbf.Init(b),
         xbf.Add(a, 6, a),
-        xbf.DivModUnit(a, 4, remainder=a),
+        xbf.DivMod(a, 4, remainder=a),
     ]
 
     memory = run_and_eval_opcodes(opcodes)
@@ -53,7 +53,7 @@ def test_integer_quotient_is_divisor() -> None:
         xbf.Init(a),
         xbf.Init(b),
         xbf.Add(a, 6, a),
-        xbf.DivModUnit(a, 4, quotient=a),
+        xbf.DivMod(a, 4, quotient=a),
     ]
 
     memory = run_and_eval_opcodes(opcodes)
@@ -66,7 +66,7 @@ def test_divmod_zero_division() -> None:
         xbf.Init(a),
         xbf.Init(b),
         xbf.Add(a, 6, a),
-        xbf.DivModUnit(a, 0, quotient=a),
+        xbf.DivMod(a, 0, quotient=a),
     ]
 
     memory = run_and_eval_opcodes(opcodes)
@@ -82,7 +82,7 @@ def test_all_arguments() -> None:
         xbf.Init(d),
         xbf.Add(a, 6, a),
         xbf.Add(c, 4, c),
-        xbf.DivModUnit(a, c, quotient=b, remainder=d),
+        xbf.DivMod(a, c, quotient=b, remainder=d),
         xbf.Add(a, 1, a),
         xbf.Add(c, 1, c),
         xbf.Add(b, 1, b),
@@ -100,7 +100,7 @@ def test_zero_dividend() -> None:
     opcodes = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.DivModUnit(a, 4, quotient=b, remainder=a),
+        xbf.DivMod(a, 4, quotient=b, remainder=a),
     ]
 
     memory = run_and_eval_opcodes(opcodes)
@@ -115,7 +115,7 @@ def test_division_by_integer_dividend_to_quotient() -> None:
         xbf.Init(a),
         xbf.Init(b),
         xbf.AssignUnit(a, 22),
-        xbf.DivModUnit(a, 4, quotient=a, remainder=b),
+        xbf.DivMod(a, 4, quotient=a, remainder=b),
     ]
 
     memory = run_and_eval_opcodes(opcodes)

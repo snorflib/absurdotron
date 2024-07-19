@@ -8,7 +8,7 @@ from .add import Add
 from .assign import AssignUnit
 from .base import BaseCommand
 from .copy import CopyUnit
-from .divmod import DivModUnit
+from .divmod import DivMod
 from .init import Init
 from .mul import Mul
 
@@ -41,8 +41,8 @@ def and_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit, program: pr
     routine.append(tokens.Clear(target))
     routine.append(tokens.EnterLoop(break_))
 
-    DivModUnit(lquot, 2, lquot, lrem)(program)
-    DivModUnit(rquot, 2, rquot, rrem)(program)
+    DivMod(lquot, 2, lquot, lrem)(program)
+    DivMod(rquot, 2, rquot, rrem)(program)
 
     routine.append(tokens.EnterLoop(lrem))
     routine.append(tokens.EnterLoop(rrem))
