@@ -10,7 +10,7 @@ from .base import BaseCommand
 from .copy import CopyUnit
 from .divmod import DivModUnit
 from .init import Init
-from .move import MoveUnit
+from .move import Move
 from .mul import MulUnit
 
 
@@ -48,8 +48,8 @@ def or_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit, program: pro
     DivModUnit(lquot, 2, lquot, lrem)(program)
     DivModUnit(rquot, 2, rquot, rrem)(program)
 
-    MoveUnit(lrem, [(ored_bit, 1)])(program)
-    MoveUnit(rrem, [(ored_bit, 1)])(program)
+    Move(lrem, [(ored_bit, 1)])(program)
+    Move(rrem, [(ored_bit, 1)])(program)
 
     routine.append(tokens.EnterLoop(ored_bit))
     Add(bit_scale, target, target)(program)

@@ -6,7 +6,7 @@ from src.xbf import dtypes, program
 
 from .base import BaseCommand
 from .init import Init
-from .move import MoveUnit
+from .move import Move
 
 
 def _get_path_tokens(array: dtypes.Array, program: program.Program) -> None:
@@ -32,7 +32,7 @@ def _array_store(
     if isinstance(index, int):
         buffer = dtypes.Unit()
         Init(buffer)(program)
-        MoveUnit(to_store, [(buffer, 1)])(program)
+        Move(to_store, [(buffer, 1)])(program)
 
         routine.extend(
             [

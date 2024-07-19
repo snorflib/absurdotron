@@ -1,3 +1,4 @@
+from .dtypes import Array, DType, Unit
 from .opcodes import (
     Add,
     AndUnit,
@@ -18,14 +19,13 @@ from .opcodes import (
     DivModUnit,
     Init,
     InputUnit,
-    MoveUnit,
+    Move,
     MulUnit,
     NotUnit,
     OrUnit,
     Sub,
     XorUnit,
 )
-from .dtypes import Array, DType, Unit
 from .program import Program
 
 __all__ = (
@@ -33,7 +33,7 @@ __all__ = (
     "Unit",
     "Array",
     "BaseCommand",
-    "MoveUnit",
+    "Move",
     "Program",
     "OrUnit",
     "Init",

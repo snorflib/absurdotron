@@ -17,7 +17,7 @@ from .display import DisplayUnit
 from .divmod import DivModUnit
 from .init import Init
 from .input import InputUnit
-from .move import MoveUnit
+from .move import Move
 from .mul import MulUnit
 from .not_ import NotUnit
 from .or_ import OrUnit
@@ -26,7 +26,7 @@ from .xor import XorUnit
 
 __all__ = (
     "BaseCommand",
-    "MoveUnit",
+    "Move",
     "Init",
     "Add",
     "Sub",

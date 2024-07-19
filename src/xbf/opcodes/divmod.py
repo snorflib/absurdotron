@@ -8,7 +8,7 @@ from .add import Add
 from .base import BaseCommand
 from .callz import CallZ
 from .init import Init
-from .move import MoveUnit, move
+from .move import Move, move
 
 
 def _generic_division(
@@ -54,7 +54,7 @@ def _generic_division(
     if dividend not in [remainder, quotient]:
         program.routine.append(tokens.Increment(dividend))
 
-    else_: list[BaseCommand] = [MoveUnit(remainder_buf, [(divisor, 1)])]
+    else_: list[BaseCommand] = [Move(remainder_buf, [(divisor, 1)])]
     if quotient:
         else_.append(Add(quotient, 1, quotient))
     CallZ(divisor, else_=else_)(program)
