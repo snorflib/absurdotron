@@ -20,8 +20,7 @@ class Move(base.BaseCommand):
 
 @base.flatten2return
 def move(from_: dtypes.Unit, to_: typing.Iterable[tuple[dtypes.Unit, int]]) -> base.ToFlatten:
-    dtype2scale = dict(to_)
-    units = collections.Counter(pair[0] for pair in to_)
+    units = _calculate_total_scale_per_unit(to_)
 
     if from_ in units:
         raise ValueError("Target byte sequence cannot contain the start byte instance.")
@@ -29,8 +28,7 @@ def move(from_: dtypes.Unit, to_: typing.Iterable[tuple[dtypes.Unit, int]]) -> b
     instrs = base.CommandReturn()
     instrs |= tokens.EnterLoop(from_)
 
-    for unit, repeated in units.items():
-        scale = repeated * dtype2scale[unit]
+    for unit, scale in units.items():
         instrs |= _integer2token(scale, unit)
 
     instrs |= tokens.Decrement(from_)
@@ -38,7 +36,17 @@ def move(from_: dtypes.Unit, to_: typing.Iterable[tuple[dtypes.Unit, int]]) -> b
 
     return instrs
 
+
+def _calculate_total_scale_per_unit(unit2scale: typing.Iterable[tuple[dtypes.Unit, int]]) -> dict[dtypes.Unit, int]:
+    units: dict[dtypes.Unit, int] = {}
+    for unit, scale in unit2scale:
+        units.setdefault(unit, 0)
+        units[unit] += scale
+
+    return units
+
+
 @base.flatten2return
 def _integer2token(value: int, unit: dtypes.Unit) -> base.CommandReturn:
     token = tokens.Increment if value > 0 else tokens.Decrement
-    return [token(owner=unit)] * abs(value)
+    return [token(owner=unit)] * abs(value)  # type: ignore

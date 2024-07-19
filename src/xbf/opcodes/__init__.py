@@ -18,7 +18,7 @@ from .divmod import DivModUnit
 from .init import Init
 from .input import InputUnit
 from .move import Move
-from .mul import MulUnit
+from .mul import Mul
 from .not_ import NotUnit
 from .or_ import OrUnit
 from .sub import Sub
@@ -37,7 +37,7 @@ __all__ = (
     "NotUnit",
     "CallZ",
     "DivModUnit",
-    "MulUnit",
+    "Mul",
     "AssignUnit",
     "AndUnit",
     "OrUnit",

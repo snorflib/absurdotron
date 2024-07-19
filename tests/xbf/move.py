@@ -15,7 +15,7 @@ class MockUpIncrementCommand(xbf.BaseCommand):
             context.routine.append(ir.Increment(self.unit))
 
 
-def test_simple_migrate() -> None:
+def test_simple_move() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     opcodes = [xbf.Init(a), xbf.Init(b), MockUpIncrementCommand(a, 5), xbf.Move(a, to_=[(b, 1)])]
 
@@ -24,7 +24,7 @@ def test_simple_migrate() -> None:
     assert memory[b] == 5
 
 
-def test_double_migrate() -> None:
+def test_double_move() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     opcodes = [xbf.Init(a), xbf.Init(b), MockUpIncrementCommand(a, 5), xbf.Move(a, to_=[(b, 2)])]
 
@@ -33,7 +33,7 @@ def test_double_migrate() -> None:
     assert memory[b] == 10
 
 
-def test_double_migrate_wrapping() -> None:
+def test_double_move_wrapping() -> None:
     a, b = xbf.Unit(), xbf.Unit()
     opcodes = [xbf.Init(a), xbf.Init(b), MockUpIncrementCommand(a, 5), xbf.Move(a, to_=[(b, -2)])]
 
@@ -42,7 +42,7 @@ def test_double_migrate_wrapping() -> None:
     assert memory[b] == 246
 
 
-def test_migrate_multiple_targets() -> None:
+def test_move_multiple_targets() -> None:
     a, b, c = xbf.Unit(), xbf.Unit(), xbf.Unit()
     opcodes = [
         xbf.Init(a),
@@ -57,3 +57,18 @@ def test_migrate_multiple_targets() -> None:
     assert memory[a] == 0
     assert memory[b] == 15
     assert memory[c] == 10
+
+
+def test_move_same_target_multiple_times() -> None:
+    a, b = xbf.Unit(), xbf.Unit()
+    opcodes = [
+        xbf.Init(a),
+        xbf.Init(b),
+        MockUpIncrementCommand(a, 5),
+        MockUpIncrementCommand(b, 10),
+        xbf.Move(a, to_=[(b, 5), (b, -1), (b, -4), (b, 3)]),
+    ]
+
+    memory = run_and_eval_opcodes(opcodes)
+    assert memory[a] == 0
+    assert memory[b] == 25

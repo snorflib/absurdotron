@@ -13,7 +13,7 @@ from .copy import CopyUnit
 from .divmod import DivModUnit
 from .init import Init
 from .move import Move
-from .mul import MulUnit
+from .mul import Mul
 
 
 def xor_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit, program: program.Program) -> None:
@@ -62,7 +62,7 @@ def xor_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit, program: pr
     routine.append(tokens.ExitLoop())
 
     routine.append(tokens.Decrement(break_))
-    MulUnit(bit_scale, 2, bit_scale)(program)
+    Mul(bit_scale, 2, bit_scale)(program)
     routine.append(tokens.ExitLoop())
 
     routine.append(tokens.Clear(bit_scale))

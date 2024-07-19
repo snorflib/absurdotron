@@ -1,81 +1,84 @@
-import collections.abc
-
 import attrs
 
 from src.ir import tokens
 from src.memoptix import metainfo
 from src.xbf import dtypes, program
 
-# from .add import _generic_addition
-from .base import BaseCommand
-from .init import Init
+from . import base
+from .add import _add_int, _move_without_clear, add
+from .init import init
 from .move import move
 
 
-def _multiply(
-    origin: dtypes.Unit,
-    other: dtypes.Unit | int,
-    target: dtypes.Unit,
-    program: program.Program,
-) -> collections.abc.Sequence[tokens.BFToken]:
-    if isinstance(other, int):
-        if other == 0:
-            return []
-
-        buffer = dtypes.Unit()
-        Init(buffer)(program)
-
-        routine = move(origin, [(buffer, 1)])
-        if origin is target:
-            routine.extend(move(buffer, [(target, other)]))
-        else:
-            routine.append(tokens.Clear(target))
-            routine.extend(move(buffer, [(target, other), (origin, 1)]))
-
-        routine.append(metainfo.Free(buffer))
-        return routine
-
-    origin_buf, other_buf = dtypes.Unit(), dtypes.Unit()
-
-    Init(origin_buf)(program)
-    Init(other_buf)(program)
-
-    if origin is other:
-        routine = move(from_unit=origin, to_units=[(origin_buf, 1), (other_buf, 1)])
-    else:
-        routine = move(from_unit=origin, to_units=[(origin_buf, 1)])
-        routine.extend(move(from_unit=other, to_units=[(other_buf, 1)]))
-
-    routine.append(tokens.Clear(target))
-    routine.append(tokens.EnterLoop(other_buf))
-    # routine.extend(_generic_addition(target, origin_buf, target, program, add=True))
-
-    if other is not origin:
-        routine.append(tokens.Increment(other))
-
-    routine.append(tokens.Decrement(other_buf))
-    routine.append(tokens.ExitLoop())
-
-    # This line also covers the case where target is the
-    routine.extend(move(origin_buf, [(origin, 1)]))
-
-    routine.append(metainfo.Free(other_buf))
-    routine.append(metainfo.Free(origin_buf))
-    return routine
-
-
 @attrs.frozen
-class MulUnit(BaseCommand):
-    origin: dtypes.Unit
-    mul_by: dtypes.Unit | int
+class Mul(base.BaseCommand):
+    multiplicand: dtypes.Unit | int
+    multiplier: dtypes.Unit | int
     target: dtypes.Unit
 
-    def _apply(self, context: program.Program) -> None:
-        context.routine.extend(
-            _multiply(
-                self.origin,
-                self.mul_by,
-                self.target,
-                program=context,
-            )
-        )
+    def _apply(self, context: program.Program) -> base.CommandReturn:
+        return mul(self.multiplicand, self.multiplier, self.target)
+
+
+@base.flatten2return
+def mul(
+    multiplicand: dtypes.Unit | int,
+    multiplier: dtypes.Unit | int,
+    target: dtypes.Unit,
+) -> base.ToFlatten:
+    if isinstance(multiplicand, int) and isinstance(multiplier, int):
+        return _add_int(multiplicand * multiplier, target)
+    elif isinstance(multiplier, int):
+        return _mul_by_int(multiplicand, multiplier, target)  # type: ignore
+
+    return _mul_two_units(multiplicand, multiplier, target)  # type: ignore
+
+
+@base.flatten2return
+def _mul_by_int(
+    multiplicand: dtypes.Unit,
+    multiplier: int,
+    target: dtypes.Unit,
+) -> base.ToFlatten:
+    if multiplicand == target:
+        return _move_without_clear(multiplicand, target, scale=multiplier - 1)
+
+    return tokens.Clear(target) | _move_without_clear(multiplicand, target, scale=multiplier)
+
+
+@base.flatten2return
+def _mul_two_units(
+    multiplicand: dtypes.Unit,
+    multiplier: dtypes.Unit,
+    target: dtypes.Unit,
+) -> base.ToFlatten:
+    cand_buf, plier_buf = dtypes.Unit(), dtypes.Unit()
+
+    instrs = base.CommandReturn()
+    instrs |= init(cand_buf)
+    instrs |= init(plier_buf)
+
+    if multiplicand == multiplier:
+        instrs |= move(multiplicand, [(cand_buf, 1), (plier_buf, 1)])
+    else:
+        instrs |= move(multiplicand, [(cand_buf, 1)])
+        instrs |= move(multiplier, [(plier_buf, 1)])
+
+    instrs |= tokens.Clear(target)
+    instrs |= tokens.EnterLoop(plier_buf)
+
+    instrs |= add(cand_buf, target, target)
+
+    if multiplicand != multiplier != target:
+        instrs |= tokens.Increment(multiplier)
+
+    instrs |= tokens.Decrement(plier_buf)
+    instrs |= tokens.ExitLoop()
+
+    if multiplicand != target:
+        instrs |= move(cand_buf, [(multiplicand, 1)])
+
+    instrs |= metainfo.Free(cand_buf)
+    instrs |= metainfo.Free(plier_buf)
+
+    return instrs
