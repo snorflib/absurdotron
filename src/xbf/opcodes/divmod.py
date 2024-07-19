@@ -6,9 +6,9 @@ from src.xbf import dtypes, program
 
 from . import base
 from .add import _add_int
-from .callz import CallZ
+from .callz import callz
 from .init import init
-from .move import Move, move
+from .move import move
 
 
 @attrs.frozen
@@ -90,7 +90,19 @@ def _div_standard(
     rem_buff, dividend_buff = dtypes.Unit(), dtypes.Unit()
     instrs |= init(rem_buff) | init(dividend_buff)
 
-    restore_divisor: bool = True
+    dynamic_divisor: bool = False
+    if isinstance(int_divisor := divisor, int):
+        divisor = dtypes.Unit()
+        instrs |= init(divisor)
+        instrs |= _add_int(int_divisor, divisor)
+        dynamic_divisor = True
+    elif divisor in [quotient, remainder]:
+        divisor_new = dtypes.Unit()
+        instrs |= init(divisor_new)
+        instrs |= move(divisor, [(divisor_new, 1)])
+        divisor = divisor_new
+
+        dynamic_divisor = True
 
     if isinstance(dividend, int):
         instrs |= _add_int(dividend, dividend_buff)
@@ -105,30 +117,31 @@ def _div_standard(
     if dividend not in [remainder, quotient]:
         instrs |= tokens.Increment(dividend)
 
-    else_: list[BaseCommand] = [Move(remainder_buf, [(divisor, 1)])]
+    else_ = move(rem_buff, [(divisor, 1)])
     if quotient:
-        else_.append(Add(quotient, 1, quotient))
-    CallZ(divisor, else_=else_)(program)
+        else_ |= tokens.Increment(quotient)
+    instrs |= callz(divisor, else_=else_)
 
-    program.routine.append(tokens.ExitLoop())
+    instrs |= tokens.ExitLoop()
 
-    if restore_divisor:
-        Add(remainder_buf, 0, divisor)(program)
-    else:
-        program.routine.append(tokens.Clear(divisor))
-        program.routine.append(metainfo.Free(divisor))
+    if dynamic_divisor:
+        instrs |= tokens.Clear(divisor)
+        instrs |= metainfo.Free(divisor)
 
     if remainder:
-        program.routine.extend([tokens.Clear(remainder)])
-        program.routine.extend(move(remainder_buf, [(remainder, 1)]))
-    else:
-        program.routine.append(tokens.Clear(remainder_buf))
+        instrs |= tokens.Clear(remainder)
 
-    program.routine.extend(
-        [
-            metainfo.Free(remainder_buf),
-            metainfo.Free(dividend_buf),
-        ]
-    )
+    if remainder and not dynamic_divisor:
+        instrs |= move(rem_buff, [(divisor, 1), (remainder, 1)])
+    elif remainder:
+        instrs |= move(rem_buff, [(remainder, 1)])
+    elif not dynamic_divisor:
+        instrs |= move(rem_buff, [(divisor, 1)])
+
+    else:
+        instrs |= tokens.Clear(rem_buff)
+
+    instrs |= metainfo.Free(rem_buff)
+    instrs |= metainfo.Free(dividend_buff)
 
     return instrs

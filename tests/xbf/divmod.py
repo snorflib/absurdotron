@@ -80,19 +80,16 @@ def test_all_arguments() -> None:
         xbf.Init(b),
         xbf.Init(c),
         xbf.Init(d),
-        xbf.Add(a, 6, a),
-        xbf.Add(c, 4, c),
-        xbf.DivMod(a, c, quotient=b, remainder=d),
-        xbf.Add(a, 1, a),
-        xbf.Add(c, 1, c),
-        xbf.Add(b, 1, b),
+        xbf.Add(a, 147, a),
+        xbf.Add(c, 43, c),
+        xbf.DivMod(a, c, remainder=b, quotient=d),
     ]
 
     memory = run_and_eval_opcodes(opcodes)
-    assert memory[a] == 7
-    assert memory[c] == 5
-    assert memory[b] == 2
-    assert memory[d] == 2
+    assert memory[a] == 147
+    assert memory[c] == 43
+    assert memory[b] == 18
+    assert memory[d] == 3
 
 
 def test_zero_dividend() -> None:
@@ -114,10 +111,62 @@ def test_division_by_integer_dividend_to_quotient() -> None:
     opcodes = [
         xbf.Init(a),
         xbf.Init(b),
-        xbf.AssignUnit(a, 22),
+        xbf.Add(a, 22, a),
         xbf.DivMod(a, 4, quotient=a, remainder=b),
     ]
 
     memory = run_and_eval_opcodes(opcodes)
     assert memory[a] == 5
     assert memory[b] == 2
+
+
+def test_dividend_as_remainder() -> None:
+    a, b = xbf.Unit(), xbf.Unit()
+    opcodes = [
+        xbf.Init(a),
+        xbf.Add(a, 25, a),
+        xbf.Add(b, 6, b),
+        xbf.DivMod(a, b, remainder=a),
+    ]
+
+    memory = run_and_eval_opcodes(opcodes)
+    assert memory[a] == 1
+
+def test_dividend_as_quotient() -> None:
+    a, b = xbf.Unit(), xbf.Unit()
+    opcodes = [
+        xbf.Init(a),
+        xbf.Add(a, 29, a),
+        xbf.Add(b, 7, b),
+        xbf.DivMod(a, b, quotient=a),
+    ]
+
+    memory = run_and_eval_opcodes(opcodes)
+    assert memory[a] == 4
+
+def test_divisor_as_quotient() -> None:
+    a, b = xbf.Unit(), xbf.Unit()
+    opcodes = [
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Add(a, 20, a),
+        xbf.Add(b, 4, b),
+        xbf.DivMod(a, b, quotient=b),
+    ]
+
+    memory = run_and_eval_opcodes(opcodes)
+    assert memory[a] == 20
+    assert memory[b] == 5
+def test_divisor_as_remainder() -> None:
+    a, b = xbf.Unit(), xbf.Unit()
+    opcodes = [
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Add(a, 18, a),
+        xbf.Add(b, 5, b),
+        xbf.DivMod(a, b, remainder=b),
+    ]
+
+    memory = run_and_eval_opcodes(opcodes)
+    assert memory[a] == 18
+    assert memory[b] == 3

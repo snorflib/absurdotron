@@ -22,8 +22,8 @@ class CallZ(base.BaseCommand):
 @base.flatten2return
 def callz(
     arg: dtypes.Unit,
-    if_: base.CommandReturn | None,
-    else_: base.CommandReturn | None,
+    if_: base.CommandReturn | None = None,
+    else_: base.CommandReturn | None = None,
 ) -> base.CommandReturn:
     else_flag, buffer = dtypes.Unit(), dtypes.Unit()
 
