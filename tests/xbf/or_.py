@@ -1,0 +1,126 @@
+from src import xbf
+
+from .utils import run_and_eval_opcodes
+
+
+def test_simple_or() -> None:
+    a = xbf.Unit()
+    opcodes = [xbf.Init(a), xbf.Add(a, 10, a), xbf.OrUnit(a, a, a)]
+
+    memory = run_and_eval_opcodes(opcodes)
+    assert memory[a] == 10
+
+
+def test_simple_or_zero() -> None:
+    a = xbf.Unit()
+    opcodes = [xbf.Init(a), xbf.Add(a, 0, a), xbf.OrUnit(a, a, a)]
+
+    memory = run_and_eval_opcodes(opcodes)
+    assert memory.get(a, 0) == 0
+
+
+def test_simple_or_255() -> None:
+    a = xbf.Unit()
+    opcodes = [xbf.Init(a), xbf.Add(a, 255, a), xbf.OrUnit(a, a, a)]
+
+    memory = run_and_eval_opcodes(opcodes)
+    assert memory[a] == 255
+
+
+def test_or_0_0() -> None:
+    a, b, c = xbf.Unit(), xbf.Unit(), xbf.Unit()
+    opcodes = [
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Init(c),
+        xbf.OrUnit(a, b, c),
+    ]
+
+    memory = run_and_eval_opcodes(opcodes)
+    assert memory[a] == 0
+    assert memory[b] == 0
+    assert memory[c] == 0
+
+
+def test_or_same_number_non_zero() -> None:
+    a, b = xbf.Unit(), xbf.Unit()
+    opcodes = [
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Add(a, 44, a),
+        xbf.Add(b, 44, b),
+        xbf.OrUnit(a, b, b),
+    ]
+
+    memory = run_and_eval_opcodes(opcodes)
+
+    assert memory[a] == 44
+    assert memory[b] == 44
+
+
+def test_or_zero_and_non_zero() -> None:
+    a, b, c = xbf.Unit(), xbf.Unit(), xbf.Unit()
+    opcodes = [
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Init(c),
+        xbf.Add(a, 0, a),
+        xbf.Add(b, 79, b),
+        xbf.OrUnit(a, b, c),
+    ]
+
+    memory = run_and_eval_opcodes(opcodes)
+    assert memory[a] == 0
+    assert memory[b] == 79
+    assert memory[c] == 79
+
+
+def test_or_non_zero_and_non_zero() -> None:
+    a, b = xbf.Unit(), xbf.Unit()
+    opcodes = [
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Add(a, 13, a),
+        xbf.Add(b, 91, b),
+        xbf.OrUnit(a, b, a),
+    ]
+
+    memory = run_and_eval_opcodes(opcodes)
+    assert memory[b] == 91
+    assert memory[a] == 95
+
+
+def test_or_non_zero_and_non_zero_2() -> None:
+    a, b, c = xbf.Unit(), xbf.Unit(), xbf.Unit()
+    opcodes = [
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Init(c),
+        xbf.Add(a, 167, a),
+        xbf.Add(b, 13, b),
+        xbf.OrUnit(a, b, c),
+    ]
+
+    memory = run_and_eval_opcodes(opcodes)
+    assert memory[a] == 167
+    assert memory[b] == 13
+    assert memory[c] == 175
+
+
+def test_or_in_row() -> None:
+    a, b, c = xbf.Unit(), xbf.Unit(), xbf.Unit()
+    opcodes = [
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Init(c),
+        xbf.Add(a, 155, a),
+        xbf.Add(b, 231, b),
+        xbf.OrUnit(a, b, c),
+        xbf.Add(c, 5, c),
+        xbf.OrUnit(c, b, a),
+    ]
+
+    memory = run_and_eval_opcodes(opcodes)
+    assert memory[a] == 231
+    assert memory[b] == 231
+    assert memory[c] == 4

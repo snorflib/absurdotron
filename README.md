@@ -1,3 +1,3 @@
 # absurdotron
 
-A generic compiler from assembly language to BrainFuck.
+A generic compiler from assembly language to BrainFuck. 

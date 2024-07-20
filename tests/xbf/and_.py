@@ -1,0 +1,107 @@
+from src import xbf
+
+from .utils import run_and_eval_opcodes
+
+
+def test_simple_and() -> None:
+    a = xbf.Unit()
+    opcodes = [xbf.Init(a), xbf.Add(a, 10, a), xbf.AndUnit(a, a, a)]
+
+    memory = run_and_eval_opcodes(opcodes)
+    assert memory[a] == 10
+
+
+def test_simple_and_zero() -> None:
+    a = xbf.Unit()
+    opcodes = [xbf.Init(a), xbf.Add(a, 0, a), xbf.AndUnit(a, a, a)]
+
+    memory = run_and_eval_opcodes(opcodes)
+    assert memory.get(a, 0) == 0
+
+
+def test_simple_and_255() -> None:
+    a = xbf.Unit()
+    opcodes = [xbf.Init(a), xbf.Add(a, 255, a), xbf.AndUnit(a, a, a)]
+
+    memory = run_and_eval_opcodes(opcodes)
+    assert memory[a] == 255
+
+
+def test_and_0_0() -> None:
+    a, b, c = xbf.Unit(), xbf.Unit(), xbf.Unit()
+    opcodes = [
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Init(c),
+        xbf.AndUnit(a, b, c),
+    ]
+
+    memory = run_and_eval_opcodes(opcodes)
+    assert memory[a] == 0
+    assert memory[b] == 0
+    assert memory[c] == 0
+
+
+def test_and_same_number_non_zero() -> None:
+    a, b = xbf.Unit(), xbf.Unit()
+    opcodes = [
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Add(a, 44, a),
+        xbf.Add(b, 44, b),
+        xbf.AndUnit(a, b, b),
+    ]
+
+    memory = run_and_eval_opcodes(opcodes)
+
+    assert memory[a] == 44
+    assert memory[b] == 44
+
+
+def test_and_zero_and_non_zero() -> None:
+    a, b, c = xbf.Unit(), xbf.Unit(), xbf.Unit()
+    opcodes = [
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Init(c),
+        xbf.Add(a, 0, a),
+        xbf.Add(b, 79, b),
+        xbf.AndUnit(a, b, c),
+    ]
+
+    memory = run_and_eval_opcodes(opcodes)
+    assert memory[a] == 0
+    assert memory[b] == 79
+    assert memory[c] == 0
+
+
+def test_and_non_zero_and_non_zero() -> None:
+    a, b = xbf.Unit(), xbf.Unit()
+    opcodes = [
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Add(a, 13, a),
+        xbf.Add(b, 91, b),
+        xbf.AndUnit(a, b, a),
+    ]
+
+    memory = run_and_eval_opcodes(opcodes)
+    assert memory[b] == 91
+    assert memory[a] == 9
+
+
+def test_and_non_zero_and_non_zero_2() -> None:
+    a, b, c = xbf.Unit(), xbf.Unit(), xbf.Unit()
+    opcodes = [
+        xbf.Init(a),
+        xbf.Init(b),
+        xbf.Init(c),
+        xbf.Add(a, 167, a),
+        xbf.Add(b, 13, b),
+        xbf.AndUnit(a, b, c),
+    ]
+
+    memory = run_and_eval_opcodes(opcodes)
+    assert memory[a] == 167
+    assert memory[b] == 13
+    assert memory[c] == 5
