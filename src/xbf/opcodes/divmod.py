@@ -38,7 +38,7 @@ def div(
     elif dividend == divisor:
         return _div_by_itself(quotient, remainder)
 
-    return _div_standard(dividend, divisor, quotient, remainder)
+    return _div_units_and_ints(dividend, divisor, quotient, remainder)
 
 
 @base.flatten2return
@@ -79,7 +79,7 @@ def _div_by_itself(
 
 
 @base.flatten2return
-def _div_standard(
+def _div_units_and_ints(
     dividend: dtypes.Unit | int,
     divisor: dtypes.Unit | int,
     quotient: dtypes.Unit | None,
