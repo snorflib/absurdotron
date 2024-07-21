@@ -1,0 +1,22 @@
+import abc
+import typing
+
+import attrs
+
+from .args import OpCodeArgs
+from .context import Context
+from .return_ import OpCodeReturn
+
+TArgs = typing.TypeVar("TArgs", bound=OpCodeArgs, covariant=True)
+
+
+@attrs.frozen
+class OpCode(abc.ABC, typing.Generic[TArgs]):
+    args: TArgs
+
+    def __call__(self, context: Context) -> OpCodeReturn:
+        return self._execute(context)
+
+    @abc.abstractmethod
+    def _execute(self, context: Context) -> OpCodeReturn:
+        raise NotImplementedError
