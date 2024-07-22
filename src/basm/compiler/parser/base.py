@@ -3,8 +3,6 @@ from __future__ import annotations
 import abc
 import typing
 
-from src.utils import cls
-
 
 def _preprocess_node_name(name: str) -> str:
     return name.lower().removeprefix("node").removesuffix("node")
@@ -39,7 +37,7 @@ TCode = typing.TypeVar("TCode")
 TNode = typing.TypeVar("TNode", bound=BaseNode)
 
 
-class BaseParser(abc.ABC, typing.Generic[TCode, TNode], metaclass=cls.SingletonMeta):
+class BaseParser(abc.ABC, typing.Generic[TCode, TNode]):
     __slots__ = ()
 
     @abc.abstractmethod

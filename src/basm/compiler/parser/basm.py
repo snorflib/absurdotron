@@ -108,11 +108,12 @@ def _get_default_basm_parser() -> pyparsing.ParserElement:
 
 
 class BASMParser(BaseParser[str, RootNode]):
-    __slots__ = ("_parser",)
-
-    def __init__(self) -> None:
-        self._parser = _get_default_basm_parser()
+    _parser = _get_default_basm_parser()
 
     def parse(self, code: str) -> RootNode:
         result = self._parser.parseString(code, parse_all=True)
         return typing.cast(RootNode, result.as_list()[0])
+
+
+def parse_basm(code: str) -> RootNode:
+    return BASMParser().parse(code)
