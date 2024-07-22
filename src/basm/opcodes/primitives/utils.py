@@ -2,6 +2,7 @@ import typing
 
 import attrs
 
+from src.basm.compiler import context
 from src.basm.opcodes import base
 from src.ir import tokens
 
@@ -18,7 +19,7 @@ class _TokenArgs(base.OpCodeArgs):
 
 @attrs.frozen
 class _TokenOpCode(base.OpCode[_TokenArgs]):
-    def _execute(self, context: base.Context) -> base.OpCodeReturn:
+    def _execute(self, context: context.Context) -> base.OpCodeReturn:
         return base.OpCodeReturn([self.args.token(*self.args.args, **self.args.kwargs)])
 
 

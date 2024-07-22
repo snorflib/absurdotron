@@ -3,8 +3,9 @@ import typing
 
 import attrs
 
+from src.basm.compiler.context import Context
+
 from .args import OpCodeArgs
-from .context import Context
 from .return_ import OpCodeReturn
 
 TArgs = typing.TypeVar("TArgs", bound=OpCodeArgs, covariant=True)

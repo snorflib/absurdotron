@@ -1,4 +1,4 @@
-from .base import Context, OpCode, OpCodeArgs, OpCodeReturn
+from .base import OpCode, OpCodeArgs, OpCodeReturn
 from .primitives import (
     CDI,
     CMI,
@@ -22,5 +22,4 @@ __all__ = (
     "OpCode",
     "OpCodeArgs",
     "OpCodeReturn",
-    "Context",
 )
