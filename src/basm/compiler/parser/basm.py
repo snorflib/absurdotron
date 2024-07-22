@@ -5,7 +5,7 @@ import ast
 import typing
 
 import attrs
-import pyparsing
+import pyparsing as pyp
 
 from .base import BaseNode, BaseParser
 
@@ -15,7 +15,7 @@ class BASMNode(abc.ABC, BaseNode):
 
     @classmethod
     @abc.abstractmethod
-    def from_parser_results(cls: type[typing.Self], results: pyparsing.results.ParseResults) -> typing.Self:
+    def from_parser_results(cls: type[typing.Self], results: pyp.results.ParseResults) -> typing.Self:
         raise NotImplementedError
 
 
@@ -27,7 +27,7 @@ class _ValueNode(BaseNode, typing.Generic[TValue]):
     value: TValue
 
     @classmethod
-    def from_parser_results(cls: type[typing.Self], results: pyparsing.results.ParseResults) -> typing.Self:
+    def from_parser_results(cls: type[typing.Self], results: pyp.results.ParseResults) -> typing.Self:
         types_ = typing.get_args(cls.__orig_bases__[0])  # type: ignore
         if len(types_) != 1:
             raise ValueError(
@@ -61,7 +61,7 @@ class CallNode(BASMNode):
     args: list[_ValueNode[typing.Any]]
 
     @classmethod
-    def from_parser_results(cls: type[typing.Self], results: pyparsing.results.ParseResults) -> typing.Self:
+    def from_parser_results(cls: type[typing.Self], results: pyp.results.ParseResults) -> typing.Self:
         return cls(*results.as_list()[0])
 
 
@@ -70,39 +70,37 @@ class RootNode(BASMNode):
     calls: list[CallNode]
 
     @classmethod
-    def from_parser_results(cls: type[typing.Self], results: pyparsing.results.ParseResults) -> typing.Self:
+    def from_parser_results(cls: type[typing.Self], results: pyp.results.ParseResults) -> typing.Self:
         return cls(results.as_list())
 
 
-def _get_default_basm_parser() -> pyparsing.ParserElement:
-    string = pyparsing.QuotedString(
+def _get_default_basm_parser() -> pyp.ParserElement:
+    string = pyp.QuotedString(
         quoteChar='"',
         escChar="\\",
         unquoteResults=True,
         multiline=True,
     ).set_parse_action(StrNode.from_parser_results)
 
-    hex_num = pyparsing.Combine(
-        "0x" + pyparsing.Word(pyparsing.hexnums, min=1),
+    hex_num = pyp.Combine(
+        "0x" + pyp.Word(pyp.hexnums, min=1),
     ).set_parse_action(HexNode.from_parser_results)
 
-    identifier = pyparsing.Word(
-        pyparsing.alphas + "_",
-        pyparsing.alphanums + "_",
+    identifier = pyp.Word(
+        pyp.alphas + "_",
+        pyp.alphanums + "_",
         min=1,
     ).set_parse_action(IdNode.from_parser_results)
 
-    arg = pyparsing.Or([identifier, hex_num, string])
+    arg = pyp.Or([identifier, hex_num, string])
 
-    delimiter = pyparsing.Literal(",")
-    line_end = pyparsing.Literal(";")
+    delimiter = pyp.Literal(",")
+    line_end = pyp.Literal(";")
 
-    args = pyparsing.Group(pyparsing.delimitedList(arg, delim=delimiter))
-    call = pyparsing.Group(identifier + args + pyparsing.Suppress(line_end)).add_parse_action(
-        CallNode.from_parser_results
-    )
+    args = pyp.Group(pyp.Optional(pyp.delimitedList(arg, delim=delimiter)))
+    call = pyp.Group(identifier + args + pyp.Suppress(line_end)).add_parse_action(CallNode.from_parser_results)
 
-    root = pyparsing.OneOrMore(call) + pyparsing.Suppress(pyparsing.StringEnd())  # type: ignore
+    root = pyp.OneOrMore(call) + pyp.Suppress(pyp.StringEnd())  # type: ignore
     root.add_parse_action(RootNode.from_parser_results)
 
     return root
