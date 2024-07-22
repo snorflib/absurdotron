@@ -102,9 +102,10 @@ def _get_default_basm_parser() -> pyparsing.ParserElement:
         CallNode.from_parser_results
     )
 
-    root = pyparsing.OneOrMore(call).add_parse_action(RootNode.from_parser_results)
+    root = pyparsing.OneOrMore(call) + pyparsing.Suppress(pyparsing.StringEnd())  # type: ignore
+    root.add_parse_action(RootNode.from_parser_results)
 
-    return root + pyparsing.StringEnd()  # type: ignore
+    return root
 
 
 class BASMParser(BaseParser[str, RootNode]):

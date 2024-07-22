@@ -10,7 +10,7 @@ def _preprocess_node_name(name: str) -> str:
 
 class NodeMeta(abc.ABCMeta):
     name: str
-    _nodes: dict[str, type[NodeMeta]] = {}
+    _nodes: dict[str, NodeMeta] = {}
 
     def __init__(
         self,
@@ -21,11 +21,11 @@ class NodeMeta(abc.ABCMeta):
         preprocess: bool = True,
     ) -> None:
         name = _preprocess_node_name(name) if preprocess else name
-        self._nodes[name] = NodeMeta
+        self._nodes[name] = self
         self._name = name
 
     @classmethod
-    def get_node(cls, name: str) -> type[NodeMeta]:
+    def get_node(cls, name: str) -> NodeMeta:
         return cls._nodes[name]
 
 
