@@ -78,16 +78,16 @@ class BaseBASMVisitor(BaseNodeVisitor):
     def visit_StrNode(self, node: StrNode) -> typing.Any:
         ...
 
-    def visit_HexNode(self, node: StrNode) -> typing.Any:
+    def visit_HexNode(self, node: HexNode) -> typing.Any:
         ...
 
-    def visit_IdNode(self, node: StrNode) -> typing.Any:
+    def visit_IdNode(self, node: IdNode) -> typing.Any:
         ...
 
-    def visit_CallNode(self, node: StrNode) -> typing.Any:
+    def visit_CallNode(self, node: CallNode) -> typing.Any:
         ...
 
-    def visit_RootNode(self, node: StrNode) -> typing.Any:
+    def visit_RootNode(self, node: RootNode) -> typing.Any:
         ...
 
 
