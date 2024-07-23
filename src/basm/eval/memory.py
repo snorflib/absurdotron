@@ -3,5 +3,5 @@ import typing
 from src.basm.opcodes import base
 
 
-class Memory(dict[str, base.OpCode[typing.Any]]):
+class Memory(dict[str, type[base.OpCode[typing.Any]]]):
     ...
