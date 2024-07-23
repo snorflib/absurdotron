@@ -1,5 +1,15 @@
 from .base import BaseNode, BaseParser
-from .basm import BASMNode, BASMParser, CallNode, HexNode, IdNode, RootNode, StrNode, parse_basm
+from .basm import (
+    BaseBASMVisitor,
+    BASMNode,
+    BASMParser,
+    CallNode,
+    HexNode,
+    IdNode,
+    RootNode,
+    StrNode,
+    parse_basm,
+)
 
 __all__ = (
     "BaseNode",
@@ -12,4 +22,5 @@ __all__ = (
     "RootNode",
     "BASMParser",
     "parse_basm",
+    "BaseBASMVisitor",
 )

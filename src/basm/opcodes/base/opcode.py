@@ -3,7 +3,7 @@ import typing
 
 import attrs
 
-from src.basm.compiler.context import Context
+from src.basm import context
 
 from .args import OpCodeArgs
 from .return_ import OpCodeReturn
@@ -15,9 +15,9 @@ TArgs = typing.TypeVar("TArgs", bound=OpCodeArgs, covariant=True)
 class OpCode(abc.ABC, typing.Generic[TArgs]):
     args: TArgs
 
-    def __call__(self, context: Context) -> OpCodeReturn:
+    def __call__(self, context: context.Context) -> OpCodeReturn:
         return self._execute(context)
 
     @abc.abstractmethod
-    def _execute(self, context: Context) -> OpCodeReturn:
+    def _execute(self, context: context.Context) -> OpCodeReturn:
         raise NotImplementedError

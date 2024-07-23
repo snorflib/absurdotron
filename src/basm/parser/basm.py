@@ -7,7 +7,7 @@ import typing
 import attrs
 import pyparsing as pyp
 
-from .base import BaseNode, BaseParser
+from .base import BaseNode, BaseNodeVisitor, BaseParser
 
 
 class BASMNode(abc.ABC, BaseNode):
@@ -72,6 +72,23 @@ class RootNode(BASMNode):
     @classmethod
     def from_parser_results(cls: type[typing.Self], results: pyp.results.ParseResults) -> typing.Self:
         return cls(results.as_list())
+
+
+class BaseBASMVisitor(BaseNodeVisitor):
+    def visit_StrNode(self, node: StrNode) -> typing.Any:
+        ...
+
+    def visit_HexNode(self, node: StrNode) -> typing.Any:
+        ...
+
+    def visit_IdNode(self, node: StrNode) -> typing.Any:
+        ...
+
+    def visit_CallNode(self, node: StrNode) -> typing.Any:
+        ...
+
+    def visit_RootNode(self, node: StrNode) -> typing.Any:
+        ...
 
 
 def _get_default_basm_parser() -> pyp.ParserElement:

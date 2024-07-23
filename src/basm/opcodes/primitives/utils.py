@@ -2,7 +2,7 @@ import typing
 
 import attrs
 
-from src.basm.compiler import context
+from src.basm import context
 from src.basm.opcodes import base
 from src.ir import tokens
 
