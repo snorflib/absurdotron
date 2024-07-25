@@ -1,3 +1,4 @@
+import re
 
 from .base import IRError
 
@@ -14,12 +15,12 @@ def _format_message(code_segment: str, index: int, error_indicator: str, message
     """
     before = max(index - 20, 0)
     after = max(index + 20, len(code_segment))
-    return (
-        f"\n\n"
-        f"\t\t{code_segment[before:index]:>20}{code_segment[index:after]:<20}\n"
-        f"\t\t{error_indicator:^40}\n\n"
-        f"{message}"
-    )
+
+    blank_line_regex = r"(?:\r?\n){2,}"
+    left_side_string = re.split(blank_line_regex, code_segment[before:index].strip())[-1]
+    right_side_string = re.split(blank_line_regex, code_segment[index:after].strip())[0]
+
+    return f"\n\n\t\t{left_side_string:>20}{right_side_string:<20}\n\t\t{error_indicator:^40}\n\n{message}"
 
 
 class CodeSemanticsViolationError(IRError):

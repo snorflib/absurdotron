@@ -7,6 +7,8 @@ import typing
 import attrs
 import pyparsing as pyp
 
+from src.ir.exceptions import tokens
+
 from .base import BaseNode, BaseNodeVisitor, BaseParser
 
 
@@ -66,8 +68,18 @@ class CallNode(BASMNode):
 
 
 @attrs.frozen
+class VarDefNode(BASMNode):
+    dtype: IdNode
+    vars: list[IdNode]
+
+    @classmethod
+    def from_parser_results(cls: type[typing.Self], results: pyp.results.ParseResults) -> typing.Self:
+        return cls(*results.as_list()[0])
+
+
+@attrs.frozen
 class RootNode(BASMNode):
-    calls: list[CallNode]
+    nodes: list[CallNode | VarDefNode]
 
     @classmethod
     def from_parser_results(cls: type[typing.Self], results: pyp.results.ParseResults) -> typing.Self:
@@ -85,6 +97,9 @@ class BaseBASMVisitor(BaseNodeVisitor):
         ...
 
     def visit_CallNode(self, node: CallNode) -> typing.Any:
+        ...
+
+    def visit_VarDefNode(self, node: VarDefNode) -> typing.Any:
         ...
 
     def visit_RootNode(self, node: RootNode) -> typing.Any:
@@ -113,21 +128,42 @@ def _get_default_basm_parser() -> pyp.ParserElement:
 
     delimiter = pyp.Literal(",")
     line_end = pyp.Literal(";")
+    type_dec = pyp.Literal(":")
 
     args = pyp.Group(pyp.Optional(pyp.delimitedList(arg, delim=delimiter)))
     call = pyp.Group(identifier + args + pyp.Suppress(line_end)).add_parse_action(CallNode.from_parser_results)
 
-    root = pyp.OneOrMore(call) + pyp.Suppress(pyp.StringEnd())  # type: ignore
+    var_dec = pyp.Group(identifier + pyp.Suppress(type_dec) + args + pyp.Suppress(line_end)).add_parse_action(
+        VarDefNode.from_parser_results
+    )
+
+    root = pyp.OneOrMore(pyp.Or([call, var_dec])) + pyp.Suppress(pyp.StringEnd())  # type: ignore
     root.add_parse_action(RootNode.from_parser_results)
 
     return root
+
+
+class BASMSyntaxError(BaseException):
+    def __init__(self, code: str, location: int, expected: str) -> None:
+        print(location)
+        message = tokens._format_message(
+            code,
+            location,
+            "^^^",
+            expected,
+        )
+        super().__init__(message)
 
 
 class BASMParser(BaseParser[str, RootNode]):
     _parser = _get_default_basm_parser()
 
     def parse(self, code: str) -> RootNode:
-        result = self._parser.parseString(code, parse_all=True)
+        try:
+            result = self._parser.parseString(code, parse_all=True)
+        except pyp.ParseException as exc:
+            raise BASMSyntaxError(code, exc.loc, exc.msg) from exc
+
         return typing.cast(RootNode, result.as_list()[0])
 
 
