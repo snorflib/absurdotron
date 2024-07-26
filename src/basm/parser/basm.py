@@ -39,7 +39,7 @@ class _ValueNode(BaseNode, typing.Generic[TValue]):
 
         try:
             pre_parsed_value = ast.literal_eval(results[0])
-        except ValueError:
+        except Exception:
             pre_parsed_value = results[0]
 
         return cls(types_[0](pre_parsed_value))
@@ -57,6 +57,10 @@ class HexNode(_ValueNode[int]):
     __slots__ = ()
 
 
+class IntNode(_ValueNode[int]):
+    __slots__ = ()
+
+
 @attrs.frozen
 class CallNode(BASMNode):
     opcode: IdNode
@@ -70,6 +74,7 @@ class CallNode(BASMNode):
 @attrs.frozen
 class VarDefNode(BASMNode):
     dtype: IdNode
+    params: list[HexNode | StrNode]
     vars: list[IdNode]
 
     @classmethod
@@ -107,10 +112,17 @@ class BaseBASMVisitor(BaseNodeVisitor):
 
 
 def _get_default_basm_parser() -> pyp.ParserElement:
+    delimiter = pyp.Literal(",")
+    line_end = pyp.Literal(";")
+    type_dec = pyp.Keyword("dec")
+    iargs_enter = pyp.Literal("<")
+    iargs_exit = pyp.Literal(">")
+
     string = pyp.QuotedString(
-        quoteChar='"',
-        escChar="\\",
-        unquoteResults=True,
+        quote_char='"',
+        end_quote_char='"',
+        esc_char="\\",
+        unquote_results=True,
         multiline=True,
     ).set_parse_action(StrNode.from_parser_results)
 
@@ -118,26 +130,33 @@ def _get_default_basm_parser() -> pyp.ParserElement:
         "0x" + pyp.Word(pyp.hexnums, min=1),
     ).set_parse_action(HexNode.from_parser_results)
 
-    identifier = pyp.Word(
+    dec_num = pyp.Word(pyp.nums, min=1).set_parse_action(IntNode.from_parser_results)
+
+    identifier = ~type_dec + pyp.Word(
         pyp.alphas + "_",
         pyp.alphanums + "_",
         min=1,
-    ).set_parse_action(IdNode.from_parser_results)
+    )
+    identifier.set_parse_action(IdNode.from_parser_results)
 
-    arg = pyp.Or([identifier, hex_num, string])
+    arg = pyp.Or([identifier, hex_num, string, dec_num])
 
-    delimiter = pyp.Literal(",")
-    line_end = pyp.Literal(";")
-    type_dec = pyp.Literal(":")
-
-    args = pyp.Group(pyp.Optional(pyp.delimitedList(arg, delim=delimiter)))
-    call = pyp.Group(identifier + args + pyp.Suppress(line_end)).add_parse_action(CallNode.from_parser_results)
-
-    var_dec = pyp.Group(identifier + pyp.Suppress(type_dec) + args + pyp.Suppress(line_end)).add_parse_action(
-        VarDefNode.from_parser_results
+    args = pyp.delimitedList(arg, delim=delimiter)
+    call = pyp.Group(identifier + pyp.Group(pyp.Optional(args)) + pyp.Suppress(line_end)).add_parse_action(
+        CallNode.from_parser_results
     )
 
-    root = pyp.OneOrMore(pyp.Or([call, var_dec])) + pyp.Suppress(pyp.StringEnd())  # type: ignore
+    literals = pyp.delimitedList(pyp.Or([hex_num, string, dec_num]), delim=delimiter)
+    type_args = pyp.Suppress(iargs_enter) + literals + pyp.Suppress(iargs_exit)
+    var_dec = pyp.Group(
+        pyp.Suppress(type_dec)
+        + identifier
+        + pyp.Group(pyp.Optional(type_args))
+        + pyp.Group(args)
+        + pyp.Suppress(line_end)
+    ).add_parse_action(VarDefNode.from_parser_results)
+
+    root = pyp.OneOrMore(pyp.Or([var_dec, call])) + pyp.Suppress(pyp.StringEnd())  # type: ignore
     root.add_parse_action(RootNode.from_parser_results)
 
     return root

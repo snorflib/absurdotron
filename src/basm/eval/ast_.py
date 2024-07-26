@@ -24,8 +24,8 @@ class EvalVisitor(parser.BaseBASMVisitor):
         opcode = self.memory[node.opcode.value]
         return opcode(*map(self.visit, node.args))(self.context)
 
-    def visit_RootNode(self, node: parser.RootNode) -> opcodes.OpCodeReturn:
+    def visit_RootNode(self, root: parser.RootNode) -> opcodes.OpCodeReturn:
         r = opcodes.OpCodeReturn()
-        for call in node.calls:
-            r |= self.visit_CallNode(call)
+        for call in root.nodes:
+            r |= self.visit_CallNode(call)  # type: ignore
         return r

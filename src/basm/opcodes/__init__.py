@@ -1,4 +1,5 @@
 from .base import OpCode, OpCodeArgs, OpCodeReturn
+from .init import Init
 from .primitives import (
     CDI,
     CMI,
@@ -11,6 +12,10 @@ from .primitives import (
 )
 
 __all__ = (
+    "OpCode",
+    "OpCodeArgs",
+    "OpCodeReturn",
+    #
     "DSP",
     "INP",
     "INC",
@@ -19,7 +24,6 @@ __all__ = (
     "EXL",
     "CMI",
     "CDI",
-    "OpCode",
-    "OpCodeArgs",
-    "OpCodeReturn",
+    #
+    "Init",
 )
