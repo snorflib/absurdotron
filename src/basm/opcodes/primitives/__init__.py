@@ -1,6 +1,6 @@
 from src.ir import tokens
 
-from .utils import token2opcode
+from .utils import TokenArgs, token2opcode
 
 DSP = token2opcode(tokens.Display)
 INP = token2opcode(tokens.Input)
@@ -23,4 +23,6 @@ __all__ = (
     "EXL",
     "CMI",
     "CDI",
+    #
+    "TokenArgs",
 )

@@ -1,5 +1,7 @@
 from .base import OpCode, OpCodeArgs, OpCodeReturn
-from .init import Init
+from .context import Context
+from .init import Init, InitArgs
+from .move import Move, MoveArgs
 from .primitives import (
     CDI,
     CMI,
@@ -12,6 +14,8 @@ from .primitives import (
 )
 
 __all__ = (
+    "Context",
+    #
     "OpCode",
     "OpCodeArgs",
     "OpCodeReturn",
@@ -26,4 +30,8 @@ __all__ = (
     "CDI",
     #
     "Init",
+    "InitArgs",
+    #
+    "Move",
+    "MoveArgs",
 )

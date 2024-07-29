@@ -5,7 +5,7 @@ import typing
 
 import attrs
 
-from src.basm import context
+from src.basm.opcodes import context
 
 from .args import OpCodeArgs
 from .return_ import OpCodeReturn
