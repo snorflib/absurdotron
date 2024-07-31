@@ -5,7 +5,7 @@ import attrs
 from src.ir import tokens
 
 from . import base, context, dtypes
-from .utils import assigning_sequence
+from .utils import add_int_long
 
 
 @attrs.frozen
@@ -28,7 +28,7 @@ def move(from_: dtypes.Unit, to_: typing.Iterable[tuple[dtypes.Unit, int]]) -> b
     instrs |= tokens.EnterLoop(from_)
 
     for unit, scale in units.items():
-        instrs |= assigning_sequence(scale, unit)
+        instrs |= add_int_long(scale, unit)
 
     instrs |= tokens.Decrement(from_)
     instrs |= tokens.ExitLoop()

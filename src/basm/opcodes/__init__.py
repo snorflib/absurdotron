@@ -1,3 +1,4 @@
+from .add import Add
 from .base import OpCode, OpCodeReturn
 from .context import Context
 from .dtypes import Array, DType, Unit
@@ -16,4 +17,5 @@ __all__ = (
     #
     "Init",
     "Move",
+    "Add",
 )
