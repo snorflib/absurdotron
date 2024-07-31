@@ -6,6 +6,7 @@ from .opcodes import (
     Init,
     Move,
     Mul,
+    Not,
     OpCode,
     OpCodeReturn,
     Sub,
@@ -24,4 +25,5 @@ __all__ = (
     "Add",
     "Sub",
     "Mul",
+    "Not",
 )

@@ -5,6 +5,7 @@ from .dtypes import Array, DType, Unit
 from .init import Init
 from .move import Move
 from .mul import Mul
+from .not_ import Not
 from .sub import Sub
 
 __all__ = (
@@ -22,4 +23,5 @@ __all__ = (
     "Add",
     "Sub",
     "Mul",
+    "Not",
 )
