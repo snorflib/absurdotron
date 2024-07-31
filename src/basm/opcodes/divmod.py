@@ -2,33 +2,32 @@ import attrs
 
 from src.ir import tokens
 from src.memoptix import metainfo
-from src.xbf import dtypes, program
 
-from . import base
-from .add import _add_int
+from . import base, context, dtypes
 from .callz import callz
 from .init import init
 from .move import move
+from .utils import add_int_long
 
 
 @attrs.frozen
-class DivMod(base.BaseCommand):
+class DivMod(base.OpCode):
     dividend: dtypes.Unit | int
     divisor: dtypes.Unit | int
     quotient: dtypes.Unit | None = None
     remainder: dtypes.Unit | None = None
 
-    def _apply(self, context: program.Program) -> base.CommandReturn:
+    def _execute(self, context: context.Context) -> base.OpCodeReturn:
         return div(self.dividend, self.divisor, self.quotient, self.remainder)
 
 
-@base.flatten2return
+@base.convert
 def div(
     dividend: dtypes.Unit | int,
     divisor: dtypes.Unit | int,
     quotient: dtypes.Unit | None,
     remainder: dtypes.Unit | None,
-) -> base.ToFlatten:
+) -> base.ToConvert:
     if remainder is quotient is None:
         return None
     elif remainder == quotient:
@@ -41,34 +40,32 @@ def div(
     return _div_units_and_ints(dividend, divisor, quotient, remainder)
 
 
-@base.flatten2return
 def _div_ints(
     dividend: int,
     divisor: int,
     quotient: dtypes.Unit | None,
     remainder: dtypes.Unit | None,
-) -> base.CommandReturn:
+) -> base.OpCodeReturn:
     quot, rem = divmod(dividend, divisor)
 
-    instrs = base.CommandReturn()
+    instrs = base.OpCodeReturn()
 
     if quotient:
         instrs |= tokens.Clear(quotient)
-        instrs |= _add_int(quot, quotient)
+        instrs |= add_int_long(quot, quotient)
 
     if remainder:
         instrs |= tokens.Clear(remainder)
-        instrs |= _add_int(rem, remainder)
+        instrs |= add_int_long(rem, remainder)
 
     return instrs
 
 
-@base.flatten2return
 def _div_by_itself(
     quotient: dtypes.Unit | None,
     remainder: dtypes.Unit | None,
-) -> base.CommandReturn:
-    instrs = base.CommandReturn()
+) -> base.OpCodeReturn:
+    instrs = base.OpCodeReturn()
 
     if quotient:
         instrs |= tokens.Clear(quotient)
@@ -78,14 +75,13 @@ def _div_by_itself(
     return instrs
 
 
-@base.flatten2return
 def _div_units_and_ints(
     dividend: dtypes.Unit | int,
     divisor: dtypes.Unit | int,
     quotient: dtypes.Unit | None,
     remainder: dtypes.Unit | None,
-) -> base.CommandReturn:
-    instrs = base.CommandReturn()
+) -> base.OpCodeReturn:
+    instrs = base.OpCodeReturn()
 
     rem_buff, dividend_buff = dtypes.Unit(), dtypes.Unit()
     instrs |= init(rem_buff) | init(dividend_buff)
@@ -94,7 +90,7 @@ def _div_units_and_ints(
     if isinstance(int_divisor := divisor, int):
         divisor = dtypes.Unit()
         instrs |= init(divisor)
-        instrs |= _add_int(int_divisor, divisor)
+        instrs |= add_int_long(int_divisor, divisor)
         dynamic_divisor = True
     elif divisor in [quotient, remainder]:
         divisor_new = dtypes.Unit()
@@ -105,7 +101,7 @@ def _div_units_and_ints(
         dynamic_divisor = True
 
     if isinstance(dividend, int):
-        instrs |= _add_int(dividend, dividend_buff)
+        instrs |= add_int_long(dividend, dividend_buff)
     else:
         instrs |= move(dividend, [(dividend_buff, 1)])
 
@@ -120,7 +116,7 @@ def _div_units_and_ints(
     else_ = move(rem_buff, [(divisor, 1)])
     if quotient:
         else_ |= tokens.Increment(quotient)
-    instrs |= callz(divisor, else_=else_)
+    instrs |= callz(divisor, if_zero=else_)
 
     instrs |= tokens.ExitLoop()
 

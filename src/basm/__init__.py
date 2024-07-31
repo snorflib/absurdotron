@@ -3,6 +3,7 @@ from .opcodes import (
     Array,
     CallZ,
     Context,
+    DivMod,
     DType,
     Init,
     Move,
@@ -28,4 +29,5 @@ __all__ = (
     "Mul",
     "Not",
     "CallZ",
+    "DivMod",
 )

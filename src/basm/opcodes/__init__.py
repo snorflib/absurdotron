@@ -2,6 +2,7 @@ from .add import Add
 from .base import OpCode, OpCodeReturn
 from .callz import CallZ
 from .context import Context
+from .divmod import DivMod
 from .dtypes import Array, DType, Unit
 from .init import Init
 from .move import Move
@@ -26,4 +27,5 @@ __all__ = (
     "Mul",
     "Not",
     "CallZ",
+    "DivMod",
 )
