@@ -9,15 +9,12 @@ from .utils import assigning_sequence
 
 
 @attrs.frozen
-class MoveArgs(base.OpCodeArgs):
+class Move(base.OpCode):
     from_: dtypes.Unit
     to_: typing.Iterable[tuple[dtypes.Unit, int]]
 
-
-@attrs.frozen
-class Move(base.OpCode[MoveArgs]):
     def _execute(self, context: context.Context) -> base.OpCodeReturn:
-        return move(self.args.from_, self.args.to_)
+        return move(self.from_, self.to_)
 
 
 @base.convert

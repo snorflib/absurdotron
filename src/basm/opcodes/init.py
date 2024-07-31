@@ -6,14 +6,11 @@ from . import base, context, dtypes
 
 
 @attrs.frozen
-class InitArgs(base.OpCodeArgs):
+class Init(base.OpCode):
     obj: dtypes.Unit | dtypes.Array
 
-
-@attrs.frozen
-class Init(base.OpCode[InitArgs]):
     def _execute(self, context: context.Context) -> base.OpCodeReturn:
-        return init(self.args.obj)
+        return init(self.obj)
 
 
 @base.convert

@@ -1,3 +1,5 @@
+import collections.abc
+
 import attrs
 
 from src.ir import types
@@ -48,7 +50,7 @@ class MemoryResolver:
 
 
 def build_memory_resolver(
-    constrs: list[constraints.BaseConstraint],
+    constrs: collections.abc.Iterable[constraints.BaseConstraint],
     metainfo: metainfo.RoutineMetaInfo,
 ) -> MemoryResolver:
     owner_to_constraints = {constr.owner: constr for constr in constrs}
