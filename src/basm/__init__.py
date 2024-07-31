@@ -5,6 +5,7 @@ from .opcodes import (
     DType,
     Init,
     Move,
+    Mul,
     OpCode,
     OpCodeReturn,
     Sub,
@@ -22,4 +23,5 @@ __all__ = (
     "Move",
     "Add",
     "Sub",
+    "Mul",
 )

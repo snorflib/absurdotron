@@ -26,7 +26,7 @@ class OpCodeReturn:
         return f"{type(self).__name__} -> {len(self.constrs)} constraints : {len(self.routine)} tokens"
 
 
-ToConvert = OpCodeReturn | memoptix.BaseConstraint | ir.BFToken | collections.abc.Iterable["ToConvert"]
+ToConvert = None | OpCodeReturn | memoptix.BaseConstraint | ir.BFToken | collections.abc.Iterable["ToConvert"]
 
 P = typing.ParamSpec("P")
 R = typing.TypeVar("R", bound=ToConvert)
@@ -45,6 +45,8 @@ def _to_opcode_return(data: ToConvert) -> OpCodeReturn:
             for to_conv in data:
                 base_ |= _to_opcode_return(to_conv)
             return base_
+        case None:
+            return OpCodeReturn()
         case _:
             raise ValueError(f"Trying to cast an unsupported data to OpCodeReturn. {type(data).__name__}: {data}")
 

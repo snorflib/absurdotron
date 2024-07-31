@@ -2,59 +2,60 @@ import attrs
 
 from src.ir import tokens
 from src.memoptix import metainfo
-from src.xbf import dtypes, program
 
-from . import base
-from .add import _add_int, _move_without_clear, add
+from . import base, context, dtypes
+from .add import add
 from .init import init
-from .move import move
+from .move import move, move_without_clear
+from .utils import add_int_long
 
 
 @attrs.frozen
-class Mul(base.BaseCommand):
+class Mul(base.OpCode):
     multiplicand: dtypes.Unit | int
     multiplier: dtypes.Unit | int
     target: dtypes.Unit
 
-    def _apply(self, context: program.Program) -> base.CommandReturn:
+    def _execute(self, context: context.Context) -> base.OpCodeReturn:
         return mul(self.multiplicand, self.multiplier, self.target)
 
 
-@base.flatten2return
+@base.convert
 def mul(
     multiplicand: dtypes.Unit | int,
     multiplier: dtypes.Unit | int,
     target: dtypes.Unit,
-) -> base.ToFlatten:
+) -> base.ToConvert:
     if isinstance(multiplicand, int) and isinstance(multiplier, int):
-        return _add_int(multiplicand * multiplier, target)
+        return add_int_long(multiplicand * multiplier, target)
     elif isinstance(multiplier, int):
         return _mul_by_int(multiplicand, multiplier, target)  # type: ignore
 
     return _mul_two_units(multiplicand, multiplier, target)  # type: ignore
 
 
-@base.flatten2return
+@base.convert
 def _mul_by_int(
     multiplicand: dtypes.Unit,
     multiplier: int,
     target: dtypes.Unit,
-) -> base.ToFlatten:
+) -> base.ToConvert:
     if multiplicand == target:
-        return _move_without_clear(multiplicand, target, scale=multiplier - 1)
+        return move_without_clear(multiplicand, target, scale=multiplier - 1)
 
-    return tokens.Clear(target) | _move_without_clear(multiplicand, target, scale=multiplier)
+    clr = base.OpCodeReturn([tokens.Clear(target)])
+    return clr | move_without_clear(multiplicand, target, scale=multiplier)
 
 
-@base.flatten2return
+@base.convert
 def _mul_two_units(
     multiplicand: dtypes.Unit,
     multiplier: dtypes.Unit,
     target: dtypes.Unit,
-) -> base.ToFlatten:
+) -> base.ToConvert:
     cand_buf, plier_buf = dtypes.Unit(), dtypes.Unit()
 
-    instrs = base.CommandReturn()
+    instrs = base.OpCodeReturn()
     instrs |= init(cand_buf)
     instrs |= init(plier_buf)
 

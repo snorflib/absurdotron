@@ -4,6 +4,7 @@ from .context import Context
 from .dtypes import Array, DType, Unit
 from .init import Init
 from .move import Move
+from .mul import Mul
 from .sub import Sub
 
 __all__ = (
@@ -20,4 +21,5 @@ __all__ = (
     "Move",
     "Add",
     "Sub",
+    "Mul",
 )
