@@ -2,9 +2,11 @@ import typing
 
 import attrs
 
+from src import memoptix
 from src.ir import tokens
 
 from . import base, context, dtypes
+from .init import init
 from .utils import add_int_long
 
 
@@ -15,6 +17,23 @@ class Move(base.OpCode):
 
     def _execute(self, context: context.Context) -> base.OpCodeReturn:
         return move(self.from_, self.to_)
+
+
+@base.convert
+def move_without_clear(from_: dtypes.Unit, to_: dtypes.Unit, scale: int = 1) -> base.ToConvert:
+    if scale == 0:
+        return None
+
+    if (from_ == to_) and (scale == -1):
+        return [tokens.Clear(from_)]
+
+    buffer = dtypes.Unit()
+    return [
+        init(buffer),
+        move(from_, [(buffer, 1)]),
+        move(buffer, [(from_, 1), (to_, scale)]),
+        memoptix.Free(buffer),
+    ]
 
 
 @base.convert

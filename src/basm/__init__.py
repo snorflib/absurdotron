@@ -7,6 +7,7 @@ from .opcodes import (
     Move,
     OpCode,
     OpCodeReturn,
+    Sub,
     Unit,
 )
 
@@ -20,4 +21,5 @@ __all__ = (
     "Init",
     "Move",
     "Add",
+    "Sub",
 )
