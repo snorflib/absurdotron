@@ -1,5 +1,6 @@
 from .add import Add
 from .base import OpCode, OpCodeReturn
+from .callz import CallZ
 from .context import Context
 from .dtypes import Array, DType, Unit
 from .init import Init
@@ -24,4 +25,5 @@ __all__ = (
     "Sub",
     "Mul",
     "Not",
+    "CallZ",
 )

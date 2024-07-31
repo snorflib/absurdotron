@@ -1,6 +1,7 @@
 from .opcodes import (
     Add,
     Array,
+    CallZ,
     Context,
     DType,
     Init,
@@ -26,4 +27,5 @@ __all__ = (
     "Sub",
     "Mul",
     "Not",
+    "CallZ",
 )
