@@ -18,6 +18,7 @@ from .opcodes import (
     Unit,
     CallLE,
     CallLT,
+    Copy
 )
 
 __all__ = (
@@ -40,4 +41,5 @@ __all__ = (
     "CallLE",
     "CallLT",
     "DivMod",
+    "Copy",
 )

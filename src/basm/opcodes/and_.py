@@ -2,15 +2,25 @@ import attrs
 
 from src.ir import tokens
 from src.memoptix import metainfo
-from src.xbf import dtypes, program
 
-from .add import Add
+from . import dtypes
+from .add import add
 from .assign import AssignUnit
 from .base import BaseCommand
 from .copy import CopyUnit
-from .divmod import DivMod
-from .init import Init
-from .mul import Mul
+from .divmod import div
+from .init import init
+from .mul import mul
+
+
+@attrs.frozen
+class And(BaseCommand):
+    left: dtypes.Unit
+    right: dtypes.Unit
+    target: dtypes.Unit
+
+    def _apply(self, context: program.Program) -> None:
+        and_(self.left, self.right, self.target, program=context)
 
 
 def and_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit, program: program.Program) -> None:
@@ -66,13 +76,3 @@ def and_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit, program: pr
     routine.append(metainfo.Free(lquot))
     routine.append(metainfo.Free(rquot))
     routine.append(metainfo.Free(break_))
-
-
-@attrs.frozen
-class AndUnit(BaseCommand):
-    left: dtypes.Unit
-    right: dtypes.Unit
-    target: dtypes.Unit
-
-    def _apply(self, context: program.Program) -> None:
-        and_(self.left, self.right, self.target, program=context)
