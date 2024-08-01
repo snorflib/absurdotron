@@ -1,6 +1,8 @@
 from .opcodes import (
     Add,
     Array,
+    CallEq,
+    CallNeq,
     CallZ,
     DivMod,
     DType,
@@ -11,7 +13,6 @@ from .opcodes import (
     OpCode,
     OpCodeReturn,
     Sub,
-    CallNeq,
     Unit,
 )
 
@@ -29,5 +30,6 @@ __all__ = (
     "Not",
     "CallZ",
     "CallNeq",
+    "CallEq",
     "DivMod",
 )

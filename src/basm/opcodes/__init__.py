@@ -1,5 +1,6 @@
 from .add import Add
 from .base import OpCode, OpCodeReturn
+from .calleq import CallEq
 from .callneq import CallNeq
 from .callz import CallZ
 from .divmod import DivMod
@@ -27,4 +28,5 @@ __all__ = (
     "CallZ",
     "DivMod",
     "CallNeq",
+    "CallEq",
 )
