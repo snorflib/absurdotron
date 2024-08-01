@@ -3,76 +3,67 @@ import attrs
 from src.ir import tokens
 from src.memoptix import metainfo
 
-from . import dtypes
+from . import dtypes, base
 from .add import add
-from .assign import AssignUnit
-from .base import BaseCommand
-from .copy import CopyUnit
+from .copy import _copy
+from .add import add_int_long
 from .divmod import div
 from .init import init
 from .mul import mul
 
 
 @attrs.frozen
-class And(BaseCommand):
+class And(base.OpCode):
     left: dtypes.Unit
     right: dtypes.Unit
     target: dtypes.Unit
 
-    def _apply(self, context: program.Program) -> None:
-        and_(self.left, self.right, self.target, program=context)
+    def _execute(self) -> base.OpCodeReturn:
+        return and_(self.left, self.right, self.target)
 
-
-def and_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit, program: program.Program) -> None:
-    if left is right is target:
+@base.convert
+def and_(left: dtypes.Unit, right: dtypes.Unit, target: dtypes.Unit) -> base.ToConvert:
+    if left == right == target:
         return
-    if left is right:
-        program.routine.append(tokens.Clear(target))
-        CopyUnit(left, target)(program)
-        return
+    if left == right:
+        return tokens.Clear(target), _copy(left, target)
 
     lquot, rquot = dtypes.Unit(), dtypes.Unit()
     lrem, rrem = dtypes.Unit(), dtypes.Unit()
     bit_scale, break_ = dtypes.Unit(), dtypes.Unit()
-    Init(lrem)(program)
-    Init(rrem)(program)
-    Init(lquot)(program)
-    Init(rquot)(program)
-    Init(bit_scale)(program)
-    Init(break_)(program)
 
-    CopyUnit(left, lquot)(program)
-    CopyUnit(right, rquot)(program)
+    ret = init(lrem) | init(rrem) | init(lquot) | init(rquot) | init(bit_scale) | init(break_)
 
-    AssignUnit(break_, 8)(program)
-    AssignUnit(bit_scale, 1)(program)
+    ret |= _copy(left, lquot) | _copy(right, rquot)
+    ret |= add_int_long(8, break_) | tokens.Increment(bit_scale)
 
-    routine = program.routine
-    routine.append(tokens.Clear(target))
-    routine.append(tokens.EnterLoop(break_))
+    ret |= tokens.Clear(target)
+    ret |= tokens.EnterLoop(break_)
 
-    DivMod(lquot, 2, lquot, lrem)(program)
-    DivMod(rquot, 2, rquot, rrem)(program)
+    ret |= div(lquot, 2, lquot, lrem)
+    ret |= div(rquot, 2, rquot, rrem)
 
-    routine.append(tokens.EnterLoop(lrem))
-    routine.append(tokens.EnterLoop(rrem))
-    Add(bit_scale, target, target)(program)
-    routine.append(tokens.Decrement(rrem))
-    routine.append(tokens.ExitLoop())
-    routine.append(tokens.Decrement(lrem))
-    routine.append(tokens.ExitLoop())
+    ret |= tokens.EnterLoop(lrem)
+    ret |= tokens.EnterLoop(rrem)
+    ret |= add(bit_scale, target, target)
+    ret |= tokens.Decrement(rrem)
+    ret |= tokens.ExitLoop()
+    ret |= tokens.Decrement(lrem)
+    ret |= tokens.ExitLoop()
 
-    routine.append(tokens.Decrement(break_))
-    Mul(bit_scale, 2, bit_scale)(program)
-    routine.append(tokens.ExitLoop())
+    ret |= tokens.Decrement(break_)
+    ret |= mul(bit_scale, 2, bit_scale)
+    ret |= tokens.ExitLoop()
 
-    routine.append(tokens.Clear(lrem))
-    routine.append(tokens.Clear(rrem))
-    routine.append(tokens.Clear(bit_scale))
+    ret |= tokens.Clear(lrem)
+    ret |= tokens.Clear(rrem)
+    ret |= tokens.Clear(bit_scale)
 
-    routine.append(metainfo.Free(lrem))
-    routine.append(metainfo.Free(rrem))
-    routine.append(metainfo.Free(bit_scale))
-    routine.append(metainfo.Free(lquot))
-    routine.append(metainfo.Free(rquot))
-    routine.append(metainfo.Free(break_))
+    ret |= metainfo.Free(lrem)
+    ret |= metainfo.Free(rrem)
+    ret |= metainfo.Free(bit_scale)
+    ret |= metainfo.Free(lquot)
+    ret |= metainfo.Free(rquot)
+    ret |= metainfo.Free(break_)
+
+    return ret

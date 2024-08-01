@@ -19,7 +19,7 @@ class Copy(base.OpCode):
 
 
 @base.convert
-def _copy(from_: dtypes.Unit, to_: dtypes.Unit) -> base.OpCodeReturn:
+def _copy(from_: dtypes.Unit, to_: dtypes.Unit) -> base.ToConvert:
     if from_ == to_:
         return []
 
