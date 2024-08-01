@@ -1,7 +1,7 @@
 from .add import Add
 from .base import OpCode, OpCodeReturn
+from .callneq import CallNeq
 from .callz import CallZ
-from .context import Context
 from .divmod import DivMod
 from .dtypes import Array, DType, Unit
 from .init import Init
@@ -15,11 +15,9 @@ __all__ = (
     "Unit",
     "Array",
     #
-    "Context",
-    #
     "OpCode",
     "OpCodeReturn",
-    #
+    #s
     "Init",
     "Move",
     "Add",
@@ -28,4 +26,5 @@ __all__ = (
     "Not",
     "CallZ",
     "DivMod",
+    "CallNeq",
 )

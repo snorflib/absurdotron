@@ -2,7 +2,7 @@ import attrs
 
 from src.ir import tokens
 
-from . import base, context, dtypes
+from . import base, dtypes
 from .move import move_without_clear
 from .utils import add_int_long
 
@@ -13,7 +13,7 @@ class Add(base.OpCode):
     addend: dtypes.Unit | int
     target: dtypes.Unit
 
-    def _execute(self, context: context.Context) -> base.OpCodeReturn:
+    def _execute(self) -> base.OpCodeReturn:
         return add(self.augend, self.addend, target=self.target)
 
 

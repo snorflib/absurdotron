@@ -3,7 +3,7 @@ import attrs
 from src.ir import tokens
 from src.memoptix import metainfo
 
-from . import base, context, dtypes
+from . import base, dtypes
 from .callz import callz
 from .init import init
 from .move import move
@@ -17,7 +17,7 @@ class DivMod(base.OpCode):
     quotient: dtypes.Unit | None = None
     remainder: dtypes.Unit | None = None
 
-    def _execute(self, context: context.Context) -> base.OpCodeReturn:
+    def _execute(self) -> base.OpCodeReturn:
         return div(self.dividend, self.divisor, self.quotient, self.remainder)
 
 

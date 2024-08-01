@@ -3,7 +3,7 @@ import attrs
 from src import memoptix
 from src.ir import tokens
 
-from . import base, context, dtypes
+from . import base, dtypes
 from .init import init
 from .move import move
 
@@ -14,7 +14,7 @@ class CallZ(base.OpCode):
     if_zero: base.OpCodeReturn | None = None
     else_: base.OpCodeReturn | None = None
 
-    def _execute(self, context: context.Context) -> base.OpCodeReturn:
+    def _execute(self) -> base.OpCodeReturn:
         return callz(self.arg, self.if_zero, self.else_)
 
 

@@ -10,7 +10,7 @@ class _IncrementOpCode(basm.OpCode):
     unit: basm.Unit
     num: int
 
-    def _execute(self, context: basm.Context) -> basm.OpCodeReturn:
+    def _execute(self) -> basm.OpCodeReturn:
         return basm.OpCodeReturn([ir.Increment(self.unit)] * self.num)
 
 

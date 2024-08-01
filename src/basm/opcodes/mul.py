@@ -3,7 +3,7 @@ import attrs
 from src.ir import tokens
 from src.memoptix import metainfo
 
-from . import base, context, dtypes
+from . import base, dtypes
 from .add import add
 from .init import init
 from .move import move, move_without_clear
@@ -16,7 +16,7 @@ class Mul(base.OpCode):
     multiplier: dtypes.Unit | int
     target: dtypes.Unit
 
-    def _execute(self, context: context.Context) -> base.OpCodeReturn:
+    def _execute(self) -> base.OpCodeReturn:
         return mul(self.multiplicand, self.multiplier, self.target)
 
 

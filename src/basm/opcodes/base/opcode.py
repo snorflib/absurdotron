@@ -5,8 +5,6 @@ import typing
 
 import attrs
 
-from src.basm.opcodes import context
-
 if typing.TYPE_CHECKING:
     from .return_ import OpCodeReturn
 
@@ -14,7 +12,7 @@ if typing.TYPE_CHECKING:
 @attrs.frozen
 class OpCode(abc.ABC):
     def __call__(self) -> OpCodeReturn:
-        return self._execute(context)
+        return self._execute()
 
     @abc.abstractmethod
     def _execute(self) -> OpCodeReturn:

@@ -2,14 +2,14 @@ import attrs
 
 from src.memoptix import constraints
 
-from . import base, context, dtypes
+from . import base, dtypes
 
 
 @attrs.frozen
 class Init(base.OpCode):
     obj: dtypes.Unit | dtypes.Array
 
-    def _execute(self, context: context.Context) -> base.OpCodeReturn:
+    def _execute(self) -> base.OpCodeReturn:
         return init(self.obj)
 
 

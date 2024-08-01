@@ -2,7 +2,6 @@ from .opcodes import (
     Add,
     Array,
     CallZ,
-    Context,
     DivMod,
     DType,
     Init,
@@ -12,6 +11,7 @@ from .opcodes import (
     OpCode,
     OpCodeReturn,
     Sub,
+    CallNeq,
     Unit,
 )
 
@@ -19,7 +19,6 @@ __all__ = (
     "DType",
     "Unit",
     "Array",
-    "Context",
     "OpCode",
     "OpCodeReturn",
     "Init",
@@ -29,5 +28,6 @@ __all__ = (
     "Mul",
     "Not",
     "CallZ",
+    "CallNeq",
     "DivMod",
 )

@@ -5,7 +5,7 @@ import attrs
 from src import memoptix
 from src.ir import tokens
 
-from . import base, context, dtypes
+from . import base, dtypes
 from .init import init
 from .utils import add_int_long
 
@@ -15,7 +15,7 @@ class Move(base.OpCode):
     from_: dtypes.Unit
     to_: typing.Iterable[tuple[dtypes.Unit, int]]
 
-    def _execute(self, context: context.Context) -> base.OpCodeReturn:
+    def _execute(self) -> base.OpCodeReturn:
         return move(self.from_, self.to_)
 
 
