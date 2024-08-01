@@ -20,6 +20,7 @@ multimethod = "^1.12"
 multipledispatch = "^1.0.0"
 pyparsing = "^3.1.2"
 aiogram = "^3.10.0"
+pandas = "^2.2.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.2"

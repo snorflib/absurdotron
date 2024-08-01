@@ -11,7 +11,7 @@ def test_callz_only_if() -> None:
         basm.Add(a, 1, a),
         basm.CallZ(
             a,
-            else_=basm.Add(b, 5, b)(None),
+            else_=basm.Add(b, 5, b)(),
         ),
     ]
 
@@ -27,7 +27,7 @@ def test_callz_only_else() -> None:
         basm.Init(b),
         basm.CallZ(
             a,
-            if_zero=basm.Add(b, 5, b)(None),
+            if_zero=basm.Add(b, 5, b)(),
         ),
     ]
 
@@ -43,11 +43,11 @@ def test_callz_nested() -> None:
         basm.Init(b),
         basm.CallZ(
             a,
-            if_zero=basm.Add(a, 1, a)(None)
+            if_zero=basm.Add(a, 1, a)()
             | basm.CallZ(
                 a,
-                else_=basm.Add(b, 5, b)(None),
-            )(None),
+                else_=basm.Add(b, 5, b)(),
+            )(),
         ),
     ]
 

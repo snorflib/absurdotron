@@ -46,16 +46,10 @@ def execute_opcodes(
     return ExecutorResults(executor.memory.cells, memory, executor.input, executor.output)
 
 
-def eval_opcodes(
-    opcodes_: list[opcodes.OpCode],
-    context: opcodes.Context | None = None,
-) -> opcodes.OpCodeReturn:
-    if context is None:
-        context = opcodes.Context()
-
+def eval_opcodes(opcodes_: list[opcodes.OpCode]) -> opcodes.OpCodeReturn:
     opcode_return = opcodes.OpCodeReturn()
     for opcode_ in opcodes_:
-        opcode_return |= opcode_(context)
+        opcode_return |= opcode_()
     return opcode_return
 
 
