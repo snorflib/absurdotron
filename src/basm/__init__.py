@@ -3,6 +3,7 @@ from .opcodes import (
     Array,
     CallEq,
     CallNeq,
+    CallGE,
     CallZ,
     DivMod,
     DType,
@@ -31,5 +32,6 @@ __all__ = (
     "CallZ",
     "CallNeq",
     "CallEq",
+    "CallGE",
     "DivMod",
 )

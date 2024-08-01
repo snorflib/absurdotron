@@ -10,6 +10,8 @@ from .move import Move
 from .mul import Mul
 from .not_ import Not
 from .sub import Sub
+from .callge import CallGE
+
 
 __all__ = (
     "DType",
@@ -29,4 +31,5 @@ __all__ = (
     "DivMod",
     "CallNeq",
     "CallEq",
+    "CallGE",
 )
