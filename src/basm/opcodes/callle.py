@@ -2,28 +2,16 @@ import typing
 
 import attrs
 
-from src.xbf import dtypes, program
-
-from .base import BaseCommand
-from .callge import CallGE
-
-
-def _callle(
-    left: dtypes.Unit,
-    right: dtypes.Unit,
-    if_: typing.Iterable[BaseCommand] | None,
-    else_: typing.Iterable[BaseCommand] | None,
-    program: program.Program,
-) -> None:
-    CallGE(right, left, if_, else_)(program)
+from . import base, dtypes
+from .callge import _callge
 
 
 @attrs.frozen
-class CallLE(BaseCommand):
+class CallLE(base.OpCode):
     left: dtypes.Unit
     right: dtypes.Unit
-    if_: typing.Iterable[BaseCommand] | None = None
-    else_: typing.Iterable[BaseCommand] | None = None
+    if_le: base.OpCodeReturn | None = None
+    else_: base.OpCodeReturn | None = None
 
-    def _apply(self, context: program.Program) -> None:
-        _callle(self.left, self.right, self.if_, self.else_, context)
+    def _execute(self) -> base.OpCodeReturn:
+        return _callge(self.right, self.left, self.if_le, self.else_)

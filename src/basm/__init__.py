@@ -4,6 +4,7 @@ from .opcodes import (
     CallEq,
     CallNeq,
     CallGE,
+    CallGT,
     CallZ,
     DivMod,
     DType,
@@ -15,6 +16,8 @@ from .opcodes import (
     OpCodeReturn,
     Sub,
     Unit,
+    CallLE,
+    CallLT,
 )
 
 __all__ = (
@@ -33,5 +36,8 @@ __all__ = (
     "CallNeq",
     "CallEq",
     "CallGE",
+    "CallGT",
+    "CallLE",
+    "CallLT",
     "DivMod",
 )

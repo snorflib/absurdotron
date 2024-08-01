@@ -11,6 +11,9 @@ from .mul import Mul
 from .not_ import Not
 from .sub import Sub
 from .callge import CallGE
+from .callgt import CallGT
+from .callle import CallLE
+from .calllt import CallLT
 
 
 __all__ = (
@@ -32,4 +35,7 @@ __all__ = (
     "CallNeq",
     "CallEq",
     "CallGE",
+    "CallGT",
+    "CallLE",
+    "CallLT",
 )
