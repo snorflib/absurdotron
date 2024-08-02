@@ -5,6 +5,7 @@ import attrs
 from src.ir import tokens
 
 from . import base, dtypes
+from .add import add
 
 # Thanks to https://esolangs.org/wiki/Brainfuck_constants
 _OptimalNumberFilling: typing.Final[dict[int, str]] = {
@@ -272,7 +273,7 @@ _OptimalNumberFilling: typing.Final[dict[int, str]] = {
 class Assign(base.OpCode):
     unit: dtypes.Unit
     value: dtypes.Unit | int
-    use_short: bool = True
+    use_short: bool = False
 
     def _execute(self) -> base.OpCodeReturn:
         return assign(
@@ -286,7 +287,7 @@ def assign(
     unit: dtypes.Unit,
     value: dtypes.Unit | int,
     *,
-    use_short: bool = True,
+    use_short: bool,
 ) -> base.OpCodeReturn:
     if isinstance(value, dtypes.Unit) or (use_short is False):
         return add(0, value, unit)
