@@ -3,10 +3,8 @@ import typing
 import attrs
 
 from src.ir import tokens
-from src.xbf import dtypes, program
 
-# from .add import _generic_addition
-from .base import BaseCommand
+from . import base, dtypes
 
 # Thanks to https://esolangs.org/wiki/Brainfuck_constants
 _OptimalNumberFilling: typing.Final[dict[int, str]] = {
@@ -269,31 +267,30 @@ _OptimalNumberFilling: typing.Final[dict[int, str]] = {
 }
 
 
-def _assign(
-    unit: dtypes.Unit,
-    value: dtypes.Unit | int,
-    program: program.Program,
-    *,
-    use_short: bool = True,
-) -> list[tokens.BFToken]:
-    routine: list[tokens.BFToken] = [tokens.Clear(unit)]
-
-    # routine.extend(_generic_addition(unit, value, unit, program))
-    return routine
-
 
 @attrs.frozen
-class AssignUnit(BaseCommand):
+class Assign(base.OpCode):
     unit: dtypes.Unit
     value: dtypes.Unit | int
     use_short: bool = True
 
-    def _apply(self, context: program.Program) -> None:
-        context.routine.extend(
-            _assign(
-                self.unit,
-                self.value,
-                context,
-                use_short=self.use_short,
-            )
+    def _execute(self) -> base.OpCodeReturn:
+        return assign(
+            self.unit,
+            self.value,
+            use_short=self.use_short
         )
+
+
+def assign(
+    unit: dtypes.Unit,
+    value: dtypes.Unit | int,
+    *,
+    use_short: bool = True,
+) -> base.OpCodeReturn:
+    if isinstance(value, dtypes.Unit) or (use_short is False):
+        return add(0, value, unit)
+
+    ret = base.OpCodeReturn
+    ret |= tokens.Clear(unit)
+    return ret

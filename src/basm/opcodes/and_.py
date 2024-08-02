@@ -3,10 +3,9 @@ import attrs
 from src.ir import tokens
 from src.memoptix import metainfo
 
-from . import dtypes, base
-from .add import add
+from . import base, dtypes
+from .add import add, add_int_long
 from .copy import copy
-from .add import add_int_long
 from .divmod import div
 from .init import init
 from .mul import mul

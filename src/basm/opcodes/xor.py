@@ -3,8 +3,8 @@ import attrs
 from src.ir import tokens
 from src.memoptix import metainfo
 
-from .add import add, add_int_long
 from . import base, dtypes
+from .add import add, add_int_long
 from .callz import callz
 from .copy import copy
 from .divmod import div

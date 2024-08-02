@@ -1,4 +1,3 @@
-import typing
 
 import attrs
 
@@ -6,12 +5,9 @@ from src import memoptix
 from src.ir import tokens
 
 from . import base, dtypes
-from .add import add_int_long
 from .callz import callz
-from .move import move
 from .init import init
-from .sub import sub
-
+from .move import move
 
 
 @attrs.frozen

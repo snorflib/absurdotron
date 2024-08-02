@@ -1,11 +1,15 @@
 from .opcodes import (
     Add,
+    And,
     Array,
     CallEq,
-    CallNeq,
     CallGE,
     CallGT,
+    CallLE,
+    CallLT,
+    CallNeq,
     CallZ,
+    Copy,
     DivMod,
     DType,
     Init,
@@ -14,14 +18,11 @@ from .opcodes import (
     Not,
     OpCode,
     OpCodeReturn,
+    Or,
     Sub,
     Unit,
-    CallLE,
-    CallLT,
-    Copy,
-    And,
-    Or,
     Xor,
+    Assign,
 )
 
 __all__ = (
@@ -48,4 +49,5 @@ __all__ = (
     "And",
     "Or",
     "Xor",
+    "Assign",
 )

@@ -1,10 +1,8 @@
-import typing
 
 import attrs
 
 from . import base, dtypes
 from .callge import _callge
-
 
 
 @attrs.frozen

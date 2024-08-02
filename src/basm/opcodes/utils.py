@@ -1,6 +1,6 @@
 from src.ir import tokens
 
-from . import dtypes, base
+from . import base, dtypes
 
 
 @base.convert

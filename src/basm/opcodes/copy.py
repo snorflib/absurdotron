@@ -8,7 +8,6 @@ from .init import init
 from .move import move
 
 
-
 @attrs.frozen
 class Copy(base.OpCode):
     from_: dtypes.Unit

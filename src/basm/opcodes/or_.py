@@ -11,6 +11,7 @@ from .init import init
 from .move import move
 from .mul import mul
 
+
 @attrs.frozen
 class Or(base.OpCode):
     left: dtypes.Unit

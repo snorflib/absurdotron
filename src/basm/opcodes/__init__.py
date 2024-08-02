@@ -1,24 +1,24 @@
 from .add import Add
+from .and_ import And
 from .base import OpCode, OpCodeReturn
 from .calleq import CallEq
+from .callge import CallGE
+from .callgt import CallGT
+from .callle import CallLE
+from .calllt import CallLT
 from .callneq import CallNeq
 from .callz import CallZ
+from .copy import Copy
 from .divmod import DivMod
 from .dtypes import Array, DType, Unit
 from .init import Init
 from .move import Move
 from .mul import Mul
 from .not_ import Not
-from .sub import Sub
-from .callge import CallGE
-from .callgt import CallGT
-from .callle import CallLE
-from .calllt import CallLT
-from .copy import Copy
-from .and_ import And
 from .or_ import Or
+from .sub import Sub
 from .xor import Xor
-
+from .assign import Assign
 
 __all__ = (
     "DType",
@@ -46,4 +46,5 @@ __all__ = (
     "And",
     "Or",
     "Xor",
+    "Assign",
 )
