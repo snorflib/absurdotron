@@ -15,11 +15,11 @@ class Copy(base.OpCode):
     to_: dtypes.Unit
 
     def _execute(self) -> base.OpCodeReturn:
-        return _copy(self.from_, self.to_)
+        return copy(self.from_, self.to_)
 
 
 @base.convert
-def _copy(from_: dtypes.Unit, to_: dtypes.Unit) -> base.ToConvert:
+def copy(from_: dtypes.Unit, to_: dtypes.Unit) -> base.ToConvert:
     if from_ == to_:
         return []
 

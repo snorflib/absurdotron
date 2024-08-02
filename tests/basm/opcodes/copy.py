@@ -3,7 +3,7 @@ from src import basm
 from .utils import execute_opcodes_get_owner_values
 
 
-def test_copy_simple() -> None:
+def testcopy_simple() -> None:
     a, b = basm.Unit(), basm.Unit()
     opcodes = [
         basm.Init(a),
@@ -17,7 +17,7 @@ def test_copy_simple() -> None:
     assert memory[b] == 10
 
 
-def test_copy_override() -> None:
+def testcopy_override() -> None:
     a, b = basm.Unit(), basm.Unit()
     opcodes = [
         basm.Init(a),

@@ -16,6 +16,7 @@ from .callle import CallLE
 from .calllt import CallLT
 from .copy import Copy
 from .and_ import And
+from .or_ import Or
 
 
 __all__ = (
@@ -42,4 +43,5 @@ __all__ = (
     "CallLT",
     "Copy",
     "And",
+    "Or",
 )

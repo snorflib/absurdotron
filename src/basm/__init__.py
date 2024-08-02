@@ -20,6 +20,7 @@ from .opcodes import (
     CallLT,
     Copy,
     And,
+    Or,
 )
 
 __all__ = (
@@ -44,4 +45,5 @@ __all__ = (
     "DivMod",
     "Copy",
     "And",
+    "Or",
 )
