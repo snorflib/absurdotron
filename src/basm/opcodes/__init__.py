@@ -17,6 +17,7 @@ from .calllt import CallLT
 from .copy import Copy
 from .and_ import And
 from .or_ import Or
+from .xor import Xor
 
 
 __all__ = (
@@ -44,4 +45,5 @@ __all__ = (
     "Copy",
     "And",
     "Or",
+    "Xor",
 )

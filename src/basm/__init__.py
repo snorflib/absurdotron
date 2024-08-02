@@ -21,6 +21,7 @@ from .opcodes import (
     Copy,
     And,
     Or,
+    Xor,
 )
 
 __all__ = (
@@ -46,4 +47,5 @@ __all__ = (
     "Copy",
     "And",
     "Or",
+    "Xor",
 )
