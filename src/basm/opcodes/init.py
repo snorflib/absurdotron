@@ -17,4 +17,4 @@ class Init(base.OpCode):
 def init(obj: dtypes.Unit | dtypes.Array) -> base.ToConvert:
     if isinstance(obj, dtypes.Unit):
         return constraints.UnitConstraint(obj)
-    return constraints.ArrayConstraint(obj, obj.length)
+    return constraints.ArrayConstraint(obj, (obj.length + 1) * (obj.granularity + 1))

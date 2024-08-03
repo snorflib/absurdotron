@@ -47,9 +47,6 @@ def get_memory_owner_scopes(routine: collections.abc.Sequence[tokens.BFToken]) -
     freed_owners: set[types.Owner] = set()
 
     for idx, token in enumerate(routine):
-        if isinstance(token, tokens.CompilerInjection) and (end_owner := token.end_owner):
-            life_cycles[end_owner] = (life_cycles[end_owner][0], life_cycles[end_owner][1])
-
         if isinstance(token, tokens.ExitLoop):
             owner = token_map[jump_map.inverse[idx]].owner
         if (owner := token.owner) is None:
@@ -62,6 +59,9 @@ def get_memory_owner_scopes(routine: collections.abc.Sequence[tokens.BFToken]) -
             freed_owners.add(owner)
         elif owner in freed_owners:
             raise ValueError(f"Owner was freed, but it now referenced by {token} at index {idx}")
+
+        if isinstance(token, tokens.CompilerInjection) and (end_owner := token.end_owner):
+            life_cycles[end_owner] = (life_cycles[end_owner][0], life_cycles[end_owner][1])
 
     if len(freed_owners) > len(life_cycles):
         # Warn user. Not needed

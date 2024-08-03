@@ -1,5 +1,7 @@
 from .add import Add
 from .and_ import And
+from .arr_store import ArrayStore
+from .assign import Assign
 from .base import OpCode, OpCodeReturn
 from .calleq import CallEq
 from .callge import CallGE
@@ -18,7 +20,6 @@ from .not_ import Not
 from .or_ import Or
 from .sub import Sub
 from .xor import Xor
-from .assign import Assign
 
 __all__ = (
     "DType",
@@ -47,4 +48,5 @@ __all__ = (
     "Or",
     "Xor",
     "Assign",
+    "ArrayStore",
 )

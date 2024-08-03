@@ -1,5 +1,7 @@
-from src import basm
 import pytest
+
+from src import basm
+
 from .utils import execute_opcodes_get_owner_values
 
 

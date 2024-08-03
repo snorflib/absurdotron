@@ -2,6 +2,8 @@ from .opcodes import (
     Add,
     And,
     Array,
+    ArrayStore,
+    Assign,
     CallEq,
     CallGE,
     CallGT,
@@ -22,7 +24,6 @@ from .opcodes import (
     Sub,
     Unit,
     Xor,
-    Assign,
 )
 
 __all__ = (
@@ -50,4 +51,5 @@ __all__ = (
     "Or",
     "Xor",
     "Assign",
+    "ArrayStore",
 )

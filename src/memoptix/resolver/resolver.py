@@ -25,7 +25,7 @@ class MemoryResolver:
         self._units.append(unit)
 
     def resolve(self) -> dict[types.Owner, int]:
-        sorted_units = sorted(self._units, key=lambda unit: unit.start)
+        sorted_units = sorted(self._units, key=lambda unit: unit.width)
         unit_to_index: dict[int, Unit] = {}
         indices = {}
 
