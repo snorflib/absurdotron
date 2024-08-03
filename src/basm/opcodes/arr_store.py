@@ -32,7 +32,7 @@ def array_store(
 ) -> base.ToConvert:
     if isinstance(index, int):
         return _array_store_by_int(array, to_store, index)
-    
+
     return _array_store_by_unit(array, to_store, index)
 
 
@@ -86,7 +86,7 @@ def _go_to_unit_indexes_from_control(array: dtypes.Array, index: list[dtypes.Uni
         return ret
 
     step = array.granularity + 1
-    for idx, unit in enumerate(index):
+    for _idx, unit in enumerate(index):
         ret |= _unit_to_from_current(array, unit, (array.granularity + 1) * 2)
 
         ret |= _move_pointer_by_value((array.granularity + 1) * 2)
@@ -154,7 +154,7 @@ def _int_to_8bits_little_endian(number: int) -> list[int]:
     while number > 0:
         byte_list.append(number & 0xFF)
         number >>= 8
-    
+
     if not byte_list:
         return [0]
     return byte_list
