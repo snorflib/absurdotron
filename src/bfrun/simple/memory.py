@@ -19,7 +19,11 @@ class Memory:
 
     def increment_ptr(self) -> None:
         if self._pointer == self._size - 1:
-            raise ValueError("Trying to move the pointer past the array size.")
+            new_arr = np.zeros(self._size * 2, dtype=np.uint8)
+            new_arr[:self._size] = self._array
+
+            self._size *= 2
+            self._array = new_arr
         self._pointer += 1
 
     def decrement_ptr(self) -> None:

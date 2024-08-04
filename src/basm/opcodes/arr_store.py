@@ -68,9 +68,7 @@ def _array_store_by_unit(
     ret |= _go_to_unit_indexes_from_control(array, index)
 
     if isinstance(to_store, int):
-        return ret |\
-               _int_to_next_partitions_from_current(array, to_store) |\
-               _move_to_control_traceless(array)
+        return ret |_int_to_next_partitions_from_current(array, to_store) | _move_to_control_traceless(array)
 
     ret |= _units_to_next_partitions_from_current(array, to_store)
     ret |= _move_to_control_traceless(array)
@@ -98,7 +96,7 @@ def _go_to_unit_indexes_from_control(array: dtypes.Array, index: list[dtypes.Uni
         ret |= tokens.ExitLoop()
         ret |= _move_pointer_by_value(-(array.granularity + 1) * 2)
 
-        # step *= 1 >> 8
+        step *= 1 << 8
         ret |= _go_to_index_stored_in_current_unit(array, step)
 
     return ret
@@ -258,7 +256,7 @@ def _move_from_control_by_trace_instance(arr: dtypes.Array) -> base.ToConvert:
 @base.convert
 def _move_to_control_traceless(arr: dtypes.Array) -> base.ToConvert:
     width = arr.granularity + 1
-    return tokens.CompilerInjection("+[-" + _move_pointer_by_value_str(-width) + "+]")
+    return tokens.CompilerInjection(None, "+[-" + _move_pointer_by_value_str(-width) + "+]")
 
 
 @base.convert
