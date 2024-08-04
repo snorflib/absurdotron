@@ -70,10 +70,10 @@ def _array_store_by_unit(
     if isinstance(to_store, int):
         return ret |\
                _int_to_next_partitions_from_current(array, to_store) |\
-               _move_to_control_traceless()
+               _move_to_control_traceless(array)
 
     ret |= _units_to_next_partitions_from_current(array, to_store)
-    ret |= _move_to_control_traceless()
+    ret |= _move_to_control_traceless(array)
 
     return ret
 
@@ -182,7 +182,7 @@ def _unit_to_from_current(array: dtypes.Array, unit: dtypes.Unit, offset: int) -
     ret = _move_pointer_by_value(offset)
     ret |= tokens.CompilerInjection(None, "[-]")
     ret |= _move_pointer_by_value(-offset)
-    ret |= _move_to_control_with_trace()
+    ret |= _move_to_control_with_trace(array)
 
     ret |= _assign_to_control(array, unit, array.granularity + 1)
     ret |= _move_from_control_to_marked(array, offset)
@@ -223,42 +223,42 @@ def _move_from_control_to_marked(array: dtypes, offset: int) -> base.ToConvert:
 
     ret |= _move_pointer_by_value(array.granularity + 1, array)
     ret |= tokens.EnterLoop(None)
-    ret |= _move_from_control_by_trace_instance()
+    ret |= _move_from_control_by_trace_instance(array)
     ret |= _move_pointer_by_value(-array.granularity - 1)
 
     ret |= _move_pointer_by_value(offset)
     ret |= tokens.Increment(None)
     ret |= _move_pointer_by_value(-offset)
 
-    ret |= _move_to_control_with_trace()
+    ret |= _move_to_control_with_trace(array)
     ret |= _move_pointer_by_value(array.granularity + 1, array)
     ret |= tokens.Decrement(None)
 
     ret |= tokens.ExitLoop()
 
     ret |= tokens.Increment(None)
-    ret |= _move_from_control_by_trace_instance()
+    ret |= _move_from_control_by_trace_instance(array)
     ret |= _move_pointer_by_value(-array.granularity - 1)
 
     return ret
 
 
 @base.convert
-def _move_to_control_with_trace() -> base.ToConvert:
-    return tokens.CompilerInjection(None, "+[<<+]-")
+def _move_to_control_with_trace(arr: dtypes.Array) -> base.ToConvert:
+    width = arr.granularity + 1
+    return tokens.CompilerInjection(None, "+[" + _move_pointer_by_value_str(-width) + "+]-")
 
 
 @base.convert
-def _move_from_control_by_trace() -> base.ToConvert:
-    return tokens.CompilerInjection(None, "[>>-]")
+def _move_from_control_by_trace_instance(arr: dtypes.Array) -> base.ToConvert:
+    width = arr.granularity + 1
+    return tokens.CompilerInjection(None, "[-" + _move_pointer_by_value_str(width) + "]")
+
 
 @base.convert
-def _move_from_control_by_trace_instance() -> base.ToConvert:
-    return tokens.CompilerInjection(None, "[->>]")
-
-@base.convert
-def _move_to_control_traceless() -> base.ToConvert:
-    return tokens.CompilerInjection(None, "+[-<<+]")
+def _move_to_control_traceless(arr: dtypes.Array) -> base.ToConvert:
+    width = arr.granularity + 1
+    return tokens.CompilerInjection("+[-" + _move_pointer_by_value_str(-width) + "+]")
 
 
 @base.convert

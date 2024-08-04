@@ -101,6 +101,22 @@ def test_unit_assignment() -> None:
     assert _get_value_by_index(exc, arr, 9) == 10
     assert sum(exc.tape) == 20
 
+
+def test_unit_assignment_gran() -> None:
+    arr = basm.Array(16, 3)
+    to_store = basm.Unit()
+    opcodes = [
+        basm.Init(arr),
+        basm.Init(to_store),
+        basm.Assign(to_store, 255),
+        basm.ArrayStore(arr, [to_store], 100),
+    ]
+
+    exc = execute_opcodes(opcodes)
+
+    assert _get_value_by_index(exc, arr, 100) == 255
+    assert sum(exc.tape) == 510
+
 def _get_value_by_index(exc: ExecutorResults, arr: basm.Array, idx: int, offset: int = 1) -> int:
     part_width = arr.granularity + 1
     rel_idx = part_width + idx * part_width + offset
