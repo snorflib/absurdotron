@@ -117,6 +117,83 @@ def test_unit_assignment_gran() -> None:
     assert _get_value_by_index(exc, arr, 100) == 255
     assert sum(exc.tape) == 510
 
+
+def test_unit_assignment_gran() -> None:
+    arr = basm.Array(16, 3)
+    to_store = basm.Unit()
+    opcodes = [
+        basm.Init(arr),
+        basm.Init(to_store),
+        basm.Assign(to_store, 255),
+        basm.ArrayStore(arr, [to_store], 100),
+    ]
+
+    exc = execute_opcodes(opcodes)
+
+    assert _get_value_by_index(exc, arr, 100) == 255
+    assert sum(exc.tape) == 510
+
+
+def test_multiple_units_assignment() -> None:
+    arr = basm.Array(16, 3)
+    to_store, to_store_one = basm.Unit(), basm.Unit()
+    opcodes = [
+        basm.Init(arr),
+        basm.Init(to_store),
+        basm.Init(to_store_one),
+        basm.Assign(to_store, 255),
+        basm.Assign(to_store_one, 5),
+        basm.ArrayStore(arr, [to_store, to_store_one], 0),
+    ]
+
+    exc = execute_opcodes(opcodes)
+
+    assert _get_value_by_index(exc, arr, 0) == 255
+    assert _get_value_by_index(exc, arr, 0, offset=2) == 5
+    assert sum(exc.tape) == 520
+
+
+def test_multiple_units_assignment_partition_overflow() -> None:
+    arr = basm.Array(16, 2)
+    to_store, to_store_one, to_store_sec = basm.Unit(), basm.Unit(), basm.Unit()
+    opcodes = [
+        basm.Init(arr),
+        basm.Init(to_store),
+        basm.Init(to_store_one),
+        basm.Init(to_store_sec),
+        basm.Assign(to_store, 255),
+        basm.Assign(to_store_one, 5),
+        basm.Assign(to_store_sec, 25),
+        basm.ArrayStore(arr, [to_store, to_store_one, to_store_sec], 50),
+    ]
+
+    exc = execute_opcodes(opcodes)
+
+    assert _get_value_by_index(exc, arr, 50) == 255
+    assert _get_value_by_index(exc, arr, 50, offset=2) == 5
+    assert _get_value_by_index(exc, arr, 51) == 25
+    assert sum(exc.tape) == 570
+
+
+def test_unit_assignment_overwrite() -> None:
+    arr = basm.Array(16)
+    to_store, to_store_one = basm.Unit(), basm.Unit()
+    opcodes = [
+        basm.Init(arr),
+        basm.Init(to_store),
+        basm.Init(to_store_one),
+        basm.Assign(to_store, 255),
+        basm.ArrayStore(arr, [to_store], 10),
+        basm.Assign(to_store_one, 5),
+        basm.ArrayStore(arr, [to_store_one], 10),
+    ]
+
+    exc = execute_opcodes(opcodes)
+
+    assert _get_value_by_index(exc, arr, 10) == 5
+    assert sum(exc.tape) == 265
+
+
 def _get_value_by_index(exc: ExecutorResults, arr: basm.Array, idx: int, offset: int = 1) -> int:
     part_width = arr.granularity + 1
     rel_idx = part_width + idx * part_width + offset
