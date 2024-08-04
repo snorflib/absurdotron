@@ -141,10 +141,10 @@ def _int_to_next_partitions_from_current(array: dtypes.Array, to_store: int) -> 
         ret |= tokens.Clear(None)
         ret |= add_int_long(part, None)
 
+        offset += 1
         if offset % array.granularity == 0:
             ret |= tokens.CodeInjection(None, ">")
             offset += 1
-        offset += 1
 
     return ret | tokens.CodeInjection(None, "<" * offset)
 
