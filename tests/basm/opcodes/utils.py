@@ -65,7 +65,6 @@ def resolve_program_memory(
 
 def compile_routine_with_memory(routine: list[ir.BFToken], memory: dict[ir.Owner, int]) -> str:
     code = ir.Generator()(routine, memory)
-    code.save("hello.txt")
     return code.source_code.getvalue()
 
 
