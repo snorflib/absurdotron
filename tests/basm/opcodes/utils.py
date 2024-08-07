@@ -41,8 +41,8 @@ def execute_opcodes(
     program = eval_opcodes(opcodes_)
     memory = resolve_program_memory(program.routine, program.constrs)
     code = compile_routine_with_memory(program.routine, memory)
-    executor = eval_bf(code, input=input, output=output)
 
+    executor = eval_bf(code, input=input, output=output)
     return ExecutorResults(executor.memory.cells, memory, executor.input, executor.output)
 
 
@@ -65,6 +65,7 @@ def resolve_program_memory(
 
 def compile_routine_with_memory(routine: list[ir.BFToken], memory: dict[ir.Owner, int]) -> str:
     code = ir.Generator()(routine, memory)
+    code.save("hello.txt")
     return code.source_code.getvalue()
 
 

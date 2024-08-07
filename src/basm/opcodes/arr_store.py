@@ -68,7 +68,7 @@ def _array_store_by_unit(
     ret |= _go_to_unit_indexes_from_control(array, index)
 
     if isinstance(to_store, int):
-        return ret |_int_to_next_partitions_from_current(array, to_store) | _move_to_control_traceless(array)
+        return ret | _int_to_next_partitions_from_current(array, to_store) | _move_to_control_traceless(array)
 
     ret |= _units_to_next_partitions_from_current(array, to_store)
     ret |= _move_to_control_traceless(array)
@@ -79,7 +79,6 @@ def _array_store_by_unit(
 @base.convert
 def _go_to_unit_indexes_from_control(array: dtypes.Array, index: list[dtypes.Unit]) -> base.ToConvert:
     ret = _apply_single_unit_index(array, index.pop(0))
-
     if not index:
         return ret
 
@@ -98,6 +97,131 @@ def _go_to_unit_indexes_from_control(array: dtypes.Array, index: list[dtypes.Uni
 
         step *= 1 << 8
         ret |= _go_to_index_stored_in_current_unit(array, step)
+
+    return ret
+
+
+@base.convert
+def _apply_large_index_current(array: dtypes.Array, power: int = 1, step_per_power: int = 255) -> base.OpCodeReturn:
+    assert power < step_per_power, "Power must be smaller than the step_per_power."
+
+    width = array.granularity + 1
+    op_offset = width * 2
+
+    ret = base.OpCodeReturn()
+
+    @base.convert
+    def _recursive_enter(power_: int = power) -> base.OpCodeReturn:
+        if power_ == 1:
+            return
+
+        ret_ = base.OpCodeReturn()
+        ret_ |= tokens.EnterLoop(None)
+        ret_ |= tokens.Decrement(None)
+        ret_ |= _move_pointer_by_value(-width)
+        ret_ |= add_int_long(step_per_power, None)
+        ret_ |= _recursive_enter(power_ - 1)
+        return ret_
+
+    ret |= _recursive_enter()
+    ret |= _move_pointer_by_value(-op_offset)
+    ret |= tokens.Decrement(None)
+    ret |= _move_pointer_by_value(op_offset)
+
+    ret |= _apply_index_partial_in_current(array, step_per_power)
+    ret |= _move_pointer_by_value(-width)
+
+    ret |= _move_to_control_with_trace(array)
+    ret |= tokens.Increment(None)
+    ret |= _move_pointer_by_value(width)
+    ret |= tokens.Decrement(None)
+    ret |= _move_pointer_by_value(width)
+    ret |= tokens.Decrement(None)
+    ret |= tokens.Decrement(None)
+
+    for _ in range(power-1):
+        ret |= _move_from_control_to_marked(array, 2 * width)
+        ret |= _move_pointer_by_value(2 * width)
+        ret |= tokens.EnterLoop(None)
+        ret |= tokens.Decrement(None)
+        ret |= _inplace_move(width)
+        ret |= tokens.ExitLoop()
+        ret |= _move_pointer_by_value(-width)
+
+        ret |= _move_to_control_with_trace(array)
+        ret |= tokens.Increment(None)
+        ret |= _move_pointer_by_value(width)
+        ret |= tokens.Decrement(None)
+        ret |= tokens.Decrement(None)
+
+    ret |= tokens.Increment(None)
+    ret |= tokens.Increment(None)
+    ret |= _move_from_control_by_trace_instance(array)
+    ret |= _move_pointer_by_value((1 - power) * width)
+
+    @base.convert
+    def _recursive_exit(power_: int = power) -> base.OpCodeReturn:
+        if power_ == 1:
+            return
+
+        ret_ = base.OpCodeReturn()
+        ret_ |= tokens.ExitLoop()
+        ret_ |= _move_pointer_by_value(width)
+        ret_ |= _recursive_exit(power_ - 1)
+        return ret_
+
+    ret |= _recursive_exit()
+    ret |= _move_pointer_by_value(-width * (power - 1))
+
+    return ret
+
+
+@base.convert
+def _apply_index_partial_in_current(array: dtypes.Array, step: int = 255, per_iteration: int = 1) -> base.ToConvert:
+    index_control_dist = array.granularity + 1
+    id_transfer_offset = 2 * (array.granularity + 1)
+    
+    ret = base.OpCodeReturn()
+
+    ret |= tokens.EnterLoop(None)
+
+    ret |= _move_pointer_by_value(-index_control_dist)
+    ret |= tokens.Decrement(None)
+    ret |= _move_pointer_by_value(index_control_dist)
+
+    ret |= _go_to_index_stored_in_current_unit(array, step * (array.granularity + 1), max=per_iteration)
+
+    ret |= _move_to_control_with_trace(array)
+    ret |= _move_pointer_by_value(index_control_dist)
+    ret |= tokens.Decrement(None)
+    ret |= _move_pointer_by_value(-index_control_dist)
+
+    ret |= _move_from_control_to_marked(array, id_transfer_offset)
+    ret |= _move_pointer_by_value(id_transfer_offset)
+    ret |= _inplace_move(id_transfer_offset)
+    ret |= _move_pointer_by_value(-id_transfer_offset)
+
+    ret |= _move_to_control_with_trace(array)
+    ret |= tokens.Increment(None)
+    ret |= tokens.Increment(None)
+    ret |= _move_from_control_by_trace_instance(array)
+    ret |= _move_pointer_by_value(-index_control_dist)
+
+    ret |= tokens.ExitLoop()
+
+    return ret
+
+
+@base.convert
+def _inplace_move(offset: int) -> base.ToConvert:
+    ret = base.OpCodeReturn()
+
+    ret |= tokens.EnterLoop(None)
+    ret |= tokens.Decrement(None)
+    ret |= _move_pointer_by_value(-offset)
+    ret |= tokens.Increment(None)
+    ret |= _move_pointer_by_value(offset)
+    ret |= tokens.ExitLoop()
 
     return ret
 
@@ -180,8 +304,8 @@ def _unit_to_from_current(array: dtypes.Array, unit: dtypes.Unit, offset: int) -
     ret = _move_pointer_by_value(offset)
     ret |= tokens.CompilerInjection(None, "[-]")
     ret |= _move_pointer_by_value(-offset)
-    ret |= _move_to_control_with_trace(array)
 
+    ret |= _move_to_control_with_trace(array)
     ret |= _assign_to_control(array, unit, array.granularity + 1)
     ret |= _move_from_control_to_marked(array, offset)
 
@@ -189,7 +313,7 @@ def _unit_to_from_current(array: dtypes.Array, unit: dtypes.Unit, offset: int) -
 
 
 @base.convert
-def _assign_to_control(array: dtypes, value: dtypes.Unit | int, offset: int = 0) -> base.ToConvert:
+def _assign_to_control(array: dtypes, value: dtypes.Unit | int, offset: int = 0, scale: int = 1) -> base.ToConvert:
     if isinstance(value, int):
         return _move_pointer_by_value(offset, array) | add_int_long(value, None)
 
@@ -204,7 +328,7 @@ def _assign_to_control(array: dtypes, value: dtypes.Unit | int, offset: int = 0)
     ret |= tokens.Decrement(buffer)
 
     ret |=  _move_pointer_by_value(offset, array)
-    ret |= tokens.Increment(None)
+    ret |= add_int_long(scale, None)
     ret |= _move_pointer_by_value(-offset)
 
     ret |= tokens.ExitLoop()
@@ -214,29 +338,32 @@ def _assign_to_control(array: dtypes, value: dtypes.Unit | int, offset: int = 0)
 
 
 @base.convert
-def _move_from_control_to_marked(array: dtypes, offset: int) -> base.ToConvert:
+def _move_from_control_to_marked(array: dtypes, offset: int, obj_offset: int | None = None) -> base.ToConvert:
     assert offset != 0
+
+    if obj_offset is None:
+        obj_offset = array.granularity + 1
 
     ret = base.OpCodeReturn()
 
-    ret |= _move_pointer_by_value(array.granularity + 1, array)
+    ret |= _move_pointer_by_value(obj_offset, array)
     ret |= tokens.EnterLoop(None)
     ret |= _move_from_control_by_trace_instance(array)
-    ret |= _move_pointer_by_value(-array.granularity - 1)
+    ret |= _move_pointer_by_value(-obj_offset)
 
     ret |= _move_pointer_by_value(offset)
     ret |= tokens.Increment(None)
     ret |= _move_pointer_by_value(-offset)
 
     ret |= _move_to_control_with_trace(array)
-    ret |= _move_pointer_by_value(array.granularity + 1, array)
+    ret |= _move_pointer_by_value(obj_offset, array)
     ret |= tokens.Decrement(None)
 
     ret |= tokens.ExitLoop()
 
     ret |= tokens.Increment(None)
     ret |= _move_from_control_by_trace_instance(array)
-    ret |= _move_pointer_by_value(-array.granularity - 1)
+    ret |= _move_pointer_by_value(-obj_offset)
 
     return ret
 
@@ -262,6 +389,7 @@ def _move_to_control_traceless(arr: dtypes.Array) -> base.ToConvert:
 @base.convert
 def _move_pointer_by_value(value: int, owner: types.Owner = None) -> base.ToConvert:
     return tokens.CodeInjection(owner, ( "<" if value < 0 else ">") * abs(value))
+
 
 def _move_pointer_by_value_str(value: int) -> str:
     return ( "<" if value < 0 else ">") * abs(value)
