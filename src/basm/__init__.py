@@ -24,6 +24,7 @@ from .opcodes import (
     Sub,
     Unit,
     Xor,
+    ArrayLoad,
 )
 
 __all__ = (
@@ -51,5 +52,6 @@ __all__ = (
     "Or",
     "Xor",
     "Assign",
+    "ArrayLoad",
     "ArrayStore",
 )

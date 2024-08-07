@@ -20,6 +20,7 @@ from .not_ import Not
 from .or_ import Or
 from .sub import Sub
 from .xor import Xor
+from .arr_load import ArrayLoad
 
 __all__ = (
     "DType",
@@ -49,4 +50,5 @@ __all__ = (
     "Xor",
     "Assign",
     "ArrayStore",
+    "ArrayLoad",
 )
